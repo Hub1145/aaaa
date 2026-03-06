@@ -9,4 +9,4 @@ websocket-client==1.9.0
 ta
 websockets
 pytest
-python-binance>=1.0.19
+python-binance>=1.0.0
