@@ -1,0 +1,989 @@
+2026-03-03 11:33:51,986 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 11:33:51,986 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 11:34:06,053 - INFO - 127.0.0.1 - - [03/Mar/2026 11:34:06] "GET / HTTP/1.1" 200 -
+2026-03-03 11:34:06,385 - INFO - 127.0.0.1 - - [03/Mar/2026 11:34:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 11:34:06,390 - INFO - 127.0.0.1 - - [03/Mar/2026 11:34:06] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-03 11:34:06,704 - INFO - 127.0.0.1 - - [03/Mar/2026 11:34:06] "GET /socket.io/?EIO=4&transport=polling&t=PopGnzL HTTP/1.1" 200 -
+2026-03-03 11:34:06,931 - INFO - 127.0.0.1 - - [03/Mar/2026 11:34:06] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-03 11:34:06,931 - INFO - 127.0.0.1 - - [03/Mar/2026 11:34:06] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 11:34:07,024 - INFO - 127.0.0.1 - - [03/Mar/2026 11:34:07] "POST /socket.io/?EIO=4&transport=polling&t=PopGn_v&sid=JSlYsXZkWhJpJGOMAAAA HTTP/1.1" 200 -
+2026-03-03 11:34:07,026 - INFO - 127.0.0.1 - - [03/Mar/2026 11:34:07] "GET /socket.io/?EIO=4&transport=polling&t=PopGn_w&sid=JSlYsXZkWhJpJGOMAAAA HTTP/1.1" 200 -
+2026-03-03 11:34:07,353 - INFO - 127.0.0.1 - - [03/Mar/2026 11:34:07] "GET /socket.io/?EIO=4&transport=polling&t=PopGo4u&sid=JSlYsXZkWhJpJGOMAAAA HTTP/1.1" 200 -
+2026-03-03 11:40:01,448 - INFO - 127.0.0.1 - - [03/Mar/2026 11:40:01] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:40:28,033 - INFO - 127.0.0.1 - - [03/Mar/2026 11:40:28] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:45:00,345 - ERROR - [DEBUG] Error fetching futures tickers: HTTPSConnectionPool(host='testnet.binancefuture.com', port=443): Read timed out. (read timeout=20)
+2026-03-03 11:45:00,345 - WARNING - [DEBUG] Price map is empty!
+2026-03-03 11:45:12,684 - ERROR - [DEBUG] Error fetching futures tickers: HTTPSConnectionPool(host='testnet.binancefuture.com', port=443): Max retries exceeded with url: /fapi/v1/ticker/bookTicker (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x00000164709A3950>: Failed to resolve 'testnet.binancefuture.com' ([Errno 11001] getaddrinfo failed)"))
+2026-03-03 11:45:12,687 - WARNING - [DEBUG] Price map is empty!
+2026-03-03 11:45:25,029 - ERROR - [DEBUG] Error fetching futures tickers: HTTPSConnectionPool(host='testnet.binancefuture.com', port=443): Max retries exceeded with url: /fapi/v1/ticker/bookTicker (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x00000164709A0650>: Failed to resolve 'testnet.binancefuture.com' ([Errno 11001] getaddrinfo failed)"))
+2026-03-03 11:45:25,030 - WARNING - [DEBUG] Price map is empty!
+2026-03-03 11:49:47,763 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 11:49:47,766 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 11:50:05,074 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:05] "GET / HTTP/1.1" 200 -
+2026-03-03 11:50:05,198 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:05] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 11:50:05,424 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:05] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 11:50:05,787 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:05] "GET /socket.io/?EIO=4&transport=polling&t=PopKS4L HTTP/1.1" 200 -
+2026-03-03 11:50:05,788 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:05] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 11:50:06,037 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:06] "POST /socket.io/?EIO=4&transport=polling&t=PopKSAB&sid=AQxbnAcYdYMYvG3BAAAA HTTP/1.1" 200 -
+2026-03-03 11:50:06,140 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:06] "GET /socket.io/?EIO=4&transport=polling&t=PopKSAF&sid=AQxbnAcYdYMYvG3BAAAA HTTP/1.1" 200 -
+2026-03-03 11:50:06,146 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:06] "GET /socket.io/?EIO=4&transport=polling&t=PopKSF1&sid=AQxbnAcYdYMYvG3BAAAA HTTP/1.1" 200 -
+2026-03-03 11:50:42,070 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:42] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:50:42,107 - INFO - 127.0.0.1 - - [03/Mar/2026 11:50:42] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 11:51:36,388 - INFO - 127.0.0.1 - - [03/Mar/2026 11:51:36] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:54:21,773 - INFO - 127.0.0.1 - - [03/Mar/2026 11:54:21] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:54:24,091 - INFO - 127.0.0.1 - - [03/Mar/2026 11:54:24] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:54:26,003 - INFO - 127.0.0.1 - - [03/Mar/2026 11:54:26] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:54:51,469 - INFO - 127.0.0.1 - - [03/Mar/2026 11:54:51] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:54:52,452 - INFO - 127.0.0.1 - - [03/Mar/2026 11:54:52] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:55:05,501 - INFO - 127.0.0.1 - - [03/Mar/2026 11:55:05] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:55:08,781 - INFO - 127.0.0.1 - - [03/Mar/2026 11:55:08] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:55:10,674 - INFO - 127.0.0.1 - - [03/Mar/2026 11:55:10] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 11:56:35,897 - INFO - 127.0.0.1 - - [03/Mar/2026 11:56:35] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 12:29:14,701 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 12:29:14,703 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 12:29:18,860 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:18] "GET /socket.io/?EIO=4&transport=polling&t=PopTQZH HTTP/1.1" 200 -
+2026-03-03 12:29:19,158 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:19] "GET / HTTP/1.1" 200 -
+2026-03-03 12:29:19,324 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:19] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 12:29:19,327 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 12:29:19,381 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:19] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 12:29:19,386 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:19] "GET /socket.io/?EIO=4&transport=polling&t=PopTQm5 HTTP/1.1" 200 -
+2026-03-03 12:29:19,722 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:19] "POST /socket.io/?EIO=4&transport=polling&t=PopTQmg&sid=-iRSTkcMyEG8apwuAAAB HTTP/1.1" 200 -
+2026-03-03 12:29:19,725 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:19] "GET /socket.io/?EIO=4&transport=polling&t=PopTQmj&sid=-iRSTkcMyEG8apwuAAAB HTTP/1.1" 200 -
+2026-03-03 12:29:23,034 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:23] "GET /socket.io/?EIO=4&transport=websocket&sid=-iRSTkcMyEG8apwuAAAB HTTP/1.1" 200 -
+2026-03-03 12:29:23,044 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:23] "GET / HTTP/1.1" 200 -
+2026-03-03 12:29:23,352 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:23] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 12:29:23,406 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:23] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-03 12:29:23,731 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:23] "GET /socket.io/?EIO=4&transport=polling&t=PopTRlQ HTTP/1.1" 200 -
+2026-03-03 12:29:23,733 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:23] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 12:29:23,998 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:23] "POST /socket.io/?EIO=4&transport=polling&t=PopTRqU&sid=4CdQ16B4ZECf3OQWAAAD HTTP/1.1" 200 -
+2026-03-03 12:29:24,072 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:24] "GET /socket.io/?EIO=4&transport=polling&t=PopTRqX&sid=4CdQ16B4ZECf3OQWAAAD HTTP/1.1" 200 -
+2026-03-03 12:29:33,873 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:33] "GET /socket.io/?EIO=4&transport=websocket&sid=4CdQ16B4ZECf3OQWAAAD HTTP/1.1" 200 -
+2026-03-03 12:29:33,888 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:33] "GET / HTTP/1.1" 200 -
+2026-03-03 12:29:34,195 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:34] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 12:29:34,243 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:34] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-03 12:29:34,568 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:34] "GET /socket.io/?EIO=4&transport=polling&t=PopTUOo HTTP/1.1" 200 -
+2026-03-03 12:29:34,570 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:34] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 12:29:34,830 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:34] "POST /socket.io/?EIO=4&transport=polling&t=PopTUTo&sid=jCzlrZIAh_Y56ONVAAAF HTTP/1.1" 200 -
+2026-03-03 12:29:34,894 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:34] "GET /socket.io/?EIO=4&transport=polling&t=PopTUTs&sid=jCzlrZIAh_Y56ONVAAAF HTTP/1.1" 200 -
+2026-03-03 12:29:34,924 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:34] "GET /socket.io/?EIO=4&transport=polling&t=PopTUZ1&sid=jCzlrZIAh_Y56ONVAAAF HTTP/1.1" 200 -
+2026-03-03 12:29:40,065 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:40] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 12:29:40,152 - INFO - 127.0.0.1 - - [03/Mar/2026 12:29:40] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-03-03 13:08:00,707 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:08:00,721 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:08:03,985 - INFO - 127.0.0.1 - - [03/Mar/2026 13:08:03] "GET /socket.io/?EIO=4&transport=polling&t=PopcID6 HTTP/1.1" 200 -
+2026-03-03 13:08:04,313 - INFO - 127.0.0.1 - - [03/Mar/2026 13:08:04] "GET /socket.io/?EIO=4&transport=polling&t=PopcIIS&sid=ye1J1zlaaB8wCbauAAAA HTTP/1.1" 200 -
+2026-03-03 13:08:04,338 - INFO - 127.0.0.1 - - [03/Mar/2026 13:08:04] "GET /socket.io/?EIO=4&transport=polling&t=PopcINg&sid=ye1J1zlaaB8wCbauAAAA HTTP/1.1" 200 -
+2026-03-03 13:11:12,022 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:11:12,023 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:11:12,182 - INFO - 127.0.0.1 - - [03/Mar/2026 13:11:12] "GET /socket.io/?EIO=4&transport=polling&t=Popd09x HTTP/1.1" 200 -
+2026-03-03 13:11:12,448 - INFO - 127.0.0.1 - - [03/Mar/2026 13:11:12] "POST /socket.io/?EIO=4&transport=polling&t=Popd0Ey&sid=S240ezmJVEpSmvBIAAAA HTTP/1.1" 200 -
+2026-03-03 13:11:12,511 - INFO - 127.0.0.1 - - [03/Mar/2026 13:11:12] "GET /socket.io/?EIO=4&transport=polling&t=Popd0F6&sid=S240ezmJVEpSmvBIAAAA HTTP/1.1" 200 -
+2026-03-03 13:11:12,533 - INFO - 127.0.0.1 - - [03/Mar/2026 13:11:12] "GET /socket.io/?EIO=4&transport=polling&t=Popd0KI&sid=S240ezmJVEpSmvBIAAAA HTTP/1.1" 200 -
+2026-03-03 13:11:56,194 - INFO - 127.0.0.1 - - [03/Mar/2026 13:11:56] "GET /socket.io/?EIO=4&transport=websocket&sid=S240ezmJVEpSmvBIAAAA HTTP/1.1" 200 -
+2026-03-03 13:13:27,306 - INFO - 127.0.0.1 - - [03/Mar/2026 13:13:27] "GET / HTTP/1.1" 200 -
+2026-03-03 13:13:27,607 - INFO - 127.0.0.1 - - [03/Mar/2026 13:13:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:13:27,689 - INFO - 127.0.0.1 - - [03/Mar/2026 13:13:27] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 13:13:28,094 - INFO - 127.0.0.1 - - [03/Mar/2026 13:13:28] "GET /socket.io/?EIO=4&transport=polling&t=PopdXLT HTTP/1.1" 200 -
+2026-03-03 13:13:28,107 - INFO - 127.0.0.1 - - [03/Mar/2026 13:13:28] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:13:28,348 - INFO - 127.0.0.1 - - [03/Mar/2026 13:13:28] "POST /socket.io/?EIO=4&transport=polling&t=PopdXQr&sid=WyFwAaFS1YltzbQ6AAAC HTTP/1.1" 200 -
+2026-03-03 13:13:28,439 - INFO - 127.0.0.1 - - [03/Mar/2026 13:13:28] "GET /socket.io/?EIO=4&transport=polling&t=PopdXQy&sid=WyFwAaFS1YltzbQ6AAAC HTTP/1.1" 200 -
+2026-03-03 13:13:55,359 - INFO - 127.0.0.1 - - [03/Mar/2026 13:13:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:13:55,718 - INFO - 127.0.0.1 - - [03/Mar/2026 13:13:55] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-03-03 13:16:24,183 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:16:24,185 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:16:29,024 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:29] "GET /socket.io/?EIO=4&transport=polling&t=PopeDbJ HTTP/1.1" 200 -
+2026-03-03 13:16:29,383 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:29] "POST /socket.io/?EIO=4&transport=polling&t=PopeDbi&sid=ZQ15fOnY1mcb5eUHAAAA HTTP/1.1" 200 -
+2026-03-03 13:16:29,462 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:29] "GET / HTTP/1.1" 200 -
+2026-03-03 13:16:29,505 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:29] "GET /socket.io/?EIO=4&transport=websocket&sid=ZQ15fOnY1mcb5eUHAAAA HTTP/1.1" 200 -
+2026-03-03 13:16:29,567 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:29] "GET /socket.io/?EIO=4&transport=polling&t=PopeDbq&sid=ZQ15fOnY1mcb5eUHAAAA HTTP/1.1" 200 -
+2026-03-03 13:16:30,156 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:30] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-03-03 13:16:30,162 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:30] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 13:16:30,213 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:16:40,627 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:40] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:16:40,724 - INFO - 127.0.0.1 - - [03/Mar/2026 13:16:40] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-03-03 13:18:54,612 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:18:54,615 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:18:59,666 - INFO - 127.0.0.1 - - [03/Mar/2026 13:18:59] "GET / HTTP/1.1" 200 -
+2026-03-03 13:19:00,070 - INFO - 127.0.0.1 - - [03/Mar/2026 13:19:00] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:19:00,083 - INFO - 127.0.0.1 - - [03/Mar/2026 13:19:00] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 13:19:00,250 - INFO - 127.0.0.1 - - [03/Mar/2026 13:19:00] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-03-03 13:19:00,556 - INFO - 127.0.0.1 - - [03/Mar/2026 13:19:00] "GET /socket.io/?EIO=4&transport=polling&t=PopeoVx HTTP/1.1" 200 -
+2026-03-03 13:19:00,557 - INFO - 127.0.0.1 - - [03/Mar/2026 13:19:00] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:19:00,890 - INFO - 127.0.0.1 - - [03/Mar/2026 13:19:00] "POST /socket.io/?EIO=4&transport=polling&t=PopeobJ&sid=9v7s7HRZQz21YnC1AAAA HTTP/1.1" 200 -
+2026-03-03 13:19:00,955 - INFO - 127.0.0.1 - - [03/Mar/2026 13:19:00] "GET /socket.io/?EIO=4&transport=polling&t=PopeobK&sid=9v7s7HRZQz21YnC1AAAA HTTP/1.1" 200 -
+2026-03-03 13:24:17,702 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:24:17,705 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:24:17,758 - INFO - 127.0.0.1 - - [03/Mar/2026 13:24:17] "GET / HTTP/1.1" 200 -
+2026-03-03 13:24:18,127 - INFO - 127.0.0.1 - - [03/Mar/2026 13:24:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:24:18,211 - INFO - 127.0.0.1 - - [03/Mar/2026 13:24:18] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 13:24:18,227 - INFO - 127.0.0.1 - - [03/Mar/2026 13:24:18] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:24:18,276 - INFO - 127.0.0.1 - - [03/Mar/2026 13:24:18] "GET /socket.io/?EIO=4&transport=polling&t=Popg08h HTTP/1.1" 200 -
+2026-03-03 13:24:18,596 - INFO - 127.0.0.1 - - [03/Mar/2026 13:24:18] "POST /socket.io/?EIO=4&transport=polling&t=Popg09f&sid=ItPuGyB9Y7mnHTc8AAAA HTTP/1.1" 200 -
+2026-03-03 13:24:18,607 - INFO - 127.0.0.1 - - [03/Mar/2026 13:24:18] "GET /socket.io/?EIO=4&transport=polling&t=Popg09h&sid=ItPuGyB9Y7mnHTc8AAAA HTTP/1.1" 200 -
+2026-03-03 13:25:19,852 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:25:19,853 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:25:22,413 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:22] "GET /socket.io/?EIO=4&transport=polling&t=PopgFkR HTTP/1.1" 200 -
+2026-03-03 13:25:22,772 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:22] "GET /socket.io/?EIO=4&transport=polling&t=PopgFq2&sid=81ZoDwsyTM7amOygAAAA HTTP/1.1" 200 -
+2026-03-03 13:25:24,022 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:24] "GET / HTTP/1.1" 200 -
+2026-03-03 13:25:24,167 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:24] "GET /socket.io/?EIO=4&transport=websocket&sid=81ZoDwsyTM7amOygAAAA HTTP/1.1" 200 -
+2026-03-03 13:25:24,171 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:24] "POST /socket.io/?EIO=4&transport=polling&t=PopgFpw&sid=81ZoDwsyTM7amOygAAAA HTTP/1.1" 200 -
+2026-03-03 13:25:24,733 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:25:24,735 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:24] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 13:25:24,792 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:24] "GET /socket.io/?EIO=4&transport=polling&t=PopgGON HTTP/1.1" 200 -
+2026-03-03 13:25:25,107 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:25] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:25:25,122 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:25] "POST /socket.io/?EIO=4&transport=polling&t=PopgGP2&sid=qTKizFwltIGdoNwmAAAC HTTP/1.1" 200 -
+2026-03-03 13:25:25,131 - INFO - 127.0.0.1 - - [03/Mar/2026 13:25:25] "GET /socket.io/?EIO=4&transport=polling&t=PopgGP3&sid=qTKizFwltIGdoNwmAAAC HTTP/1.1" 200 -
+2026-03-03 13:26:09,023 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:26:09,024 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:26:10,439 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:10] "GET /socket.io/?EIO=4&transport=polling&t=PopgRTA HTTP/1.1" 200 -
+2026-03-03 13:26:10,735 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:10] "POST /socket.io/?EIO=4&transport=polling&t=PopgRYC&sid=P47MdS-vYcUmmm4KAAAA HTTP/1.1" 200 -
+2026-03-03 13:26:10,813 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:10] "GET /socket.io/?EIO=4&transport=polling&t=PopgRYD&sid=P47MdS-vYcUmmm4KAAAA HTTP/1.1" 200 -
+2026-03-03 13:26:10,845 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:10] "GET /socket.io/?EIO=4&transport=polling&t=PopgReH&sid=P47MdS-vYcUmmm4KAAAA HTTP/1.1" 200 -
+2026-03-03 13:26:11,706 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:11] "GET /socket.io/?EIO=4&transport=websocket&sid=P47MdS-vYcUmmm4KAAAA HTTP/1.1" 200 -
+2026-03-03 13:26:12,094 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:12] "GET / HTTP/1.1" 200 -
+2026-03-03 13:26:12,326 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:26:12,434 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:12] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 13:26:12,758 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:12] "GET /socket.io/?EIO=4&transport=polling&t=PopgS1P HTTP/1.1" 200 -
+2026-03-03 13:26:12,762 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:12] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:26:13,107 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:13] "GET /socket.io/?EIO=4&transport=polling&t=PopgS6o&sid=XJVGpta1IpOJQT7jAAAC HTTP/1.1" 200 -
+2026-03-03 13:26:14,038 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:14] "POST /socket.io/?EIO=4&transport=polling&t=PopgS6k&sid=XJVGpta1IpOJQT7jAAAC HTTP/1.1" 200 -
+2026-03-03 13:26:33,210 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:33] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:26:44,975 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:44] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:26:55,425 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:55] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:26:57,478 - INFO - 127.0.0.1 - - [03/Mar/2026 13:26:57] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:27:04,985 - ERROR - [DEBUG] Error fetching futures tickers: HTTPSConnectionPool(host='testnet.binancefuture.com', port=443): Read timed out. (read timeout=20)
+2026-03-03 13:27:04,987 - WARNING - [DEBUG] Price map is empty!
+2026-03-03 13:31:38,533 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:31:38,534 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:31:38,653 - INFO - 127.0.0.1 - - [03/Mar/2026 13:31:38] "GET /socket.io/?EIO=4&transport=polling&t=PophhHV HTTP/1.1" 200 -
+2026-03-03 13:31:38,948 - INFO - 127.0.0.1 - - [03/Mar/2026 13:31:38] "POST /socket.io/?EIO=4&transport=polling&t=PophhgX&sid=1iRfqjj0eQVZJ3oUAAAA HTTP/1.1" 200 -
+2026-03-03 13:31:39,084 - INFO - 127.0.0.1 - - [03/Mar/2026 13:31:39] "GET /socket.io/?EIO=4&transport=polling&t=PophhgZ&sid=1iRfqjj0eQVZJ3oUAAAA HTTP/1.1" 200 -
+2026-03-03 13:33:20,311 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:20] "GET /socket.io/?EIO=4&transport=websocket&sid=1iRfqjj0eQVZJ3oUAAAA HTTP/1.1" 200 -
+2026-03-03 13:33:20,696 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:20] "GET / HTTP/1.1" 200 -
+2026-03-03 13:33:20,935 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:20] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:33:21,042 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:21] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 13:33:21,375 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:21] "GET /socket.io/?EIO=4&transport=polling&t=Popi4gQ HTTP/1.1" 200 -
+2026-03-03 13:33:21,381 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:21] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:33:21,626 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:21] "POST /socket.io/?EIO=4&transport=polling&t=Popi4lr&sid=9cfYHPRZ221iF0r2AAAC HTTP/1.1" 200 -
+2026-03-03 13:33:21,722 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:21] "GET /socket.io/?EIO=4&transport=polling&t=Popi4lw&sid=9cfYHPRZ221iF0r2AAAC HTTP/1.1" 200 -
+2026-03-03 13:33:21,819 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:21] "GET /socket.io/?EIO=4&transport=polling&t=Popi4rk&sid=9cfYHPRZ221iF0r2AAAC HTTP/1.1" 200 -
+2026-03-03 13:33:23,755 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:23] "GET /socket.io/?EIO=4&transport=websocket&sid=9cfYHPRZ221iF0r2AAAC HTTP/1.1" 200 -
+2026-03-03 13:33:24,091 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:24] "GET / HTTP/1.1" 200 -
+2026-03-03 13:33:24,249 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:33:24,357 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:24] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-03 13:33:24,698 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:24] "GET /socket.io/?EIO=4&transport=polling&t=Popi5UI HTTP/1.1" 200 -
+2026-03-03 13:33:24,732 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:24] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:33:24,944 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:24] "POST /socket.io/?EIO=4&transport=polling&t=Popi5Zk&sid=hoLTSlp7DopM1NnYAAAE HTTP/1.1" 200 -
+2026-03-03 13:33:25,041 - INFO - 127.0.0.1 - - [03/Mar/2026 13:33:25] "GET /socket.io/?EIO=4&transport=polling&t=Popi5Zo&sid=hoLTSlp7DopM1NnYAAAE HTTP/1.1" 200 -
+2026-03-03 13:45:33,824 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:45:33,828 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:45:34,030 - INFO - 127.0.0.1 - - [03/Mar/2026 13:45:34] "GET /socket.io/?EIO=4&transport=polling&t=Popkt1_ HTTP/1.1" 200 -
+2026-03-03 13:45:34,266 - INFO - 127.0.0.1 - - [03/Mar/2026 13:45:34] "POST /socket.io/?EIO=4&transport=polling&t=PopktdK&sid=Rak5ioBpdmzHnn8uAAAA HTTP/1.1" 200 -
+2026-03-03 13:45:34,362 - INFO - 127.0.0.1 - - [03/Mar/2026 13:45:34] "GET /socket.io/?EIO=4&transport=polling&t=PopktdU&sid=Rak5ioBpdmzHnn8uAAAA HTTP/1.1" 200 -
+2026-03-03 13:45:34,379 - INFO - 127.0.0.1 - - [03/Mar/2026 13:45:34] "GET /socket.io/?EIO=4&transport=polling&t=PopktiW&sid=Rak5ioBpdmzHnn8uAAAA HTTP/1.1" 200 -
+2026-03-03 13:46:05,684 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:05] "GET /socket.io/?EIO=4&transport=polling&t=Popk_Jr HTTP/1.1" 200 -
+2026-03-03 13:46:05,736 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:05] "POST /socket.io/?EIO=4&transport=polling&t=Popk_MB&sid=yDDDqvikwKhI-VkaAAAC HTTP/1.1" 200 -
+2026-03-03 13:46:05,937 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:05] "GET /socket.io/?EIO=4&transport=polling&t=Popk_MM&sid=yDDDqvikwKhI-VkaAAAC HTTP/1.1" 200 -
+2026-03-03 13:46:06,297 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:06] "GET /socket.io/?EIO=4&transport=polling&t=Popk_Q3&sid=yDDDqvikwKhI-VkaAAAC HTTP/1.1" 200 -
+2026-03-03 13:46:07,620 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:07] "GET /socket.io/?EIO=4&transport=websocket&sid=yDDDqvikwKhI-VkaAAAC HTTP/1.1" 200 -
+2026-03-03 13:46:07,724 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:07] "GET / HTTP/1.1" 200 -
+2026-03-03 13:46:08,219 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:08] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:46:08,256 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:08] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 13:46:08,613 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:08] "GET /socket.io/?EIO=4&transport=polling&t=Popk_-H HTTP/1.1" 200 -
+2026-03-03 13:46:08,620 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:08] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:46:08,899 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:08] "POST /socket.io/?EIO=4&transport=polling&t=Popl041&sid=WuZMbr6CpLfeNhkUAAAE HTTP/1.1" 200 -
+2026-03-03 13:46:08,994 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:08] "GET /socket.io/?EIO=4&transport=polling&t=Popl046&sid=WuZMbr6CpLfeNhkUAAAE HTTP/1.1" 200 -
+2026-03-03 13:46:09,124 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:09] "GET /socket.io/?EIO=4&transport=polling&t=Popl0A-&sid=WuZMbr6CpLfeNhkUAAAE HTTP/1.1" 200 -
+2026-03-03 13:46:10,622 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:10] "GET /socket.io/?EIO=4&transport=websocket&sid=WuZMbr6CpLfeNhkUAAAE HTTP/1.1" 200 -
+2026-03-03 13:46:10,961 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:10] "GET / HTTP/1.1" 200 -
+2026-03-03 13:46:11,084 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:46:11,223 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:11] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-03 13:46:11,559 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:11] "GET /socket.io/?EIO=4&transport=polling&t=Popl0ib HTTP/1.1" 200 -
+2026-03-03 13:46:11,619 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:11] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:46:11,823 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:11] "POST /socket.io/?EIO=4&transport=polling&t=Popl0nk&sid=F6pbkcKxPKJ8DtIKAAAG HTTP/1.1" 200 -
+2026-03-03 13:46:11,885 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:11] "GET /socket.io/?EIO=4&transport=polling&t=Popl0no&sid=F6pbkcKxPKJ8DtIKAAAG HTTP/1.1" 200 -
+2026-03-03 13:46:11,938 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:11] "GET /socket.io/?EIO=4&transport=polling&t=Popl0tJ&sid=F6pbkcKxPKJ8DtIKAAAG HTTP/1.1" 200 -
+2026-03-03 13:46:31,716 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:31] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:46:34,221 - INFO - 127.0.0.1 - - [03/Mar/2026 13:46:34] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:47:25,514 - INFO - 127.0.0.1 - - [03/Mar/2026 13:47:25] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:47:26,529 - INFO - 127.0.0.1 - - [03/Mar/2026 13:47:26] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:47:28,752 - INFO - 127.0.0.1 - - [03/Mar/2026 13:47:28] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:48:43,961 - INFO - 127.0.0.1 - - [03/Mar/2026 13:48:43] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:53:22,887 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 13:53:22,888 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 13:53:23,971 - INFO - 127.0.0.1 - - [03/Mar/2026 13:53:23] "GET /socket.io/?EIO=4&transport=polling&t=PopmgH8 HTTP/1.1" 200 -
+2026-03-03 13:53:24,229 - INFO - 127.0.0.1 - - [03/Mar/2026 13:53:24] "POST /socket.io/?EIO=4&transport=polling&t=PopmgMn&sid=T7vLkuu7lodM2Zc8AAAA HTTP/1.1" 200 -
+2026-03-03 13:53:24,334 - INFO - 127.0.0.1 - - [03/Mar/2026 13:53:24] "GET /socket.io/?EIO=4&transport=polling&t=PopmgN2&sid=T7vLkuu7lodM2Zc8AAAA HTTP/1.1" 200 -
+2026-03-03 13:53:24,666 - INFO - 127.0.0.1 - - [03/Mar/2026 13:53:24] "GET /socket.io/?EIO=4&transport=polling&t=PopmgWr HTTP/1.1" 200 -
+2026-03-03 13:53:25,016 - INFO - 127.0.0.1 - - [03/Mar/2026 13:53:25] "POST /socket.io/?EIO=4&transport=polling&t=PopmgX6&sid=dI0Dvw1NixY9HLZjAAAC HTTP/1.1" 200 -
+2026-03-03 13:53:25,020 - INFO - 127.0.0.1 - - [03/Mar/2026 13:53:25] "GET /socket.io/?EIO=4&transport=polling&t=PopmgXB&sid=dI0Dvw1NixY9HLZjAAAC HTTP/1.1" 200 -
+2026-03-03 13:53:25,249 - INFO - 127.0.0.1 - - [03/Mar/2026 13:53:25] "GET /socket.io/?EIO=4&transport=polling&t=Popmgdx&sid=dI0Dvw1NixY9HLZjAAAC HTTP/1.1" 200 -
+2026-03-03 13:54:14,497 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:14] "GET /socket.io/?EIO=4&transport=websocket&sid=dI0Dvw1NixY9HLZjAAAC HTTP/1.1" 200 -
+2026-03-03 13:54:14,582 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:14] "GET / HTTP/1.1" 200 -
+2026-03-03 13:54:15,088 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 13:54:15,102 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:15] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 13:54:15,469 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:15] "GET /socket.io/?EIO=4&transport=polling&t=PopmsrW HTTP/1.1" 200 -
+2026-03-03 13:54:15,471 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:15] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 13:54:15,728 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:15] "POST /socket.io/?EIO=4&transport=polling&t=Popmsw_&sid=ImcZvHoI5u7fwh5MAAAE HTTP/1.1" 200 -
+2026-03-03 13:54:15,822 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:15] "GET /socket.io/?EIO=4&transport=polling&t=Popmsx5&sid=ImcZvHoI5u7fwh5MAAAE HTTP/1.1" 200 -
+2026-03-03 13:54:25,329 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:25] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:54:30,435 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:30] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:54:32,135 - INFO - 127.0.0.1 - - [03/Mar/2026 13:54:32] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 13:55:07,432 - INFO - 127.0.0.1 - - [03/Mar/2026 13:55:07] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:03:09,062 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 14:03:09,063 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 14:03:10,066 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:10] "GET / HTTP/1.1" 200 -
+2026-03-03 14:03:10,391 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:10] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:03:10,493 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:10] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 14:03:10,933 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:10] "GET /socket.io/?EIO=4&transport=polling&t=Popova3 HTTP/1.1" 200 -
+2026-03-03 14:03:10,937 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:10] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:03:11,197 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:11] "POST /socket.io/?EIO=4&transport=polling&t=Popovfk&sid=Egmq3Aolgm7oRJZsAAAA HTTP/1.1" 200 -
+2026-03-03 14:03:11,281 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:11] "GET /socket.io/?EIO=4&transport=polling&t=Popovfr&sid=Egmq3Aolgm7oRJZsAAAA HTTP/1.1" 200 -
+2026-03-03 14:03:17,748 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:17] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:03:20,277 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:20] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:03:20,810 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:20] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:03:23,354 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:23] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:03:27,292 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:27] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:03:31,030 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:31] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:03:32,026 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:32] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:03:33,796 - INFO - 127.0.0.1 - - [03/Mar/2026 14:03:33] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:13:39,422 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 14:13:39,426 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 14:13:42,582 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:42] "GET / HTTP/1.1" 200 -
+2026-03-03 14:13:42,744 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:13:42,770 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:42] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 14:13:43,202 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:43] "GET /socket.io/?EIO=4&transport=polling&t=PoprJxV HTTP/1.1" 200 -
+2026-03-03 14:13:43,214 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:43] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:13:43,536 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:43] "GET /socket.io/?EIO=4&transport=polling&t=PoprK0k&sid=z-9xQMPlo2RMZ7QCAAAA HTTP/1.1" 200 -
+2026-03-03 14:13:43,575 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:43] "GET /socket.io/?EIO=4&transport=polling&t=PoprK6E&sid=z-9xQMPlo2RMZ7QCAAAA HTTP/1.1" 200 -
+2026-03-03 14:13:43,982 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:43] "GET /socket.io/?EIO=4&transport=polling&t=PoprK7c HTTP/1.1" 200 -
+2026-03-03 14:13:44,129 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:44] "POST /socket.io/?EIO=4&transport=polling&t=PoprK0i&sid=z-9xQMPlo2RMZ7QCAAAA HTTP/1.1" 200 -
+2026-03-03 14:13:44,331 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:44] "POST /socket.io/?EIO=4&transport=polling&t=PoprKCz&sid=aspt-xSqimBedKl7AAAC HTTP/1.1" 200 -
+2026-03-03 14:13:44,346 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:44] "GET /socket.io/?EIO=4&transport=polling&t=PoprKD2&sid=aspt-xSqimBedKl7AAAC HTTP/1.1" 200 -
+2026-03-03 14:13:44,707 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:44] "GET /socket.io/?EIO=4&transport=polling&t=PoprKJ4&sid=aspt-xSqimBedKl7AAAC HTTP/1.1" 200 -
+2026-03-03 14:13:50,301 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:50] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:13:52,556 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:52] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:13:53,178 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:53] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:13:59,037 - INFO - 127.0.0.1 - - [03/Mar/2026 14:13:59] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:19:07,508 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 14:19:07,510 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 14:19:08,145 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:08] "GET /socket.io/?EIO=4&transport=polling&t=PopsZGn HTTP/1.1" 200 -
+2026-03-03 14:19:08,400 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:08] "POST /socket.io/?EIO=4&transport=polling&t=PopsZL-&sid=uiCfr8vXTK4-tvGTAAAA HTTP/1.1" 200 -
+2026-03-03 14:19:08,478 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:08] "GET /socket.io/?EIO=4&transport=polling&t=PopsZM2&sid=uiCfr8vXTK4-tvGTAAAA HTTP/1.1" 200 -
+2026-03-03 14:19:08,489 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:08] "GET /socket.io/?EIO=4&transport=polling&t=PopsZR6&sid=uiCfr8vXTK4-tvGTAAAA HTTP/1.1" 200 -
+2026-03-03 14:19:08,963 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:08] "GET /socket.io/?EIO=4&transport=polling&t=PopsZTe HTTP/1.1" 200 -
+2026-03-03 14:19:09,229 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:09] "POST /socket.io/?EIO=4&transport=polling&t=PopsZYg&sid=vc39VYO5EBpowGy4AAAC HTTP/1.1" 200 -
+2026-03-03 14:19:09,291 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:09] "GET /socket.io/?EIO=4&transport=polling&t=PopsZYj&sid=vc39VYO5EBpowGy4AAAC HTTP/1.1" 200 -
+2026-03-03 14:19:14,892 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:14] "GET /socket.io/?EIO=4&transport=websocket&sid=uiCfr8vXTK4-tvGTAAAA HTTP/1.1" 200 -
+2026-03-03 14:19:15,009 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:15] "GET / HTTP/1.1" 200 -
+2026-03-03 14:19:15,565 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:19:15,618 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:15] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 14:19:15,955 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:15] "GET /socket.io/?EIO=4&transport=polling&t=PopsbAh HTTP/1.1" 200 -
+2026-03-03 14:19:15,961 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:15] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:19:16,220 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:16] "POST /socket.io/?EIO=4&transport=polling&t=PopsbG3&sid=D1A51dptSVvQ5jLdAAAE HTTP/1.1" 200 -
+2026-03-03 14:19:16,297 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:16] "GET /socket.io/?EIO=4&transport=polling&t=PopsbG8&sid=D1A51dptSVvQ5jLdAAAE HTTP/1.1" 200 -
+2026-03-03 14:19:23,721 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:23] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:19:26,305 - INFO - 127.0.0.1 - - [03/Mar/2026 14:19:26] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:27:21,261 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 14:27:21,265 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 14:27:26,185 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:26] "GET /socket.io/?EIO=4&transport=polling&t=PopuSqh HTTP/1.1" 200 -
+2026-03-03 14:27:26,321 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:26] "POST /socket.io/?EIO=4&transport=polling&t=PopuSxr&sid=zpQ2cuz5KFr7XRDdAAAA HTTP/1.1" 200 -
+2026-03-03 14:27:26,540 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:26] "GET /socket.io/?EIO=4&transport=polling&t=PopuSxs&sid=zpQ2cuz5KFr7XRDdAAAA HTTP/1.1" 200 -
+2026-03-03 14:27:26,550 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:26] "GET /socket.io/?EIO=4&transport=polling&t=PopuSqh HTTP/1.1" 200 -
+2026-03-03 14:27:26,615 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:26] "GET /socket.io/?EIO=4&transport=polling&t=PopuT1t&sid=zpQ2cuz5KFr7XRDdAAAA HTTP/1.1" 200 -
+2026-03-03 14:27:26,965 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:26] "POST /socket.io/?EIO=4&transport=polling&t=PopuT2h&sid=4IOmjuHI57UkWAE_AAAC HTTP/1.1" 200 -
+2026-03-03 14:27:26,975 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:26] "GET /socket.io/?EIO=4&transport=polling&t=PopuT2k&sid=4IOmjuHI57UkWAE_AAAC HTTP/1.1" 200 -
+2026-03-03 14:27:27,212 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:27] "GET /socket.io/?EIO=4&transport=polling&t=PopuTAJ&sid=4IOmjuHI57UkWAE_AAAC HTTP/1.1" 200 -
+2026-03-03 14:27:28,881 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:28] "GET /socket.io/?EIO=4&transport=websocket&sid=4IOmjuHI57UkWAE_AAAC HTTP/1.1" 200 -
+2026-03-03 14:27:28,982 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:28] "GET / HTTP/1.1" 200 -
+2026-03-03 14:27:29,518 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:27:29,568 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:29] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 14:27:29,910 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:29] "GET /socket.io/?EIO=4&transport=polling&t=PopuTmk HTTP/1.1" 200 -
+2026-03-03 14:27:29,913 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:29] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:27:30,154 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:30] "POST /socket.io/?EIO=4&transport=polling&t=PopuTsB&sid=gMJxw1M682iSztb8AAAE HTTP/1.1" 200 -
+2026-03-03 14:27:30,248 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:30] "GET /socket.io/?EIO=4&transport=polling&t=PopuTsF&sid=gMJxw1M682iSztb8AAAE HTTP/1.1" 200 -
+2026-03-03 14:27:31,784 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:31] "GET /socket.io/?EIO=4&transport=websocket&sid=gMJxw1M682iSztb8AAAE HTTP/1.1" 200 -
+2026-03-03 14:27:31,826 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:31] "GET / HTTP/1.1" 200 -
+2026-03-03 14:27:32,139 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:32] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:27:32,246 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:32] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-03 14:27:32,601 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:32] "GET /socket.io/?EIO=4&transport=polling&t=PopuUQq HTTP/1.1" 200 -
+2026-03-03 14:27:32,603 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:32] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:27:32,868 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:32] "POST /socket.io/?EIO=4&transport=polling&t=PopuUW7&sid=F88M5zfdOEr9dbsiAAAG HTTP/1.1" 200 -
+2026-03-03 14:27:32,948 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:32] "GET /socket.io/?EIO=4&transport=polling&t=PopuUWA&sid=F88M5zfdOEr9dbsiAAAG HTTP/1.1" 200 -
+2026-03-03 14:27:33,000 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:33] "GET /socket.io/?EIO=4&transport=polling&t=PopuUbs&sid=F88M5zfdOEr9dbsiAAAG HTTP/1.1" 200 -
+2026-03-03 14:27:46,690 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:46] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:27:49,661 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:49] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:27:54,073 - INFO - 127.0.0.1 - - [03/Mar/2026 14:27:54] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:28:01,629 - INFO - 127.0.0.1 - - [03/Mar/2026 14:28:01] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:28:04,968 - INFO - 127.0.0.1 - - [03/Mar/2026 14:28:04] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:28:13,314 - INFO - 127.0.0.1 - - [03/Mar/2026 14:28:13] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:28:13,319 - INFO - 127.0.0.1 - - [03/Mar/2026 14:28:13] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:28:13,645 - INFO - 127.0.0.1 - - [03/Mar/2026 14:28:13] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:28:14,543 - INFO - 127.0.0.1 - - [03/Mar/2026 14:28:14] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:28:15,311 - INFO - 127.0.0.1 - - [03/Mar/2026 14:28:15] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:42:11,919 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 14:42:11,926 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 14:42:16,416 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:16] "GET / HTTP/1.1" 200 -
+2026-03-03 14:42:16,602 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:16] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:42:16,636 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:16] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 14:42:17,030 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:17] "GET /socket.io/?EIO=4&transport=polling&t=PopxsLe HTTP/1.1" 200 -
+2026-03-03 14:42:17,032 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:17] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:42:17,265 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:17] "POST /socket.io/?EIO=4&transport=polling&t=PopxsRC&sid=t0VFGZc12CxZ1JCJAAAA HTTP/1.1" 200 -
+2026-03-03 14:42:17,353 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:17] "GET /socket.io/?EIO=4&transport=polling&t=PopxsRE&sid=t0VFGZc12CxZ1JCJAAAA HTTP/1.1" 200 -
+2026-03-03 14:42:17,370 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:17] "GET /socket.io/?EIO=4&transport=polling&t=PopxsWL&sid=t0VFGZc12CxZ1JCJAAAA HTTP/1.1" 200 -
+2026-03-03 14:42:31,322 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:31] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:42:32,235 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:32] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:42:33,398 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:33] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:42:53,081 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:53] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:42:53,191 - INFO - 127.0.0.1 - - [03/Mar/2026 14:42:53] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-03-03 14:48:31,729 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 14:48:31,736 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 14:48:34,962 - INFO - 127.0.0.1 - - [03/Mar/2026 14:48:34] "GET /socket.io/?EIO=4&transport=polling&t=PopzIdM HTTP/1.1" 200 -
+2026-03-03 14:48:35,287 - INFO - 127.0.0.1 - - [03/Mar/2026 14:48:35] "GET /socket.io/?EIO=4&transport=polling&t=PopzIiY&sid=ueI6pPs_LzPyW-T-AAAA HTTP/1.1" 200 -
+2026-03-03 14:48:35,321 - INFO - 127.0.0.1 - - [03/Mar/2026 14:48:35] "GET /socket.io/?EIO=4&transport=polling&t=PopzIno&sid=ueI6pPs_LzPyW-T-AAAA HTTP/1.1" 200 -
+2026-03-03 14:48:36,047 - INFO - 127.0.0.1 - - [03/Mar/2026 14:48:36] "POST /socket.io/?EIO=4&transport=polling&t=PopzIiR&sid=ueI6pPs_LzPyW-T-AAAA HTTP/1.1" 200 -
+2026-03-03 14:49:42,618 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:42] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:49:42,648 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:42] "GET /socket.io/?EIO=4&transport=polling&t=PopzZD6 HTTP/1.1" 200 -
+2026-03-03 14:49:42,992 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:42] "POST /socket.io/?EIO=4&transport=polling&t=PopzZEA&sid=XkmQ9yhJ5P8rbEyiAAAC HTTP/1.1" 200 -
+2026-03-03 14:49:42,999 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:42] "GET /socket.io/?EIO=4&transport=polling&t=PopzZEG&sid=XkmQ9yhJ5P8rbEyiAAAC HTTP/1.1" 200 -
+2026-03-03 14:49:44,052 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:44] "GET /socket.io/?EIO=4&transport=websocket&sid=XkmQ9yhJ5P8rbEyiAAAC HTTP/1.1" 200 -
+2026-03-03 14:49:44,096 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:44] "GET / HTTP/1.1" 200 -
+2026-03-03 14:49:44,800 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:49:44,818 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:44] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 14:49:45,334 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:45] "GET /socket.io/?EIO=4&transport=polling&t=PopzZog HTTP/1.1" 200 -
+2026-03-03 14:49:45,338 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:45] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:49:45,591 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:45] "POST /socket.io/?EIO=4&transport=polling&t=PopzZu2&sid=rj938CcbHd2U2fJGAAAE HTTP/1.1" 200 -
+2026-03-03 14:49:45,672 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:45] "GET /socket.io/?EIO=4&transport=polling&t=PopzZu8&sid=rj938CcbHd2U2fJGAAAE HTTP/1.1" 200 -
+2026-03-03 14:49:58,761 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:49:59,164 - INFO - 127.0.0.1 - - [03/Mar/2026 14:49:59] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-03-03 14:54:23,719 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 14:54:23,723 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 14:54:23,816 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:23] "GET /socket.io/?EIO=4&transport=polling&t=Pop-dLE HTTP/1.1" 200 -
+2026-03-03 14:54:24,001 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:24] "POST /socket.io/?EIO=4&transport=polling&t=Pop-dtJ&sid=jWACsqaxvyvbnjtHAAAA HTTP/1.1" 200 -
+2026-03-03 14:54:24,148 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:24] "GET /socket.io/?EIO=4&transport=polling&t=Pop-dtj&sid=jWACsqaxvyvbnjtHAAAA HTTP/1.1" 200 -
+2026-03-03 14:54:24,214 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:24] "GET / HTTP/1.1" 200 -
+2026-03-03 14:54:24,830 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:24] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-03 14:54:24,836 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:54:24,851 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:24] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-03-03 14:54:25,082 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:25] "GET /socket.io/?EIO=4&transport=polling&t=Pop-e9K HTTP/1.1" 200 -
+2026-03-03 14:54:25,422 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:25] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:54:25,429 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:25] "POST /socket.io/?EIO=4&transport=polling&t=Pop-eB2&sid=eZePkjMtG0cqsG2NAAAC HTTP/1.1" 200 -
+2026-03-03 14:54:25,544 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:25] "GET /socket.io/?EIO=4&transport=polling&t=Pop-eB4&sid=eZePkjMtG0cqsG2NAAAC HTTP/1.1" 200 -
+2026-03-03 14:54:37,487 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:37] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:54:37,562 - INFO - 127.0.0.1 - - [03/Mar/2026 14:54:37] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2026-03-03 14:59:23,657 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-03 14:59:23,660 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-03 14:59:24,959 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:24] "GET /socket.io/?EIO=4&transport=polling&t=Pop_nJd HTTP/1.1" 200 -
+2026-03-03 14:59:25,224 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:25] "GET /socket.io/?EIO=4&transport=polling&t=Pop_nJd HTTP/1.1" 200 -
+2026-03-03 14:59:25,288 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:25] "POST /socket.io/?EIO=4&transport=polling&t=Pop_nOl&sid=fh9tSi3lvQjCbI9zAAAA HTTP/1.1" 200 -
+2026-03-03 14:59:25,299 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:25] "GET /socket.io/?EIO=4&transport=polling&t=Pop_nOn&sid=fh9tSi3lvQjCbI9zAAAA HTTP/1.1" 200 -
+2026-03-03 14:59:25,328 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:25] "POST /socket.io/?EIO=4&transport=polling&t=Pop_nSq&sid=1__NZMNjn2uwSGv6AAAB HTTP/1.1" 200 -
+2026-03-03 14:59:25,557 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:25] "GET /socket.io/?EIO=4&transport=polling&t=Pop_nT8&sid=1__NZMNjn2uwSGv6AAAB HTTP/1.1" 200 -
+2026-03-03 14:59:25,578 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:25] "GET /socket.io/?EIO=4&transport=polling&t=Pop_nUG&sid=fh9tSi3lvQjCbI9zAAAA HTTP/1.1" 200 -
+2026-03-03 14:59:25,656 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:25] "GET /socket.io/?EIO=4&transport=polling&t=Pop_nX_&sid=1__NZMNjn2uwSGv6AAAB HTTP/1.1" 200 -
+2026-03-03 14:59:30,342 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:30] "GET /socket.io/?EIO=4&transport=websocket&sid=fh9tSi3lvQjCbI9zAAAA HTTP/1.1" 200 -
+2026-03-03 14:59:30,456 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:30] "GET / HTTP/1.1" 200 -
+2026-03-03 14:59:30,919 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:30] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-03-03 14:59:31,056 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:31] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-03 14:59:31,464 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:31] "GET /socket.io/?EIO=4&transport=polling&t=Pop_ov3 HTTP/1.1" 200 -
+2026-03-03 14:59:31,478 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:31] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:59:31,731 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:31] "POST /socket.io/?EIO=4&transport=polling&t=Pop_o-C&sid=JB2O0RmkbsJYTsKyAAAE HTTP/1.1" 200 -
+2026-03-03 14:59:31,796 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:31] "GET /socket.io/?EIO=4&transport=polling&t=Pop_o-G&sid=JB2O0RmkbsJYTsKyAAAE HTTP/1.1" 200 -
+2026-03-03 14:59:31,841 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:31] "GET /socket.io/?EIO=4&transport=polling&t=Pop_p3c&sid=JB2O0RmkbsJYTsKyAAAE HTTP/1.1" 200 -
+2026-03-03 14:59:33,529 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:33] "GET /socket.io/?EIO=4&transport=websocket&sid=JB2O0RmkbsJYTsKyAAAE HTTP/1.1" 200 -
+2026-03-03 14:59:33,875 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:33] "GET / HTTP/1.1" 200 -
+2026-03-03 14:59:33,980 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:33] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-03 14:59:34,133 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:34] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-03 14:59:34,468 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:34] "GET /socket.io/?EIO=4&transport=polling&t=Pop_pdx HTTP/1.1" 200 -
+2026-03-03 14:59:34,469 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:34] "GET /api/config HTTP/1.1" 200 -
+2026-03-03 14:59:34,708 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:34] "POST /socket.io/?EIO=4&transport=polling&t=Pop_pjL&sid=_ut0AFm7CrmBQBqGAAAG HTTP/1.1" 200 -
+2026-03-03 14:59:34,817 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:34] "GET /socket.io/?EIO=4&transport=polling&t=Pop_pjO&sid=_ut0AFm7CrmBQBqGAAAG HTTP/1.1" 200 -
+2026-03-03 14:59:34,833 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:34] "GET /socket.io/?EIO=4&transport=polling&t=Pop_poe&sid=_ut0AFm7CrmBQBqGAAAG HTTP/1.1" 200 -
+2026-03-03 14:59:53,239 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:53] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:59:53,747 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:53] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:59:56,074 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:56] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:59:56,083 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:56] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:59:56,628 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:56] "POST /api/config HTTP/1.1" 200 -
+2026-03-03 14:59:57,412 - INFO - 127.0.0.1 - - [03/Mar/2026 14:59:57] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:01:25,138 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-04 10:01:25,141 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-04 10:01:25,386 - INFO - 127.0.0.1 - - [04/Mar/2026 10:01:25] "GET / HTTP/1.1" 200 -
+2026-03-04 10:01:25,645 - INFO - 127.0.0.1 - - [04/Mar/2026 10:01:25] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-04 10:01:25,703 - INFO - 127.0.0.1 - - [04/Mar/2026 10:01:25] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-04 10:01:26,075 - INFO - 127.0.0.1 - - [04/Mar/2026 10:01:26] "GET /api/config HTTP/1.1" 200 -
+2026-03-04 10:01:26,082 - INFO - 127.0.0.1 - - [04/Mar/2026 10:01:26] "GET /socket.io/?EIO=4&transport=polling&t=Pou5A5P HTTP/1.1" 200 -
+2026-03-04 10:01:26,574 - INFO - 127.0.0.1 - - [04/Mar/2026 10:01:26] "POST /socket.io/?EIO=4&transport=polling&t=Pou5AIf&sid=KhozP_iVUKda1AHRAAAA HTTP/1.1" 200 -
+2026-03-04 10:01:27,047 - INFO - 127.0.0.1 - - [04/Mar/2026 10:01:27] "GET /socket.io/?EIO=4&transport=polling&t=Pou5AJt&sid=KhozP_iVUKda1AHRAAAA HTTP/1.1" 200 -
+2026-03-04 10:01:58,520 - INFO - 127.0.0.1 - - [04/Mar/2026 10:01:58] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:02:41,258 - INFO - Iniciando Binance Bot Engine...
+2026-03-04 10:02:46,619 - INFO - [Account 1] Thread iniciada para BTCUSDC
+2026-03-04 10:02:46,622 - INFO - [Account 1] Thread iniciada para LINKUSDC
+2026-03-04 10:02:46,625 - INFO - [Account 1] Conta Account 1 inicializada.
+2026-03-04 10:02:49,922 - INFO - [Account 1] Alavancagem definida em 20x, Margem: CROSSED
+2026-03-04 10:02:49,924 - INFO - [Account 1] Alavancagem definida em 20x, Margem: CROSSED
+2026-03-04 10:03:42,623 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:03:44,419 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:03:46,341 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:03:48,188 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:03:49,481 - INFO - [Account 1] Live Update: Leverage changed to 20x for BTCUSDC
+2026-03-04 10:03:50,010 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:03:50,268 - INFO - [Account 1] Live Update: Leverage changed to 20x for LINKUSDC
+2026-03-04 10:03:50,271 - INFO - 127.0.0.1 - - [04/Mar/2026 10:03:50] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:03:51,567 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:03:51,569 - ERROR - Symbol logic worker error (BTCUSDC): name 'state' is not defined
+2026-03-04 10:03:51,875 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:03:53,606 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:03:55,456 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:03:57,095 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:03:57,196 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:03:57,688 - INFO - [Account 1] Live Update: Leverage changed to 20x for BTCUSDC
+2026-03-04 10:03:58,474 - INFO - [Account 1] Live Update: Leverage changed to 20x for LINKUSDC
+2026-03-04 10:03:58,478 - INFO - 127.0.0.1 - - [04/Mar/2026 10:03:58] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:03:58,810 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:03:58,928 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:00,567 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:00,651 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:01,290 - INFO - [Account 1] Live Update: Leverage changed to 20x for BTCUSDC
+2026-03-04 10:04:02,046 - INFO - [Account 1] Live Update: Leverage changed to 20x for LINKUSDC
+2026-03-04 10:04:02,048 - INFO - 127.0.0.1 - - [04/Mar/2026 10:04:02] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:04:02,291 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:02,418 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:02,728 - INFO - [Account 1] Live Update: Leverage changed to 20x for BTCUSDC
+2026-03-04 10:04:03,523 - INFO - [Account 1] Live Update: Leverage changed to 20x for LINKUSDC
+2026-03-04 10:04:03,525 - INFO - 127.0.0.1 - - [04/Mar/2026 10:04:03] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:04:04,019 - INFO - [Account 1] Live Update: Leverage changed to 20x for BTCUSDC
+2026-03-04 10:04:04,047 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:04,195 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:04,810 - INFO - [Account 1] Live Update: Leverage changed to 20x for LINKUSDC
+2026-03-04 10:04:04,812 - INFO - 127.0.0.1 - - [04/Mar/2026 10:04:04] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:04:05,822 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:06,075 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:07,594 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:07,802 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:09,416 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:09,578 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:10,934 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:11,448 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:12,702 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:13,381 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:13,972 - INFO - [Account 1] Live Update: Leverage changed to 20x for BTCUSDC
+2026-03-04 10:04:14,592 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:14,750 - INFO - [Account 1] Live Update: Leverage changed to 20x for LINKUSDC
+2026-03-04 10:04:14,752 - INFO - 127.0.0.1 - - [04/Mar/2026 10:04:14] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:04:15,149 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:16,379 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:16,873 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:18,116 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:18,775 - INFO - [Account 1] Position already exists for LINKUSDC. Skipping initial entry.
+2026-03-04 10:04:19,420 - INFO - [Account 1] Position for LINKUSDC closed manually.
+2026-03-04 10:04:19,894 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:19,976 - INFO - [Account 1] Order 56518956 FILLED: SELL 11.26 LINKUSDC at 9.16
+2026-03-04 10:04:21,058 - INFO - [Account 1] Conditional order active for LINKUSDC. Trigger: 60000.0
+2026-03-04 10:04:21,670 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:23,387 - INFO - [Account 1] Conditional order active for LINKUSDC. Trigger: 60000.0
+2026-03-04 10:04:23,449 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:04:24,712 - INFO - [Account 1] Position for BTCUSDC closed manually.
+2026-03-04 10:04:25,300 - INFO - [Account 1] Order 292434883 FILLED: SELL 0.006 BTCUSDC at 70793.7
+2026-03-04 10:04:25,761 - INFO - [Account 1] Conditional order active for LINKUSDC. Trigger: 60000.0
+2026-03-04 10:04:25,791 - INFO - [Account 1] Placing initial MARKET LONG entry
+2026-03-04 10:04:25,795 - INFO - [Account 1] Trigger hit. Executing MARKET entry for BTCUSDC (LONG)
+2026-03-04 10:04:26,113 - INFO - Binance Bot Engine stopped.
+2026-03-04 10:04:26,587 - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-5' coro=<ThreadedApiManager.start_listener() done, defined at C:\Users\abc\AppData\Local\Programs\Python\Python312\Lib\site-packages\binance\threaded_stream.py:44> exception=KeyError(0)>
+Traceback (most recent call last):
+  File "C:\Users\abc\AppData\Local\Programs\Python\Python312\Lib\site-packages\binance\threaded_stream.py", line 55, in start_listener
+    callback(msg)
+  File "c:\Users\abc\Desktop\WORKSPACE\NIGHT\bot_engine.py", line 178, in <lambda>
+    twm.start_futures_user_socket(callback=lambda msg, idx=i: self._handle_user_data(idx, msg))
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\abc\Desktop\WORKSPACE\NIGHT\bot_engine.py", line 380, in _handle_user_data
+    acc_name = self.accounts[idx]['info'].get('name')
+               ~~~~~~~~~~~~~^^^^^
+KeyError: 0
+2026-03-04 10:04:50,157 - INFO - Starting Binance Bot Engine...
+2026-03-04 10:04:56,232 - INFO - [Account 1] Account Account 1 initialized.
+2026-03-04 10:33:46,587 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-04 10:33:46,590 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-04 10:33:46,960 - INFO - 127.0.0.1 - - [04/Mar/2026 10:33:46] "GET /socket.io/?EIO=4&transport=polling&t=PouCZxh HTTP/1.1" 200 -
+2026-03-04 10:33:47,198 - INFO - 127.0.0.1 - - [04/Mar/2026 10:33:47] "POST /socket.io/?EIO=4&transport=polling&t=PouCa1j&sid=HY0hr4zZySU5_joqAAAA HTTP/1.1" 200 -
+2026-03-04 10:33:47,395 - INFO - 127.0.0.1 - - [04/Mar/2026 10:33:47] "GET /socket.io/?EIO=4&transport=polling&t=PouCa1r&sid=HY0hr4zZySU5_joqAAAA HTTP/1.1" 200 -
+2026-03-04 10:34:22,569 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:22] "GET /socket.io/?EIO=4&transport=websocket&sid=HY0hr4zZySU5_joqAAAA HTTP/1.1" 200 -
+2026-03-04 10:34:22,677 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:22] "GET / HTTP/1.1" 200 -
+2026-03-04 10:34:23,166 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:23] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-04 10:34:23,231 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:23] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-04 10:34:23,568 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:23] "GET /api/config HTTP/1.1" 200 -
+2026-03-04 10:34:23,569 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:23] "GET /socket.io/?EIO=4&transport=polling&t=PouCiu6 HTTP/1.1" 200 -
+2026-03-04 10:34:23,815 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:23] "POST /socket.io/?EIO=4&transport=polling&t=PouCi-G&sid=Dee7kiB_WXcdLGwPAAAC HTTP/1.1" 200 -
+2026-03-04 10:34:23,987 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:23] "GET /socket.io/?EIO=4&transport=polling&t=PouCi-M&sid=Dee7kiB_WXcdLGwPAAAC HTTP/1.1" 200 -
+2026-03-04 10:34:37,771 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:37] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:34:46,906 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:46] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:34:50,491 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:50] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:34:52,549 - INFO - 127.0.0.1 - - [04/Mar/2026 10:34:52] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:35:14,271 - INFO - 127.0.0.1 - - [04/Mar/2026 10:35:14] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:35:17,595 - INFO - 127.0.0.1 - - [04/Mar/2026 10:35:17] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:35:19,505 - INFO - 127.0.0.1 - - [04/Mar/2026 10:35:19] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:35:20,736 - INFO - 127.0.0.1 - - [04/Mar/2026 10:35:20] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:35:22,241 - INFO - 127.0.0.1 - - [04/Mar/2026 10:35:22] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:35:22,601 - INFO - Starting Binance Bot Engine...
+2026-03-04 10:35:23,668 - INFO - 127.0.0.1 - - [04/Mar/2026 10:35:23] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 10:35:28,758 - INFO - [Account 1] Started thread for BTCUSDC
+2026-03-04 10:35:28,767 - INFO - [Account 1] Started thread for LINKUSDC
+2026-03-04 10:35:28,780 - INFO - [Account 1] Account Account 1 initialized.
+2026-03-04 10:35:32,467 - INFO - [Account 1] Leverage set to 20x, Margin: CROSSED
+2026-03-04 10:35:32,776 - INFO - [Account 1] Leverage set to 20x, Margin: CROSSED
+2026-03-04 10:35:33,910 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:33,916 - ERROR - [Account 1] Strategy setup error: name 'state' is not defined
+2026-03-04 10:35:34,443 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:34,447 - WARNING - [Account 1] Insufficient balance to place order for 549.8780289477963 at 60000.0
+2026-03-04 10:35:34,829 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:35,845 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:35,849 - WARNING - [Account 1] Insufficient balance to place order for 549.6992358966021 at 60000.0
+2026-03-04 10:35:36,669 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:38,240 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:38,267 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:38,271 - WARNING - [Account 1] Insufficient balance to place order for 549.6992358966021 at 60000.0
+2026-03-04 10:35:39,743 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:40,764 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:40,773 - WARNING - [Account 1] Insufficient balance to place order for 549.6992358966021 at 60000.0
+2026-03-04 10:35:41,485 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:42,856 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:42,860 - WARNING - [Account 1] Insufficient balance to place order for 549.6992358966021 at 60000.0
+2026-03-04 10:35:43,330 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:45,108 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:45,169 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:45,173 - WARNING - [Account 1] Insufficient balance to place order for 549.6992358966021 at 60000.0
+2026-03-04 10:35:47,012 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:47,515 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:47,517 - WARNING - [Account 1] Insufficient balance to place order for 549.6694483580795 at 60000.0
+2026-03-04 10:35:48,856 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:49,878 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:49,880 - WARNING - [Account 1] Insufficient balance to place order for 549.6694483580795 at 60000.0
+2026-03-04 10:35:50,629 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:52,240 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:52,245 - WARNING - [Account 1] Insufficient balance to place order for 549.6694483580795 at 60000.0
+2026-03-04 10:35:52,525 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:54,258 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:54,260 - WARNING - [Account 1] Insufficient balance to place order for 549.6694483580795 at 60000.0
+2026-03-04 10:35:54,463 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:56,434 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:56,643 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:56,654 - WARNING - [Account 1] Insufficient balance to place order for 549.6694483580795 at 60000.0
+2026-03-04 10:35:58,716 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:35:59,098 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:35:59,102 - WARNING - [Account 1] Insufficient balance to place order for 549.6694483580795 at 60000.0
+2026-03-04 10:36:00,640 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:01,453 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:01,469 - WARNING - [Account 1] Insufficient balance to place order for 549.6098829648895 at 60000.0
+2026-03-04 10:36:02,479 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:04,168 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:04,176 - WARNING - [Account 1] Insufficient balance to place order for 549.6098829648895 at 60000.0
+2026-03-04 10:36:04,536 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:06,672 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:06,983 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:06,987 - WARNING - [Account 1] Insufficient balance to place order for 549.6098829648895 at 60000.0
+2026-03-04 10:36:08,597 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:09,331 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:09,335 - WARNING - [Account 1] Insufficient balance to place order for 549.6098829648895 at 60000.0
+2026-03-04 10:36:10,466 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:11,694 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:11,698 - WARNING - [Account 1] Insufficient balance to place order for 549.6098829648895 at 60000.0
+2026-03-04 10:36:12,365 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:14,119 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:14,123 - WARNING - [Account 1] Insufficient balance to place order for 549.6098829648895 at 60000.0
+2026-03-04 10:36:14,146 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:15,992 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:16,632 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:16,713 - WARNING - [Account 1] Insufficient balance to place order for 549.6098829648895 at 60000.0
+2026-03-04 10:36:18,042 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:19,130 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:19,132 - WARNING - [Account 1] Insufficient balance to place order for 549.6098829648895 at 60000.0
+2026-03-04 10:36:20,013 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:21,527 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:21,532 - WARNING - [Account 1] Insufficient balance to place order for 549.6098829648895 at 60000.0
+2026-03-04 10:36:21,807 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:23,576 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:23,823 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:23,824 - WARNING - [Account 1] Insufficient balance to place order for 549.5503304800087 at 60000.0
+2026-03-04 10:36:25,389 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:26,083 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:26,085 - WARNING - [Account 1] Insufficient balance to place order for 549.5503304800087 at 60000.0
+2026-03-04 10:36:27,451 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:28,838 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:28,840 - WARNING - [Account 1] Insufficient balance to place order for 549.5503304800087 at 60000.0
+2026-03-04 10:36:29,250 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:31,033 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:31,256 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:31,271 - WARNING - [Account 1] Insufficient balance to place order for 549.5503304800087 at 60000.0
+2026-03-04 10:36:32,838 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:33,608 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:33,611 - WARNING - [Account 1] Insufficient balance to place order for 549.5503304800087 at 60000.0
+2026-03-04 10:36:34,725 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:36,082 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:36,089 - WARNING - [Account 1] Insufficient balance to place order for 549.5503304800087 at 60000.0
+2026-03-04 10:36:36,677 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:38,386 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:38,392 - WARNING - [Account 1] Insufficient balance to place order for 549.5503304800087 at 60000.0
+2026-03-04 10:36:38,455 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:40,236 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:40,730 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:40,792 - WARNING - [Account 1] Insufficient balance to place order for 549.5205590768732 at 60000.0
+2026-03-04 10:36:42,028 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:43,294 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:43,307 - WARNING - [Account 1] Insufficient balance to place order for 549.3419983753047 at 60000.0
+2026-03-04 10:36:43,812 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:45,678 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:45,882 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:45,883 - WARNING - [Account 1] Insufficient balance to place order for 549.3419983753047 at 60000.0
+2026-03-04 10:36:47,450 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:47,959 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:47,969 - WARNING - [Account 1] Insufficient balance to place order for 549.3419983753047 at 60000.0
+2026-03-04 10:36:49,237 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:50,269 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:50,271 - WARNING - [Account 1] Insufficient balance to place order for 549.3419983753047 at 60000.0
+2026-03-04 10:36:51,009 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:52,597 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:52,602 - WARNING - [Account 1] Insufficient balance to place order for 549.3419983753047 at 60000.0
+2026-03-04 10:36:52,891 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:54,707 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:54,887 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:54,912 - WARNING - [Account 1] Insufficient balance to place order for 549.2527615334633 at 60000.0
+2026-03-04 10:36:56,569 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:57,367 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:57,372 - WARNING - [Account 1] Insufficient balance to place order for 549.2527615334633 at 60000.0
+2026-03-04 10:36:58,364 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:36:59,675 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:36:59,687 - WARNING - [Account 1] Insufficient balance to place order for 549.2527615334633 at 60000.0
+2026-03-04 10:37:00,201 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:01,708 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:02,479 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:02,482 - WARNING - [Account 1] Insufficient balance to place order for 549.2527615334633 at 60000.0
+2026-03-04 10:37:03,496 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:04,746 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:04,749 - WARNING - [Account 1] Insufficient balance to place order for 549.2230223617954 at 60000.0
+2026-03-04 10:37:05,382 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:07,184 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:07,187 - WARNING - [Account 1] Insufficient balance to place order for 549.2230223617954 at 60000.0
+2026-03-04 10:37:07,367 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:09,188 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:09,663 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:09,666 - WARNING - [Account 1] Insufficient balance to place order for 549.2230223617954 at 60000.0
+2026-03-04 10:37:10,967 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:11,981 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:11,985 - WARNING - [Account 1] Insufficient balance to place order for 549.1932864103953 at 60000.0
+2026-03-04 10:37:12,793 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:14,297 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:14,300 - WARNING - [Account 1] Insufficient balance to place order for 549.1932864103953 at 60000.0
+2026-03-04 10:37:14,571 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:16,414 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:16,667 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:16,671 - WARNING - [Account 1] Insufficient balance to place order for 549.1932864103953 at 60000.0
+2026-03-04 10:37:18,188 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:19,153 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:19,155 - WARNING - [Account 1] Insufficient balance to place order for 549.1932864103953 at 60000.0
+2026-03-04 10:37:19,974 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:21,445 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:21,449 - WARNING - [Account 1] Insufficient balance to place order for 549.1635536787396 at 60000.0
+2026-03-04 10:37:21,755 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:23,530 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:23,873 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:23,876 - WARNING - [Account 1] Insufficient balance to place order for 549.1338241663058 at 60000.0
+2026-03-04 10:37:25,305 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:26,222 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:26,225 - WARNING - [Account 1] Insufficient balance to place order for 549.1338241663058 at 60000.0
+2026-03-04 10:37:27,070 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:28,609 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:28,612 - WARNING - [Account 1] Insufficient balance to place order for 549.1338241663058 at 60000.0
+2026-03-04 10:37:28,897 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:30,712 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:30,883 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:30,889 - WARNING - [Account 1] Insufficient balance to place order for 549.1338241663058 at 60000.0
+2026-03-04 10:37:32,513 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:33,293 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:33,299 - WARNING - [Account 1] Insufficient balance to place order for 549.0743747970121 at 60000.0
+2026-03-04 10:37:34,408 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:35,649 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:35,651 - WARNING - [Account 1] Insufficient balance to place order for 549.0743747970121 at 60000.0
+2026-03-04 10:37:36,964 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:38,017 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:38,022 - WARNING - [Account 1] Insufficient balance to place order for 549.0743747970121 at 60000.0
+2026-03-04 10:37:38,799 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:40,313 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:40,316 - WARNING - [Account 1] Insufficient balance to place order for 549.0743747970121 at 60000.0
+2026-03-04 10:37:40,673 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:42,460 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:42,652 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:42,656 - WARNING - [Account 1] Insufficient balance to place order for 549.0743747970121 at 60000.0
+2026-03-04 10:37:44,261 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:45,084 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:45,089 - WARNING - [Account 1] Insufficient balance to place order for 548.9852248741679 at 60000.0
+2026-03-04 10:37:46,043 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:47,445 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:47,447 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:37:47,841 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:49,609 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:49,790 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:49,799 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:37:51,378 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:51,823 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:51,827 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:37:53,151 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:54,072 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:54,078 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:37:54,953 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:56,417 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:56,419 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:37:56,819 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:58,694 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:37:58,727 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:37:58,736 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:38:00,221 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:01,107 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:01,111 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:38:02,223 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:03,399 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:03,401 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:38:04,226 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:05,662 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:05,664 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:38:06,043 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:07,861 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:08,137 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:08,140 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:38:09,813 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:10,455 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:10,456 - WARNING - [Account 1] Insufficient balance to place order for 548.9555146660894 at 60000.0
+2026-03-04 10:38:11,656 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:12,885 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:12,888 - WARNING - [Account 1] Insufficient balance to place order for 548.9258076735755 at 60000.0
+2026-03-04 10:38:13,463 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:15,212 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:15,216 - WARNING - [Account 1] Insufficient balance to place order for 548.9258076735755 at 60000.0
+2026-03-04 10:38:15,385 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:17,253 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:17,531 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:17,533 - WARNING - [Account 1] Insufficient balance to place order for 548.9258076735755 at 60000.0
+2026-03-04 10:38:19,047 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:19,903 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:19,905 - WARNING - [Account 1] Insufficient balance to place order for 548.9258076735755 at 60000.0
+2026-03-04 10:38:20,848 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:22,162 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:22,165 - WARNING - [Account 1] Insufficient balance to place order for 548.9258076735755 at 60000.0
+2026-03-04 10:38:22,640 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:24,565 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:24,566 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:24,569 - WARNING - [Account 1] Insufficient balance to place order for 548.9258076735755 at 60000.0
+2026-03-04 10:38:26,352 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:26,940 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:26,941 - WARNING - [Account 1] Insufficient balance to place order for 548.6289144896966 at 60000.0
+2026-03-04 10:38:28,263 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:29,253 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:29,256 - WARNING - [Account 1] Insufficient balance to place order for 548.6289144896966 at 60000.0
+2026-03-04 10:38:30,045 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:31,275 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:31,280 - WARNING - [Account 1] Insufficient balance to place order for 548.6289144896966 at 60000.0
+2026-03-04 10:38:32,031 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:33,626 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:33,627 - WARNING - [Account 1] Insufficient balance to place order for 548.6289144896966 at 60000.0
+2026-03-04 10:38:33,853 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:35,646 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:35,908 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:35,914 - WARNING - [Account 1] Insufficient balance to place order for 548.6289144896966 at 60000.0
+2026-03-04 10:38:37,520 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:38,368 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:38,369 - WARNING - [Account 1] Insufficient balance to place order for 548.6289144896966 at 60000.0
+2026-03-04 10:38:39,397 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:40,600 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:40,603 - WARNING - [Account 1] Insufficient balance to place order for 548.6289144896966 at 60000.0
+2026-03-04 10:38:41,257 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:42,920 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:42,924 - WARNING - [Account 1] Insufficient balance to place order for 548.6289144896966 at 60000.0
+2026-03-04 10:38:43,102 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:44,918 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:45,491 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:45,492 - WARNING - [Account 1] Insufficient balance to place order for 548.6289144896966 at 60000.0
+2026-03-04 10:38:46,755 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:47,776 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:47,778 - WARNING - [Account 1] Insufficient balance to place order for 548.5399091499028 at 60000.0
+2026-03-04 10:38:48,541 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:50,064 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:50,073 - WARNING - [Account 1] Insufficient balance to place order for 548.5399091499028 at 60000.0
+2026-03-04 10:38:50,341 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:52,119 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:52,410 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:52,416 - WARNING - [Account 1] Insufficient balance to place order for 548.5399091499028 at 60000.0
+2026-03-04 10:38:54,017 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:54,749 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:54,750 - WARNING - [Account 1] Insufficient balance to place order for 548.5399091499028 at 60000.0
+2026-03-04 10:38:55,913 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:57,248 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:57,255 - WARNING - [Account 1] Insufficient balance to place order for 548.5399091499028 at 60000.0
+2026-03-04 10:38:57,723 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:59,519 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:38:59,523 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:38:59,525 - WARNING - [Account 1] Insufficient balance to place order for 548.5399091499028 at 60000.0
+2026-03-04 10:39:01,328 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:01,817 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:01,819 - WARNING - [Account 1] Insufficient balance to place order for 548.5102471205321 at 60000.0
+2026-03-04 10:39:03,094 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:04,080 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:04,082 - WARNING - [Account 1] Insufficient balance to place order for 548.5102471205321 at 60000.0
+2026-03-04 10:39:04,989 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:06,374 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:06,385 - WARNING - [Account 1] Insufficient balance to place order for 548.5102471205321 at 60000.0
+2026-03-04 10:39:06,836 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:08,327 - INFO - [Account 1] Order 292465094 FILLED: SELL 0.143 BTCUSDC at 71762.5
+2026-03-04 10:39:08,697 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:08,698 - WARNING - [Account 1] Insufficient balance to place order for 548.4805882989078 at 60000.0
+2026-03-04 10:39:11,297 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:11,300 - WARNING - [Account 1] Insufficient balance to place order for 548.4805882989078 at 60000.0
+2026-03-04 10:39:11,545 - INFO - [Account 1] Placing initial MARKET LONG entry
+2026-03-04 10:39:11,549 - INFO - [Account 1] Trigger hit. Executing MARKET entry for BTCUSDC (LONG)
+2026-03-04 10:39:13,564 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:13,566 - WARNING - [Account 1] Insufficient balance to place order for 548.4805882989078 at 60000.0
+2026-03-04 10:39:14,520 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:15,907 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:15,908 - WARNING - [Account 1] Insufficient balance to place order for 548.4509326845094 at 60000.0
+2026-03-04 10:39:16,522 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:18,118 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:18,221 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:18,228 - WARNING - [Account 1] Insufficient balance to place order for 548.4509326845094 at 60000.0
+2026-03-04 10:39:19,906 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:20,431 - INFO - [Account 1] Order 292465169 FILLED: BUY 0.07 BTCUSDC at 71771.1329
+2026-03-04 10:39:20,507 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:20,508 - WARNING - [Account 1] Insufficient balance to place order for 548.4509326845094 at 60000.0
+2026-03-04 10:39:22,405 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:22,869 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:22,872 - WARNING - [Account 1] Insufficient balance to place order for 548.4509326845094 at 60000.0
+2026-03-04 10:39:24,269 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:25,257 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:25,260 - WARNING - [Account 1] Insufficient balance to place order for 548.4509326845094 at 60000.0
+2026-03-04 10:39:26,135 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:27,518 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:27,520 - WARNING - [Account 1] Insufficient balance to place order for 548.4509326845094 at 60000.0
+2026-03-04 10:39:28,015 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:29,806 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:29,808 - WARNING - [Account 1] Insufficient balance to place order for 548.4509326845094 at 60000.0
+2026-03-04 10:39:29,850 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:31,774 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:32,067 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:32,068 - WARNING - [Account 1] Insufficient balance to place order for 548.3916310753095 at 60000.0
+2026-03-04 10:39:33,606 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:34,354 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:34,356 - WARNING - [Account 1] Insufficient balance to place order for 548.3916310753095 at 60000.0
+2026-03-04 10:39:35,428 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:36,621 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:36,625 - WARNING - [Account 1] Insufficient balance to place order for 548.3916310753095 at 60000.0
+2026-03-04 10:39:37,251 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 10:39:38,962 - INFO - [Account 1] Placing initial LONG entry at 60000.0
+2026-03-04 10:39:38,974 - WARNING - [Account 1] Insufficient balance to place order for 548.3916310753095 at 60000.0
+2026-03-04 10:39:39,047 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:05:28,936 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://10.2.0.2:8080
+2026-03-04 11:05:28,947 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-04 11:05:33,020 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:33] "GET /socket.io/?EIO=4&transport=polling&t=PouJrGx HTTP/1.1" 200 -
+2026-03-04 11:05:33,362 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:33] "GET /socket.io/?EIO=4&transport=polling&t=PouJrNo&sid=4s9UIqAn8xAACKFMAAAA HTTP/1.1" 200 -
+2026-03-04 11:05:34,978 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:34] "POST /socket.io/?EIO=4&transport=polling&t=PouJrNb&sid=4s9UIqAn8xAACKFMAAAA HTTP/1.1" 200 -
+2026-03-04 11:05:36,144 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:36] "GET /socket.io/?EIO=4&transport=websocket&sid=4s9UIqAn8xAACKFMAAAA HTTP/1.1" 200 -
+2026-03-04 11:05:36,195 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:36] "GET / HTTP/1.1" 200 -
+2026-03-04 11:05:36,670 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-04 11:05:36,705 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:36] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-04 11:05:37,065 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:37] "GET /socket.io/?EIO=4&transport=polling&t=PouJsHN HTTP/1.1" 200 -
+2026-03-04 11:05:37,067 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:37] "GET /api/config HTTP/1.1" 200 -
+2026-03-04 11:05:37,310 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:37] "POST /socket.io/?EIO=4&transport=polling&t=PouJsMp&sid=Ckir33sYDnnHY9lzAAAC HTTP/1.1" 200 -
+2026-03-04 11:05:37,390 - INFO - 127.0.0.1 - - [04/Mar/2026 11:05:37] "GET /socket.io/?EIO=4&transport=polling&t=PouJsMt&sid=Ckir33sYDnnHY9lzAAAC HTTP/1.1" 200 -
+2026-03-04 11:06:03,706 - INFO - 127.0.0.1 - - [04/Mar/2026 11:06:03] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 11:06:07,116 - INFO - 127.0.0.1 - - [04/Mar/2026 11:06:07] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 11:06:09,940 - INFO - 127.0.0.1 - - [04/Mar/2026 11:06:09] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 11:06:14,481 - INFO - 127.0.0.1 - - [04/Mar/2026 11:06:14] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 11:06:20,344 - INFO - 127.0.0.1 - - [04/Mar/2026 11:06:20] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 11:06:42,868 - INFO - 127.0.0.1 - - [04/Mar/2026 11:06:42] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 11:06:48,529 - INFO - Starting Binance Bot Engine...
+2026-03-04 11:06:50,140 - INFO - 127.0.0.1 - - [04/Mar/2026 11:06:50] "POST /api/config HTTP/1.1" 200 -
+2026-03-04 11:06:53,795 - INFO - [Account 1] Started thread for BTCUSDC
+2026-03-04 11:06:53,811 - INFO - [Account 1] Started thread for LINKUSDC
+2026-03-04 11:06:53,819 - INFO - [Account 1] Account Account 1 initialized.
+2026-03-04 11:06:57,101 - INFO - [Account 1] Leverage set to 20x, Margin: CROSSED
+2026-03-04 11:06:57,102 - INFO - [Account 1] Leverage set to 20x, Margin: CROSSED
+2026-03-04 11:06:58,699 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:06:58,701 - ERROR - [Account 1] Strategy setup error: name 'state' is not defined
+2026-03-04 11:06:59,193 - INFO - [Account 1] Placing initial LONG entry at 9.24
+2026-03-04 11:06:59,455 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:07:01,298 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:07:03,143 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:07:04,950 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:07:06,700 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:07:08,449 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:07:10,301 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:07:12,151 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
+2026-03-04 11:07:13,649 - INFO - [Account 1] Position already exists for BTCUSDC. Skipping initial entry.
