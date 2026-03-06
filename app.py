@@ -155,4 +155,4 @@ if __name__ == '__main__':
         bot_engine = BinanceTradingBotEngine(config_file, emit_to_client)
 
     port = int(os.environ.get('PORT', 8080))
-    socketio.run(app, host='0.0.0.0', port=port, debug=False, use_reloader=False)
+    socketio.run(app, host='0.0.0.0', port=port, debug=False, use_reloader=False, allow_unsafe_werkzeug=True)
