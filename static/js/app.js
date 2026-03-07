@@ -74,6 +74,7 @@ function setupEventListeners() {
     // Asset Switcher
     document.getElementById('selectActiveSymbol').addEventListener('change', (e) => {
         activeSymbol = e.target.value;
+        const unit = 'USDC';
         const labels = ['asset-symbol-label', 'base-asset-label', 'entry-price-asset-label', 'tp-price-asset-label', 'sl-price-asset-label', 'sl-order-price-asset-label'];
         labels.forEach(id => {
             const el = document.getElementById(id);
