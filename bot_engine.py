@@ -44,7 +44,7 @@ class BinanceTradingBotEngine:
         # Dashboard metrics
         self.account_balances = {} # account_index -> balance
         self.open_positions = {} # account_index -> [positions]
-        # Trailing TP state: (account_index, symbol) -> { 'highest_pnl': float, 'last_update': float }
+        # Trailing TP/SL/Buy state
         self.trailing_state = {}
         
         self.data_lock = threading.Lock()
@@ -114,11 +114,16 @@ class BinanceTradingBotEngine:
         return self._create_client(api_key, api_secret)
 
     def _initialize_bg_clients(self):
-        """Initializes clients for all enabled accounts to fetch balances in background."""
+        """Initializes clients for all accounts with keys to fetch balances in background."""
         api_accounts = self.config.get('api_accounts', [])
         new_bg_clients = {}
+        testnet = self.config.get('is_demo', True)
+        mode_str = "DEMO (Testnet)" if testnet else "LIVE (Mainnet)"
+
         for i, acc in enumerate(api_accounts):
-            if acc.get('api_key') and acc.get('api_secret') and acc.get('enabled', True):
+            # We initialize background clients for ALL accounts that have keys,
+            # so we can show their balance even if they are not enabled for trading.
+            if acc.get('api_key') and acc.get('api_secret'):
                 try:
                     # Always re-create client to ensure correct environment (Demo vs Live)
                     client = self._get_client(acc['api_key'], acc['api_secret'])
@@ -129,7 +134,9 @@ class BinanceTradingBotEngine:
                     }
                 except Exception as e:
                     logging.error(f"Failed to init bg client for {acc.get('name')}: {e}")
+
         self.bg_clients = new_bg_clients
+        logging.info(f"Initialized {len(new_bg_clients)} background clients in {mode_str} mode.")
 
     def _get_metadata_client(self):
         """Creates a client for fetching prices/leverage even when bot is stopped."""
@@ -144,9 +151,10 @@ class BinanceTradingBotEngine:
         except:
             return None
 
-    def test_account(self, api_key, api_secret):
+    @staticmethod
+    def test_account(api_key, api_secret, is_demo=True):
         try:
-            client = self._get_client(api_key, api_secret)
+            client = Client(api_key, api_secret, testnet=is_demo, requests_params={'timeout': 20})
             client.futures_account_balance()
             return True, "Connection successful"
         except Exception as e:
@@ -271,7 +279,7 @@ class BinanceTradingBotEngine:
         entry_price = float(strategy.get('entry_price', 0))
 
         # "Use Existing Assets" logic
-        use_existing = strategy.get('use_existing_assets', True)
+        use_existing = strategy.get('use_existing', True)
         pos = client.futures_position_information(symbol=symbol)
         p_info = next((p for p in pos if p['symbol'] == symbol and float(p['positionAmt']) != 0), None)
         has_pos = p_info is not None
@@ -718,6 +726,7 @@ class BinanceTradingBotEngine:
             for p in pos_list:
                 p_copy = p.copy()
                 p_copy['account'] = acc_name
+                p_copy['account_idx'] = idx
                 total_pnl += float(p_copy.get('unrealizedProfit', 0))
                 
                 symbol = p_copy['symbol']
@@ -752,17 +761,32 @@ class BinanceTradingBotEngine:
         self.config = new_config
         self.language = self.config.get('language', 'pt-BR')
         
+        # Check if is_demo changed
+        demo_changed = old_config.get('is_demo') != self.config.get('is_demo')
+
+        if demo_changed:
+            mode_str = "DEMO (Testnet)" if self.config.get('is_demo') else "LIVE (Mainnet)"
+            self.log(f"Switching to {mode_str} mode. Clearing caches...", level='warning')
+
+            # Clear all environment-specific data
+            with self.market_data_lock:
+                self.shared_market_data = {}
+                self.max_leverages = {}
+
+            with self.data_lock:
+                self.grid_state = {}
+                self.trailing_state = {}
+
+            self.account_balances = {}
+            self.open_positions = {}
+
         # Immediate refresh of background states
-        self.account_balances = {} # Clear stale balances
-        self.open_positions = {}
         self._initialize_bg_clients()
         self.metadata_client = self._get_metadata_client()
         self._emit_account_update()
         
         if self.is_running:
-            # Check if is_demo changed
-            if old_config.get('is_demo') != self.config.get('is_demo'):
-                self.log("Demo mode changed, restarting active accounts...")
+            if demo_changed:
                 self.stop()
                 self.start()
                 return {"success": True}
@@ -825,19 +849,25 @@ class BinanceTradingBotEngine:
         
         return {"success": True}
 
-    def close_position(self, account_name, symbol):
+    def close_position(self, account_idx, symbol):
         # Find the client in trading accounts or background clients
         target_client = None
-        for acc in self.accounts.values():
-            if acc['info'].get('name') == account_name:
-                target_client = acc['client']
-                break
-
-        if not target_client:
-            for acc in self.bg_clients.values():
-                if acc.get('name') == account_name:
+        if isinstance(account_idx, int):
+            if account_idx in self.accounts:
+                target_client = self.accounts[account_idx]['client']
+            elif account_idx in self.bg_clients:
+                target_client = self.bg_clients[account_idx]['client']
+        else:
+            # Fallback for name-based lookup
+            for acc in self.accounts.values():
+                if acc['info'].get('name') == account_idx:
                     target_client = acc['client']
                     break
+            if not target_client:
+                for acc in self.bg_clients.values():
+                    if acc.get('name') == account_idx:
+                        target_client = acc['client']
+                        break
 
         if target_client:
             try:
@@ -856,19 +886,24 @@ class BinanceTradingBotEngine:
                                 type=Client.FUTURE_ORDER_TYPE_MARKET,
                                 quantity=self._format_quantity(symbol, abs(amt))
                             )
-                self.log("pos_closed_manual", account_name=account_name, is_key=True, symbol=symbol)
+                acc_name = self.config.get('api_accounts', [])[account_idx].get('name') if isinstance(account_idx, int) and account_idx < len(self.config.get('api_accounts', [])) else str(account_idx)
+                self.log("pos_closed_manual", account_name=acc_name, is_key=True, symbol=symbol)
 
                 # Cleanup grid state if managed
-                for (idx, sym), state in list(self.grid_state.items()):
-                    if sym == symbol:
-                        api_accounts = self.config.get('api_accounts', [])
-                        acc_name = api_accounts[idx].get('name') if idx < len(api_accounts) else None
-                        if acc_name == account_name:
-                            with self.data_lock:
-                                del self.grid_state[(idx, sym)]
+                with self.data_lock:
+                    if isinstance(account_idx, int):
+                        if (account_idx, symbol) in self.grid_state:
+                            del self.grid_state[(account_idx, symbol)]
+                    else:
+                        for (idx, sym), state in list(self.grid_state.items()):
+                            if sym == symbol:
+                                api_accounts = self.config.get('api_accounts', [])
+                                a_name = api_accounts[idx].get('name') if idx < len(api_accounts) else None
+                                if a_name == account_idx:
+                                    del self.grid_state[(idx, sym)]
 
             except Exception as e:
-                self.log("error_closing_pos", level='error', account_name=account_name, is_key=True, error=str(e))
+                self.log("error_closing_pos", level='error', account_name=str(account_idx), is_key=True, error=str(e))
 
     def _global_background_worker(self):
         """Global worker for fetching prices once and updating shared metrics."""

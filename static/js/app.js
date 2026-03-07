@@ -642,7 +642,7 @@ function setupSocketListeners() {
                 <td class="${p.amount > 0 ? 'text-success' : 'text-danger'}">${p.amount}</td>
                 <td>${(parseFloat(p.entryPrice) || 0).toFixed(2)}</td>
                 <td class="${p.unrealizedProfit >= 0 ? 'text-success' : 'text-danger'}">${(parseFloat(p.unrealizedProfit) || 0).toFixed(2)}</td>
-                <td><button class="btn btn-xs btn-outline-danger py-0" onclick="closePosition('${p.account}', '${p.symbol}')">Kill</button></td>
+                <td><button class="btn btn-xs btn-outline-danger py-0" onclick="closePosition(${p.account_idx}, '${p.symbol}')">Kill</button></td>
             </tr>
         `).join('');
     });
@@ -678,8 +678,11 @@ function populateSettingsModal() {
     accContainer.innerHTML = (currentConfig.api_accounts || []).map((acc, i) => `
         <div class="row g-2 mb-2 align-items-center account-setting-row" data-idx="${i}">
             <div class="col-2"><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_name_placeholder || 'Name'}" value="${acc.name || ''}" id="acc-name-${i}"></div>
-            <div class="col-4"><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_key_placeholder || 'Key'}" value="${acc.api_key || ''}" id="acc-key-${i}"></div>
-            <div class="col-4"><input type="password" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_secret_placeholder || 'Secret'}" value="${acc.api_secret || ''}" id="acc-secret-${i}"></div>
+            <div class="col-3"><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_key_placeholder || 'Key'}" value="${acc.api_key || ''}" id="acc-key-${i}"></div>
+            <div class="col-3"><input type="password" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_secret_placeholder || 'Secret'}" value="${acc.api_secret || ''}" id="acc-secret-${i}"></div>
+            <div class="col-2 text-center">
+                <button class="btn btn-xs btn-outline-info" onclick="testApiKey(${i})" id="test-btn-${i}">${ui.settings_test_btn || 'Test'}</button>
+            </div>
             <div class="col-2 text-end">
                 <div class="form-check form-switch d-inline-block">
                     <input class="form-check-input" type="checkbox" id="acc-enabled-${i}" ${acc.enabled !== false ? 'checked' : ''}>
@@ -744,7 +747,38 @@ async function saveLiveConfig(extra = {}) {
     await fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 }
 
-window.closePosition = (account, symbol) => { socket.emit('close_trade', { account, symbol }); };
+window.testApiKey = async (i) => {
+    const key = document.getElementById(`acc-key-${i}`).value;
+    const secret = document.getElementById(`acc-secret-${i}`).value;
+    const isDemo = document.getElementById('demoModeToggle').checked;
+    const btn = document.getElementById(`test-btn-${i}`);
+
+    if (!key || !secret) {
+        alert("Please enter API key and secret");
+        return;
+    }
+
+    btn.disabled = true;
+    const oldText = btn.innerText;
+    btn.innerText = "...";
+
+    try {
+        const res = await fetch('/api/test_api_key', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ api_key: key, api_secret: secret, is_demo: isDemo })
+        });
+        const data = await res.json();
+        alert(data.message);
+    } catch (e) {
+        alert("Error testing API key: " + e);
+    } finally {
+        btn.disabled = false;
+        btn.innerText = oldText;
+    }
+};
+
+window.closePosition = (account_idx, symbol) => { socket.emit('close_trade', { account_idx, symbol }); };
 
 // TP Split Management
 function renderTpTargets() {
