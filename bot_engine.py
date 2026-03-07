@@ -46,6 +46,7 @@ class BinanceTradingBotEngine:
         self.open_positions = {} # account_index -> [positions]
         # Trailing TP/SL/Buy state
         self.trailing_state = {}
+        self.last_log_times = {} # key -> timestamp
         
         self.data_lock = threading.Lock()
         
@@ -102,8 +103,12 @@ class BinanceTradingBotEngine:
 
     def _create_client(self, api_key, api_secret):
         testnet = self.config.get('is_demo', True)
-        client = Client(api_key, api_secret, testnet=testnet, requests_params={'timeout': 20})
+        # Enable automatic time synchronization and trim keys
+        client = Client(api_key.strip(), api_secret.strip(), testnet=testnet, requests_params={'timeout': 20})
+        # Set base URL for futures explicitly
+        client.API_URL = 'https://fapi.binance.com/fapi' if not testnet else 'https://testnet.binancefuture.com/fapi'
         try:
+            # Sync time with server to avoid 'Timestamp for this request is outside of the recvWindow'
             res = client.get_server_time()
             client.timestamp_offset = res['serverTime'] - int(time.time() * 1000)
         except Exception as e:
@@ -121,12 +126,14 @@ class BinanceTradingBotEngine:
         mode_str = "DEMO (Testnet)" if testnet else "LIVE (Mainnet)"
 
         for i, acc in enumerate(api_accounts):
+            api_key = acc.get('api_key', '').strip()
+            api_secret = acc.get('api_secret', '').strip()
             # We initialize background clients for ALL accounts that have keys,
             # so we can show their balance even if they are not enabled for trading.
-            if acc.get('api_key') and acc.get('api_secret'):
+            if api_key and api_secret:
                 try:
                     # Always re-create client to ensure correct environment (Demo vs Live)
-                    client = self._get_client(acc['api_key'], acc['api_secret'])
+                    client = self._get_client(api_key, api_secret)
                     new_bg_clients[i] = {
                         'client': client,
                         'name': acc.get('name', f"Account {i+1}"),
@@ -154,7 +161,7 @@ class BinanceTradingBotEngine:
     @staticmethod
     def test_account(api_key, api_secret, is_demo=True):
         try:
-            client = Client(api_key, api_secret, testnet=is_demo, requests_params={'timeout': 20})
+            client = Client(api_key.strip(), api_secret.strip(), testnet=is_demo, requests_params={'timeout': 20})
             client.futures_account_balance()
             return True, "Connection successful"
         except Exception as e:
@@ -162,8 +169,10 @@ class BinanceTradingBotEngine:
 
     def _init_account(self, i, acc):
         try:
-            client = self._get_client(acc['api_key'], acc['api_secret'])
-            twm = ThreadedWebsocketManager(api_key=acc['api_key'], api_secret=acc['api_secret'], testnet=self.config.get('is_demo', True))
+            api_key = acc.get('api_key', '').strip()
+            api_secret = acc.get('api_secret', '').strip()
+            client = self._get_client(api_key, api_secret)
+            twm = ThreadedWebsocketManager(api_key=api_key, api_secret=api_secret, testnet=self.config.get('is_demo', True))
             twm.start()
 
             self.accounts[i] = {
@@ -271,8 +280,8 @@ class BinanceTradingBotEngine:
         if current_price <= 0: return
         
         # Calculate quantity for new entry
+        balance = self.account_balances.get(idx, 0.0)
         if is_pct:
-            balance = self.account_balances.get(idx, 0.0)
             quantity = (balance * (trade_amount_val / 100.0) * leverage) / current_price
         else:
             quantity = (trade_amount_val * leverage) / current_price
@@ -364,6 +373,15 @@ class BinanceTradingBotEngine:
                         'initial_filled': False,
                         'levels': {}
                     }
+                return
+
+            # Check balance before logging "placing_initial" to avoid log spam if empty
+            if not self._check_balance_for_order(idx, quantity, entry_price):
+                log_key = f"insufficient_balance_{idx}_{symbol}"
+                now = time.time()
+                if now - self.last_log_times.get(log_key, 0) > 60:
+                    self.log("insufficient_balance", level='warning', account_name=acc['info'].get('name'), is_key=True, qty=quantity, price=entry_price)
+                    self.last_log_times[log_key] = now
                 return
 
             self.log("placing_initial", account_name=acc['info'].get('name'), is_key=True, direction=direction, price=entry_price)
@@ -621,7 +639,11 @@ class BinanceTradingBotEngine:
 
         # Validate balance before placing re-buy/re-sell orders
         if not self._check_balance_for_order(idx, qty, price):
-            self.log("insufficient_balance", level='warning', account_name=self.accounts[idx]['info'].get('name'), is_key=True, qty=qty, price=price)
+            log_key = f"insufficient_balance_{idx}_{symbol}"
+            now = time.time()
+            if now - self.last_log_times.get(log_key, 0) > 60: # Log at most once per minute per symbol
+                self.log("insufficient_balance", level='warning', account_name=self.accounts[idx]['info'].get('name'), is_key=True, qty=qty, price=price)
+                self.last_log_times[log_key] = now
             return None
 
         try:
@@ -799,8 +821,11 @@ class BinanceTradingBotEngine:
             active_idxs = list(self.accounts.keys())
             for idx in active_idxs:
                 if idx >= len(api_accounts):
-                    try: self.accounts[idx]['twm'].stop()
-                    except: pass
+                    try:
+                        if 'twm' in self.accounts[idx]:
+                            self.accounts[idx]['twm'].stop()
+                    except Exception as e:
+                        logging.debug(f"Error stopping TWM for account {idx}: {e}")
                     del self.accounts[idx]
                     with self.data_lock:
                         for key in list(self.grid_state.keys()):
@@ -808,16 +833,21 @@ class BinanceTradingBotEngine:
 
             for i, acc_config in enumerate(api_accounts):
                 enabled = acc_config.get('enabled', True)
-                has_keys = acc_config.get('api_key') and acc_config.get('api_secret')
+                api_key = acc_config.get('api_key', '').strip()
+                api_secret = acc_config.get('api_secret', '').strip()
+                has_keys = api_key and api_secret
 
                 if i in self.accounts:
                     old_acc_config = self.accounts[i]['info']
-                    keys_changed = (old_acc_config.get('api_key') != acc_config.get('api_key') or
-                                    old_acc_config.get('api_secret') != acc_config.get('api_secret'))
+                    keys_changed = (old_acc_config.get('api_key', '').strip() != api_key or
+                                    old_acc_config.get('api_secret', '').strip() != api_secret)
 
                     if not enabled or not has_keys or keys_changed:
-                        try: self.accounts[i]['twm'].stop()
-                        except: pass
+                        try:
+                            if 'twm' in self.accounts[i]:
+                                self.accounts[i]['twm'].stop()
+                        except Exception as e:
+                            logging.debug(f"Error stopping TWM for account {i}: {e}")
                         del self.accounts[i]
                         with self.data_lock:
                             for key in list(self.grid_state.keys()):
@@ -1145,6 +1175,14 @@ class BinanceTradingBotEngine:
         quantity = (trade_amount_usdc * leverage) / current_price
         side = Client.SIDE_BUY if direction == 'LONG' else Client.SIDE_SELL
         
+        if not self._check_balance_for_order(idx, quantity, current_price):
+            log_key = f"insufficient_balance_{idx}_{symbol}"
+            now = time.time()
+            if now - self.last_log_times.get(log_key, 0) > 60:
+                self.log("insufficient_balance", level='warning', account_name=self.accounts[idx]['info'].get('name'), is_key=True, qty=quantity, price=current_price)
+                self.last_log_times[log_key] = now
+            return
+
         try:
             self.log("executing_market_entry", account_name=self.accounts[idx]['info'].get('name'), is_key=True, symbol=symbol, direction=direction)
             # We use market order for trailing buy trigger
