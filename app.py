@@ -112,6 +112,7 @@ def handle_connect():
         bot_engine = BinanceTradingBotEngine(config_file, emit_to_client)
 
     emit('bot_status', {'running': bot_engine.is_running})
+    emit('clear_console', {})
     for log in list(bot_engine.console_logs):
         emit('console_log', log)
     bot_engine._emit_account_update()

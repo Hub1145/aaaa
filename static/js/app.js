@@ -618,6 +618,11 @@ function setupSocketListeners() {
         }
     });
 
+    socket.on('clear_console', () => {
+        const out = document.getElementById('consoleOutput');
+        if (out) out.innerHTML = '';
+    });
+
     socket.on('account_update', (data) => {
         const container = document.getElementById('individual-accounts-container');
         container.innerHTML = (data.accounts || []).map(acc => `
@@ -650,8 +655,10 @@ function setupSocketListeners() {
     socket.on('console_log', (data) => {
         const out = document.getElementById('consoleOutput');
         const div = document.createElement('div');
-        div.className = `small mb-1 ${data.level === 'error' ? 'text-danger' : 'text-success'}`;
-        div.innerText = `[${data.timestamp}] ${data.message}`;
+        div.className = `small mb-1 console-entry ${data.level === 'error' ? 'text-danger' : 'text-success'}`;
+        // data.rendered is pre-rendered on backend but if we changed language
+        // we might get the whole history or just updates.
+        div.innerText = `[${data.timestamp}] ${data.rendered || data.message}`;
         out.appendChild(div);
         out.scrollTop = out.scrollHeight;
     });

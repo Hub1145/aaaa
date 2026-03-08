@@ -87,19 +87,39 @@ class BinanceTradingBotEngine:
             return template
 
     def log(self, message_or_key, level='info', account_name=None, is_key=False, **kwargs):
-        if is_key:
-            message = self._t(message_or_key, **kwargs)
-        else:
-            message = message_or_key
-            
+        # We store structured logs now to allow re-translation
         timestamp = datetime.now().strftime('%H:%M:%S')
-        prefix = f"[{account_name}] " if account_name else ""
-        log_entry = {'timestamp': timestamp, 'message': f"{prefix}{message}", 'level': level}
+
+        log_entry = {
+            'timestamp': timestamp,
+            'level': level,
+            'account_name': account_name,
+            'key': message_or_key if is_key else None,
+            'message': message_or_key if not is_key else None,
+            'kwargs': kwargs
+        }
+
+        # Add a rendered version for the immediate display
+        rendered_msg = self._render_log(log_entry)
+        log_entry['rendered'] = rendered_msg
+
         self.console_logs.append(log_entry)
         self.emit('console_log', log_entry)
-        if level == 'error': logging.error(f"{prefix}{message}")
-        elif level == 'warning': logging.warning(f"{prefix}{message}")
-        else: logging.info(f"{prefix}{message}")
+
+        if level == 'error': logging.error(rendered_msg)
+        elif level == 'warning': logging.warning(rendered_msg)
+        else: logging.info(rendered_msg)
+
+    def _render_log(self, entry):
+        account_name = entry.get('account_name')
+        prefix = f"[{account_name}] " if account_name else ""
+
+        if entry.get('key'):
+            message = self._t(entry['key'], **entry.get('kwargs', {}))
+        else:
+            message = entry.get('message', '')
+
+        return f"{prefix}{message}"
 
     def _create_client(self, api_key, api_secret):
         testnet = self.config.get('is_demo', True)
@@ -121,11 +141,28 @@ class BinanceTradingBotEngine:
     def _initialize_bg_clients(self):
         """Initializes clients for all accounts with keys to fetch balances in background."""
         api_accounts = self.config.get('api_accounts', [])
-        new_bg_clients = {}
+
+        # Cleanup existing background clients if they are no longer in the config or keys changed
+        old_bg_idxs = list(self.bg_clients.keys())
+        for idx in old_bg_idxs:
+            if idx >= len(api_accounts):
+                del self.bg_clients[idx]
+                continue
+
+            acc = api_accounts[idx]
+            old_bg = self.bg_clients[idx]
+            if (acc.get('api_key', '').strip() != old_bg['info'].get('api_key', '').strip() or
+                acc.get('api_secret', '').strip() != old_bg['info'].get('api_secret', '').strip()):
+                del self.bg_clients[idx]
+
+        new_bg_clients = self.bg_clients.copy()
         testnet = self.config.get('is_demo', True)
         mode_str = "DEMO (Testnet)" if testnet else "LIVE (Mainnet)"
 
         for i, acc in enumerate(api_accounts):
+            if i in new_bg_clients:
+                continue # Already have a valid one
+
             api_key = acc.get('api_key', '').strip()
             api_secret = acc.get('api_secret', '').strip()
             # We initialize background clients for ALL accounts that have keys,
@@ -781,8 +818,20 @@ class BinanceTradingBotEngine:
     def apply_live_config_update(self, new_config):
         old_config = self.config
         self.config = new_config
-        self.language = self.config.get('language', 'pt-BR')
-        
+
+        # Handle Language Change
+        lang_changed = old_config.get('language') != self.config.get('language')
+        if lang_changed:
+            self.language = self.config.get('language', 'pt-BR')
+            # Update all existing logs in the queue
+            for entry in self.console_logs:
+                entry['rendered'] = self._render_log(entry)
+            # Re-emit the whole status to refresh UI text
+            self.emit('bot_status', {'running': self.is_running})
+            self.emit('clear_console', {})
+            for log in list(self.console_logs):
+                self.emit('console_log', log)
+
         # Check if is_demo changed
         demo_changed = old_config.get('is_demo') != self.config.get('is_demo')
 
@@ -805,6 +854,27 @@ class BinanceTradingBotEngine:
         # Immediate refresh of background states
         self._initialize_bg_clients()
         self.metadata_client = self._get_metadata_client()
+
+        # Cleanup stale data for removed accounts or cleared keys
+        num_accounts = len(self.config.get('api_accounts', []))
+        api_accounts = self.config.get('api_accounts', [])
+
+        for idx in list(self.account_balances.keys()):
+            if idx >= num_accounts:
+                del self.account_balances[idx]
+            else:
+                acc = api_accounts[idx]
+                if not acc.get('api_key') or not acc.get('api_secret'):
+                    del self.account_balances[idx]
+
+        for idx in list(self.open_positions.keys()):
+            if idx >= num_accounts:
+                del self.open_positions[idx]
+            else:
+                acc = api_accounts[idx]
+                if not acc.get('api_key') or not acc.get('api_secret'):
+                    del self.open_positions[idx]
+
         self._emit_account_update()
         
         if self.is_running:
