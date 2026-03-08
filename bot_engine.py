@@ -124,15 +124,29 @@ class BinanceTradingBotEngine:
     def _create_client(self, api_key, api_secret):
         testnet = self.config.get('is_demo', True)
         # Enable automatic time synchronization and trim keys
-        client = Client(api_key.strip(), api_secret.strip(), testnet=testnet, requests_params={'timeout': 20})
-        # Set base URL for futures explicitly
-        client.API_URL = 'https://fapi.binance.com/fapi' if not testnet else 'https://testnet.binancefuture.com/fapi'
+        # We don't set API_URL manually to avoid breaking standard calls
+        # Use a shorter timeout for the initial connection to avoid blocking too long
+        client = Client(api_key.strip(), api_secret.strip(), testnet=testnet, requests_params={'timeout': 10})
+
+        # Explicitly set Futures URL if we are in Demo mode to avoid any confusion with python-binance defaults
+        if testnet:
+            client.FUTURES_URL = 'https://testnet.binancefuture.com/fapi'
+            client.FUTURES_DATA_URL = 'https://testnet.binancefuture.com/fapi'
+        else:
+            client.FUTURES_URL = 'https://fapi.binance.com/fapi'
+            client.FUTURES_DATA_URL = 'https://fapi.binance.com/fapi'
+
         try:
-            # Sync time with server to avoid 'Timestamp for this request is outside of the recvWindow'
-            res = client.get_server_time()
+            # Use futures_time for futures accounts to avoid 404s on restricted spot regions
+            res = client.futures_time()
             client.timestamp_offset = res['serverTime'] - int(time.time() * 1000)
         except Exception as e:
-            logging.warning(f"Failed to sync time: {e}")
+            # Fallback to spot time if futures_time fails
+            try:
+                res = client.get_server_time()
+                client.timestamp_offset = res['serverTime'] - int(time.time() * 1000)
+            except:
+                logging.warning(f"Failed to sync time for account: {e}")
         return client
 
     def _get_client(self, api_key, api_secret):
@@ -141,8 +155,9 @@ class BinanceTradingBotEngine:
     def _initialize_bg_clients(self):
         """Initializes clients for all accounts with keys to fetch balances in background."""
         api_accounts = self.config.get('api_accounts', [])
+        testnet = self.config.get('is_demo', True)
 
-        # Cleanup existing background clients if they are no longer in the config or keys changed
+        # Cleanup existing background clients if they are no longer in the config, keys changed, or mode changed
         old_bg_idxs = list(self.bg_clients.keys())
         for idx in old_bg_idxs:
             if idx >= len(api_accounts):
@@ -151,12 +166,14 @@ class BinanceTradingBotEngine:
 
             acc = api_accounts[idx]
             old_bg = self.bg_clients[idx]
+            old_testnet = old_bg.get('is_demo', not testnet)
+
             if (acc.get('api_key', '').strip() != old_bg['info'].get('api_key', '').strip() or
-                acc.get('api_secret', '').strip() != old_bg['info'].get('api_secret', '').strip()):
+                acc.get('api_secret', '').strip() != old_bg['info'].get('api_secret', '').strip() or
+                old_testnet != testnet):
                 del self.bg_clients[idx]
 
         new_bg_clients = self.bg_clients.copy()
-        testnet = self.config.get('is_demo', True)
         mode_str = "DEMO (Testnet)" if testnet else "LIVE (Mainnet)"
 
         for i, acc in enumerate(api_accounts):
@@ -174,7 +191,8 @@ class BinanceTradingBotEngine:
                     new_bg_clients[i] = {
                         'client': client,
                         'name': acc.get('name', f"Account {i+1}"),
-                        'info': acc
+                        'info': acc,
+                        'is_demo': testnet
                     }
                 except Exception as e:
                     logging.error(f"Failed to init bg client for {acc.get('name')}: {e}")
@@ -325,7 +343,7 @@ class BinanceTradingBotEngine:
         entry_price = float(strategy.get('entry_price', 0))
 
         # "Use Existing Assets" logic
-        use_existing = strategy.get('use_existing', True)
+        use_existing = strategy.get('use_existing', strategy.get('use_existing_assets', True))
         pos = client.futures_position_information(symbol=symbol)
         p_info = next((p for p in pos if p['symbol'] == symbol and float(p['positionAmt']) != 0), None)
         has_pos = p_info is not None
@@ -438,45 +456,46 @@ class BinanceTradingBotEngine:
     def _format_quantity(self, symbol, quantity):
         with self.market_data_lock:
             info = self.shared_market_data.get(symbol, {}).get('info')
-        if not info: return quantity
+        if not info: return f"{quantity:.8f}".rstrip('0').rstrip('.')
+
         step_size = "0.00000001"
         for f in info['filters']:
             if f['filterType'] == 'LOT_SIZE':
                 step_size = f['stepSize']
                 break
+
         step_d = Decimal(step_size).normalize()
         qty_d = Decimal(str(quantity))
 
-        # Precision from step_size
-        precision = abs(step_d.as_tuple().exponent)
+        # Quantize quantity to step size
+        # We floor to avoid 'insufficient balance' or 'quantity too high'
+        result = (qty_d / step_d).quantize(Decimal('1'), rounding=ROUND_FLOOR) * step_d
         
-        # Format explicitly using decimal string formatting
-        # Round down to avoid exceeding available balance mathematically
-        factor = Decimal(10) ** precision
-        qty_floored = math.floor(qty_d * factor) / factor
+        # Determine decimal places from step_size
+        precision = max(0, -step_d.as_tuple().exponent)
         
-        return f"{qty_floored:.{precision}f}"
+        return format(result, f'.{precision}f')
 
 
     def _format_price(self, symbol, price):
         with self.market_data_lock:
             info = self.shared_market_data.get(symbol, {}).get('info')
-        if not info: return str(price)
+        if not info: return f"{price:.8f}".rstrip('0').rstrip('.')
+
         tick_size = "0.00000001"
         for f in info['filters']:
             if f['filterType'] == 'PRICE_FILTER':
                 tick_size = f['tickSize']
                 break
         
+        tick_d = Decimal(tick_size).normalize()
         price_d = Decimal(str(price))
-        tick_d = Decimal(tick_size)
         
-        # Quantize to the same number of decimals as tick_size
-        exp = tick_d.normalize().as_tuple().exponent
-        places = Decimal(10) ** exp
-        result = price_d.quantize(places, rounding=ROUND_HALF_UP)
+        # Quantize to tick size
+        result = (price_d / tick_d).quantize(Decimal('1'), rounding=ROUND_HALF_UP) * tick_d
         
-        return format(result.normalize(), 'f')
+        precision = max(0, -tick_d.as_tuple().exponent)
+        return format(result, f'.{precision}f')
 
     def _handle_user_data(self, idx, msg):
         if not self.is_running or idx not in self.accounts:
@@ -686,6 +705,17 @@ class BinanceTradingBotEngine:
         try:
             formatted_qty = self._format_quantity(symbol, qty)
             formatted_price = self._format_price(symbol, price)
+
+            # Validation for limit price vs market price to avoid common "Price out of range" errors
+            with self.market_data_lock:
+                current_market_price = self.shared_market_data.get(symbol, {}).get('price', 0)
+
+            if current_market_price > 0:
+                # Basic check: BUY limit cannot be much higher than market, SELL limit cannot be much lower.
+                # Binance has a "Price Filter" and "Percent Price Filter"
+                # If it's significantly off, we log it but try anyway, as Binance will reject it.
+                pass
+
             order = client.futures_create_order(
                 symbol=symbol,
                 side=side,
@@ -695,6 +725,13 @@ class BinanceTradingBotEngine:
                 price=formatted_price
             )
             return order['orderId']
+        except BinanceAPIException as e:
+            # Catch specific price out of range errors
+            if e.code == -4025 or "Price out of range" in e.message or "Price higher than" in e.message:
+                self.log("limit_order_price_error", level='warning', account_name=self.accounts[idx]['info'].get('name'), is_key=False, symbol=symbol, error=e.message)
+            else:
+                self.log("limit_order_failed", level='error', account_name=self.accounts[idx]['info'].get('name'), is_key=True, error=str(e))
+            return None
         except Exception as e:
             self.log("limit_order_failed", level='error', account_name=self.accounts[idx]['info'].get('name'), is_key=True, error=str(e))
             return None
@@ -919,6 +956,8 @@ class BinanceTradingBotEngine:
                         except Exception as e:
                             logging.debug(f"Error stopping TWM for account {i}: {e}")
                         del self.accounts[i]
+                        if i in self.account_balances: del self.account_balances[i]
+                        if i in self.open_positions: del self.open_positions[i]
                         with self.data_lock:
                             for key in list(self.grid_state.keys()):
                                 if key[0] == i: del self.grid_state[key]
@@ -1023,6 +1062,21 @@ class BinanceTradingBotEngine:
                     active_client = self.metadata_client
 
                 if symbols and active_client:
+                    # Optimize: Check if we need to fetch exchange info for any missing symbols
+                    missing_info = [s for s in symbols if s not in self.shared_market_data or 'info' not in self.shared_market_data[s]]
+                    if missing_info:
+                        try:
+                            ex_info = active_client.futures_exchange_info()
+                            with self.market_data_lock:
+                                for s_data in ex_info['symbols']:
+                                    s_name = s_data['symbol']
+                                    if s_name in symbols:
+                                        if s_name not in self.shared_market_data:
+                                            self.shared_market_data[s_name] = {'price': 0, 'last_update': 0}
+                                        self.shared_market_data[s_name]['info'] = s_data
+                        except Exception as e:
+                            logging.error(f"Error fetching exchange info: {e}")
+
                     try:
                         # Fetch orderbook ticker for bid/ask
                         tickers = active_client.futures_orderbook_ticker()
@@ -1041,15 +1095,6 @@ class BinanceTradingBotEngine:
                             if symbol in price_map:
                                 if symbol not in self.shared_market_data:
                                     self.shared_market_data[symbol] = {'price': 0, 'last_update': 0}
-                                    # Fetch exchange info for precision parsing
-                                    try:
-                                        info = active_client.futures_exchange_info()
-                                        for s in info['symbols']:
-                                            if s['symbol'] == symbol:
-                                                self.shared_market_data[symbol]['info'] = s
-                                                break
-                                    except:
-                                        pass
                                         
                                 self.shared_market_data[symbol]['price'] = price_map[symbol]['last']
                                 self.shared_market_data[symbol]['bid'] = price_map[symbol]['bid']

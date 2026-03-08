@@ -26,7 +26,7 @@ function setupEventListeners() {
         applyUiTranslations();
     });
 
-    document.getElementById('addNewSymbolBtn').addEventListener('click', () => {
+    document.getElementById('addNewSymbolBtn').addEventListener('click', async () => {
         const inputStr = document.getElementById('newSymbolInput').value;
         const symbol = inputStr ? inputStr.trim().toUpperCase() : '';
         if (symbol && symbol.length > 3) {
@@ -48,9 +48,9 @@ function setupEventListeners() {
                 }
 
                 currentConfig.symbol_strategies[symbol] = newStrat;
-                saveLiveConfig();
+                await saveLiveConfig();
                 initSymbolPicker();
-                renderSymbolsList(); // Update the settings modal list
+                renderSymbolsInModal();
                 document.getElementById('newSymbolInput').value = '';
                 document.getElementById('selectActiveSymbol').value = symbol;
                 activeSymbol = symbol;
@@ -328,18 +328,6 @@ function setupEventListeners() {
         loadConfig(); // Refresh after save
     });
 
-    document.getElementById('addNewSymbolBtn').addEventListener('click', () => {
-        const input = document.getElementById('newSymbolInput');
-        const sym = input.value.trim().toUpperCase();
-        if (sym && !currentConfig.symbols.includes(sym)) {
-            currentConfig.symbols.push(sym);
-            if (!currentConfig.symbol_strategies[sym]) {
-                currentConfig.symbol_strategies[sym] = JSON.parse(JSON.stringify(currentConfig.symbol_strategies[activeSymbol] || {}));
-            }
-            input.value = '';
-            renderSymbolsInModal();
-        }
-    });
 
     // Custom Bottom Tabs
     document.querySelectorAll('[data-tab-target]').forEach(tab => {
