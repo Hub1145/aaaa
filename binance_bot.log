@@ -1,0 +1,18 @@
+2026-03-08 15:59:03,896 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+2026-03-08 15:59:03,900 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3000
+ * Running on http://192.168.0.2:3000
+2026-03-08 15:59:03,900 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-08 15:59:08,977 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:08] "GET / HTTP/1.1" 200 -
+2026-03-08 15:59:09,175 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:09] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-08 15:59:09,178 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:09] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-03-08 15:59:09,621 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:09] "GET /socket.io/?EIO=4&transport=polling&t=PpEB8C7 HTTP/1.1" 200 -
+2026-03-08 15:59:09,659 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:09] "GET /api/config HTTP/1.1" 200 -
+2026-03-08 15:59:09,752 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:09] "GET /socket.io/?EIO=4&transport=polling&t=PpEB8Dm&sid=qHqjj2cnkBp0HxHAAAAA HTTP/1.1" 200 -
+2026-03-08 15:59:09,755 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:09] "POST /socket.io/?EIO=4&transport=polling&t=PpEB8DO&sid=qHqjj2cnkBp0HxHAAAAA HTTP/1.1" 200 -
+2026-03-08 15:59:09,905 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:09] "GET /socket.io/?EIO=4&transport=polling&t=PpEB8H3&sid=qHqjj2cnkBp0HxHAAAAA HTTP/1.1" 200 -
+2026-03-08 15:59:09,931 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:09] "GET /socket.io/?EIO=4&transport=polling&t=PpEB8HQ&sid=qHqjj2cnkBp0HxHAAAAA HTTP/1.1" 200 -
+2026-03-08 15:59:10,663 - INFO - Initialized 0 background clients in LIVE (Mainnet) mode.
+2026-03-08 15:59:10,755 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:10] "POST /api/config HTTP/1.1" 200 -
+2026-03-08 15:59:12,033 - INFO - 127.0.0.1 - - [08/Mar/2026 15:59:12] "GET /socket.io/?EIO=4&transport=websocket&sid=qHqjj2cnkBp0HxHAAAAA HTTP/1.1" 200 -

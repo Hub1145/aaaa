@@ -125,6 +125,7 @@ TRANSLATIONS = {
             'acc_secret_placeholder': "Segredo",
             'label_consolidated_reentry': "Reciclagem de Frações",
             'desc_consolidated_reentry': "Sempre que um Take Profit for atingido, o robô recompra automaticamente no preço de entrada original, acumulando o volume.",
+            'server_ip': "IP do Servidor: ",
         }
     },
     'en-US': {
@@ -251,6 +252,7 @@ TRANSLATIONS = {
             'acc_secret_placeholder': "Secret",
             'label_consolidated_reentry': "Consolidated Re-entry",
             'desc_consolidated_reentry': "Whenever a Take Profit is hit, the bot automatically buys back at the original entry price, accumulating the volume.",
+            'server_ip': "Server IP: ",
         }
     }
 }

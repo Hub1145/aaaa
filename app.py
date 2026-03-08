@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import threading
+import requests
 from bot_engine import BinanceTradingBotEngine
 from translations_py import TRANSLATIONS
 
@@ -18,6 +19,12 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 config_file = 'config.json'
 bot_engine = None
+server_ip = "Unknown"
+
+try:
+    server_ip = requests.get('https://api.ipify.org', timeout=5).text
+except Exception:
+    pass
 
 def load_config():
     with open(config_file, 'r') as f:
@@ -32,7 +39,7 @@ def emit_to_client(event, data):
 
 @app.route('/')
 def index():
-    return render_template('dashboard.html', translations=TRANSLATIONS)
+    return render_template('dashboard.html', translations=TRANSLATIONS, server_ip=server_ip)
 
 @app.route('/api/config', methods=['GET'])
 def get_config():
