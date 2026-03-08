@@ -117,6 +117,7 @@ TRANSLATIONS = {
             'settings_symbol_mgmt': "Gerenciamento de Símbolos",
             'settings_add_symbol_placeholder': "Adicionar Símbolo (ex: BTCUSDC)",
             'settings_add_btn': "Adicionar",
+            'settings_test_btn': "Testar",
             'settings_close_btn': "Fechar",
             'settings_save_btn': "Salvar Alterações",
             'acc_name_placeholder': "Nome",
@@ -124,6 +125,7 @@ TRANSLATIONS = {
             'acc_secret_placeholder': "Segredo",
             'label_consolidated_reentry': "Reciclagem de Frações",
             'desc_consolidated_reentry': "Sempre que um Take Profit for atingido, o robô recompra automaticamente no preço de entrada original, acumulando o volume.",
+            'server_ip': "IP do Servidor: ",
         }
     },
     'en-US': {
@@ -242,6 +244,7 @@ TRANSLATIONS = {
             'settings_symbol_mgmt': "Symbol Management",
             'settings_add_symbol_placeholder': "Add Symbol (e.g. BTCUSDC)",
             'settings_add_btn': "Add",
+            'settings_test_btn': "Test",
             'settings_close_btn': "Close",
             'settings_save_btn': "Save Changes",
             'acc_name_placeholder': "Name",
@@ -249,6 +252,7 @@ TRANSLATIONS = {
             'acc_secret_placeholder': "Secret",
             'label_consolidated_reentry': "Consolidated Re-entry",
             'desc_consolidated_reentry': "Whenever a Take Profit is hit, the bot automatically buys back at the original entry price, accumulating the volume.",
+            'server_ip': "Server IP: ",
         }
     }
 }
