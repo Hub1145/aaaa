@@ -265,7 +265,7 @@ class BinanceTradingBotEngine:
         self.is_running = False
         # Do NOT set stop_event here because it stops the global pricing/balance worker
         # Instead, we just stop the TWMs and clear active trading accounts
-        for i, acc in self.accounts.items():
+        for i, acc in list(self.accounts.items()):
             try:
                 acc['twm'].stop()
             except: pass
@@ -340,14 +340,18 @@ class BinanceTradingBotEngine:
         # Determine calculation price for quantity
         # For LIMIT/COND_LIMIT, use entry_price to ensure notional amount (qty*price) is exact.
         # For MARKET/COND_MARKET, use current market price.
-        # Robust check: if entry_price is wildly different from current_price (e.g. 5x difference),
-        # it's likely a stale price from another symbol or a major config error.
+
+        # VERY IMPORTANT: Price Mismatch Protection
+        # If entry_price is wildly different from current_price (e.g. 5x difference),
+        # it's likely a stale price inherited from a previous symbol in the UI (e.g. DOGE inheriting BTC price).
+        # We MUST block this to avoid massive quantity errors.
         if entry_type in ['LIMIT', 'COND_LIMIT'] and entry_price > 0:
-            if entry_price > current_price * 2 or entry_price < current_price * 0.5:
+            # Increase tolerance to 5x for volatile assets, but keep protection
+            if entry_price > current_price * 5 or entry_price < current_price * 0.2:
                 log_key = f"stale_price_skip_{idx}_{symbol}"
                 now = time.time()
                 if now - self.last_log_times.get(log_key, 0) > 60:
-                    self.log(f"Skipping {symbol} - Entry price {entry_price} is too far from market {current_price}. Please update configuration.", level='warning', account_name=acc['info'].get('name'))
+                    self.log(f"Skipping {symbol} - Entry price {entry_price} is too far from market {current_price}. This is likely inherited from another symbol. Please re-select the symbol in the UI to refresh.", level='warning', account_name=acc['info'].get('name'))
                     self.last_log_times[log_key] = now
                 return
             calc_price = entry_price
@@ -358,8 +362,17 @@ class BinanceTradingBotEngine:
         balance = self.account_balances.get(idx, 0.0)
         if is_pct:
             quantity = (balance * (trade_amount_val / 100.0) * leverage) / calc_price
+            calc_details = f"(Balance {balance:.2f} * {trade_amount_val}% * Lev {leverage}) / {calc_price}"
         else:
             quantity = (trade_amount_val * leverage) / calc_price
+            calc_details = f"(Amount {trade_amount_val} * Lev {leverage}) / {calc_price}"
+
+        # Debug log for quantity calculation
+        log_key_calc = f"qty_calc_debug_{idx}_{symbol}"
+        now = time.time()
+        if now - self.last_log_times.get(log_key_calc, 0) > 300: # Every 5 mins
+            logging.debug(f"[{acc['info'].get('name')}] Calculated quantity for {symbol}: {quantity} using {calc_details}")
+            self.last_log_times[log_key_calc] = now
 
         # "Use Existing Assets" logic
         use_existing = strategy.get('use_existing', strategy.get('use_existing_assets', True))
@@ -431,7 +444,7 @@ class BinanceTradingBotEngine:
                     log_key = f"price_out_of_range_{idx}_{symbol}"
                     now = time.time()
                     if now - self.last_log_times.get(log_key, 0) > 60:
-                        self.log("limit_price_out_of_range", level='warning', account_name=acc['info'].get('name'), is_key=False, symbol=symbol, price=entry_price, market=current_price)
+                        self.log(f"Limit order price {entry_price} for {symbol} is likely invalid (Market: {current_price}). Skipping to avoid API error.", level='warning', account_name=acc['info'].get('name'))
                         self.last_log_times[log_key] = now
                     return
 
@@ -467,11 +480,12 @@ class BinanceTradingBotEngine:
                 return
 
             # Check balance before logging "placing_initial" to avoid log spam if empty
-            if not self._check_balance_for_order(idx, quantity, entry_price):
+            # Use calc_price (current price for Market, entry price for Limit) for validation
+            if not self._check_balance_for_order(idx, quantity, calc_price):
                 log_key = f"insufficient_balance_{idx}_{symbol}"
                 now = time.time()
                 if now - self.last_log_times.get(log_key, 0) > 60:
-                    self.log("insufficient_balance", level='warning', account_name=acc['info'].get('name'), is_key=True, qty=quantity, price=entry_price)
+                    self.log("insufficient_balance", level='warning', account_name=acc['info'].get('name'), is_key=True, qty=quantity, price=calc_price)
                     self.last_log_times[log_key] = now
                 return
 
@@ -610,7 +624,7 @@ class BinanceTradingBotEngine:
                 return
 
             # 2. Check levels for TP fills
-            for level, lvl_data in state['levels'].items():
+            for level, lvl_data in list(state['levels'].items()):
                 if lvl_data.get('tp_order_id') and order_id == lvl_data.get('tp_order_id'):
                     qty_filled = lvl_data.get('qty', fraction_qty)
                     self.log("tp_filled_manual", account_name=self.accounts[idx]['info'].get('name'), is_key=True, level=level, qty=qty_filled)
@@ -633,7 +647,7 @@ class BinanceTradingBotEngine:
                 
                 anchor = state.get('avg_entry_price', entry_price_base)
                 # Re-place TPs that were filled
-                for l, o in state['levels'].items():
+                for l, o in list(state['levels'].items()):
                     if o.get('tp_order_id') is None and not o.get('is_market') and not o.get('trailing_eligible'):
                         pct = o.get('percent', 0)
                         tp_price = anchor * (1 + pct) if direction == 'LONG' else anchor * (1 - pct)
@@ -754,6 +768,8 @@ class BinanceTradingBotEngine:
             formatted_qty = self._format_quantity(symbol, qty)
             formatted_price = self._format_price(symbol, price)
 
+            logging.debug(f"[{self.accounts[idx]['info'].get('name')}] Placing {side} LIMIT order for {symbol}: Qty {formatted_qty} @ Price {formatted_price}")
+
             # Validation for limit price vs market price to avoid common "Price out of range" errors
             with self.market_data_lock:
                 current_market_price = self.shared_market_data.get(symbol, {}).get('price', 0)
@@ -853,7 +869,7 @@ class BinanceTradingBotEngine:
             pass
 
     def _emit_account_update(self):
-        total_balance = sum(self.account_balances.values())
+        total_balance = sum(list(self.account_balances.values()))
         total_pnl = 0.0
         
         all_positions = []
@@ -1046,12 +1062,12 @@ class BinanceTradingBotEngine:
                 target_client = self.bg_clients[account_idx]['client']
         else:
             # Fallback for name-based lookup
-            for acc in self.accounts.values():
+            for acc in list(self.accounts.values()):
                 if acc['info'].get('name') == account_idx:
                     target_client = acc['client']
                     break
             if not target_client:
-                for acc in self.bg_clients.values():
+                for acc in list(self.bg_clients.values()):
                     if acc.get('name') == account_idx:
                         target_client = acc['client']
                         break
@@ -1097,11 +1113,12 @@ class BinanceTradingBotEngine:
         while not self.stop_event.is_set():
             try:
                 # 1. Update shared market data (prices)
+                # Ensure we use a fresh list of symbols from the live config
                 symbols = list(self.config.get('symbols', []))
                 
                 # Use metadata client if no accounts are active yet
                 active_client = None
-                for acc in self.accounts.values():
+                for acc in list(self.accounts.values()):
                     if acc.get('client'):
                         active_client = acc['client']
                         break
@@ -1165,8 +1182,17 @@ class BinanceTradingBotEngine:
                     if price_map:
                         self.emit('price_update', price_map)
                     
+                    # Log warnings for symbols not found (typos or unsupported)
+                    for s in symbols:
+                        if s not in price_map:
+                            log_key = f"symbol_not_found_{s}"
+                            now = time.time()
+                            if now - self.last_log_times.get(log_key, 0) > 300: # Every 5 mins
+                                self.log(f"Warning: Symbol {s} not found on Binance. Please check if it is a valid USDC pair.", level='warning')
+                                self.last_log_times[log_key] = now
+
                     # 2. Update balances for all background accounts
-                    for idx in self.bg_clients:
+                    for idx in list(self.bg_clients.keys()):
                         self._update_bg_account_metrics(idx)
                     
                     self._emit_account_update()
@@ -1186,7 +1212,7 @@ class BinanceTradingBotEngine:
         with self.market_data_lock:
             # Reconstruct price map from shared storage with full {bid, ask, last}
             price_map = {}
-            for s, data in self.shared_market_data.items():
+            for s, data in list(self.shared_market_data.items()):
                 price_map[s] = {
                     'bid': data.get('bid', data['price']),
                     'ask': data.get('ask', data['price']),
@@ -1378,7 +1404,7 @@ class BinanceTradingBotEngine:
 
         to_execute = []
         with self.data_lock:
-            for lvl_idx, lvl in levels.items():
+            for lvl_idx, lvl in list(levels.items()):
                 if not lvl.get('tp_order_id') and not lvl.get('filled') and not lvl.get('trailing_eligible'):
                     target_price = lvl['price']
                     triggered = False
@@ -1554,5 +1580,5 @@ class BinanceTradingBotEngine:
         return {
             'running': self.is_running,
             'accounts_count': len(self.accounts),
-            'total_balance': sum(self.account_balances.values())
+            'total_balance': sum(list(self.account_balances.values()))
         }

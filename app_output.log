@@ -1,0 +1,19 @@
+2026-03-09 11:37:56,532 - INFO - Initialized 0 background clients in LIVE (Mainnet) mode.
+2026-03-09 11:37:56,627 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Serving Flask app 'app'
+ * Debug mode: off
+2026-03-09 11:37:56,630 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3000
+ * Running on http://192.168.0.2:3000
+2026-03-09 11:37:56,630 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-09 11:38:43,418 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET / HTTP/1.1" 200 -
+2026-03-09 11:38:43,448 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-03-09 11:38:43,449 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-09 11:38:43,650 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /api/config HTTP/1.1" 200 -
+2026-03-09 11:38:43,652 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP70t HTTP/1.1" 200 -
+2026-03-09 11:38:43,662 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "POST /socket.io/?EIO=4&transport=polling&t=PpIP718&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
+2026-03-09 11:38:43,673 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP71C&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
+2026-03-09 11:38:43,685 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP71Y&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
+2026-03-09 11:38:43,696 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP71i&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
+2026-03-09 11:39:14,154 - INFO - 127.0.0.1 - - [09/Mar/2026 11:39:14] "GET /socket.io/?EIO=4&transport=websocket&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -

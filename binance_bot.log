@@ -15,3 +15,81 @@
 2026-03-09 10:57:05,636 - INFO - Initialized 0 background clients in LIVE (Mainnet) mode.
 2026-03-09 10:57:05,744 - INFO - 127.0.0.1 - - [09/Mar/2026 10:57:05] "POST /api/config HTTP/1.1" 200 -
 2026-03-09 10:57:06,908 - INFO - 127.0.0.1 - - [09/Mar/2026 10:57:06] "GET /socket.io/?EIO=4&transport=websocket&sid=pehGN0k5_o68agQFAAAA HTTP/1.1" 200 -
+2026-03-09 11:11:27,338 - INFO - Initialized 0 background clients in LIVE (Mainnet) mode.
+2026-03-09 11:11:38,476 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+2026-03-09 11:11:38,488 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3000
+ * Running on http://192.168.0.2:3000
+2026-03-09 11:11:38,488 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-09 11:12:50,783 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:50] "GET / HTTP/1.1" 200 -
+2026-03-09 11:12:50,875 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:50] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-09 11:12:50,877 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:50] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-03-09 11:12:51,252 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:51] "GET /socket.io/?EIO=4&transport=polling&t=PpIJC0C HTTP/1.1" 200 -
+2026-03-09 11:12:51,260 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:51] "GET /api/config HTTP/1.1" 200 -
+2026-03-09 11:12:51,279 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:51] "POST /socket.io/?EIO=4&transport=polling&t=PpIJC10&sid=qWopJoxYH9u0cHisAAAA HTTP/1.1" 200 -
+2026-03-09 11:12:51,315 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:51] "GET /socket.io/?EIO=4&transport=polling&t=PpIJC1J&sid=qWopJoxYH9u0cHisAAAA HTTP/1.1" 200 -
+2026-03-09 11:12:51,384 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:51] "GET /socket.io/?EIO=4&transport=polling&t=PpIJC2o&sid=qWopJoxYH9u0cHisAAAA HTTP/1.1" 200 -
+2026-03-09 11:12:51,408 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:51] "GET /socket.io/?EIO=4&transport=polling&t=PpIJC3A&sid=qWopJoxYH9u0cHisAAAA HTTP/1.1" 200 -
+2026-03-09 11:12:54,035 - INFO - 127.0.0.1 - - [09/Mar/2026 11:12:54] "GET /socket.io/?EIO=4&transport=websocket&sid=qWopJoxYH9u0cHisAAAA HTTP/1.1" 200 -
+2026-03-09 11:19:57,341 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+2026-03-09 11:19:57,346 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3000
+ * Running on http://192.168.0.2:3000
+2026-03-09 11:19:57,346 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-09 11:20:36,759 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:36] "GET / HTTP/1.1" 200 -
+2026-03-09 11:20:36,818 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:36] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-09 11:20:36,820 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:36] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-03-09 11:20:37,033 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:37] "GET /socket.io/?EIO=4&transport=polling&t=PpIKzkM HTTP/1.1" 200 -
+2026-03-09 11:20:37,037 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:37] "GET /api/config HTTP/1.1" 200 -
+2026-03-09 11:20:37,065 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:37] "POST /socket.io/?EIO=4&transport=polling&t=PpIKzkm&sid=eU-DBxkmKxcQnEZxAAAA HTTP/1.1" 200 -
+2026-03-09 11:20:37,066 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:37] "GET /socket.io/?EIO=4&transport=polling&t=PpIKzkr&sid=eU-DBxkmKxcQnEZxAAAA HTTP/1.1" 200 -
+2026-03-09 11:20:37,118 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:37] "GET /socket.io/?EIO=4&transport=polling&t=PpIKzls&sid=eU-DBxkmKxcQnEZxAAAA HTTP/1.1" 200 -
+2026-03-09 11:20:37,140 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:37] "GET /socket.io/?EIO=4&transport=polling&t=PpIKzmD&sid=eU-DBxkmKxcQnEZxAAAA HTTP/1.1" 200 -
+2026-03-09 11:20:39,981 - INFO - Initialized 0 background clients in LIVE (Mainnet) mode.
+2026-03-09 11:20:40,086 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:40] "POST /api/config HTTP/1.1" 200 -
+2026-03-09 11:20:43,274 - INFO - 127.0.0.1 - - [09/Mar/2026 11:20:43] "GET /socket.io/?EIO=4&transport=websocket&sid=eU-DBxkmKxcQnEZxAAAA HTTP/1.1" 200 -
+2026-03-09 11:29:33,058 - INFO - Initialized 0 background clients in LIVE (Mainnet) mode.
+2026-03-09 11:31:41,649 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+2026-03-09 11:33:06,870 - INFO - 127.0.0.1 - - [09/Mar/2026 11:33:06] "GET / HTTP/1.1" 200 -
+2026-03-09 11:33:06,935 - INFO - 127.0.0.1 - - [09/Mar/2026 11:33:06] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-09 11:33:06,939 - INFO - 127.0.0.1 - - [09/Mar/2026 11:33:06] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-03-09 11:33:07,165 - INFO - 127.0.0.1 - - [09/Mar/2026 11:33:07] "GET /api/config HTTP/1.1" 200 -
+2026-03-09 11:33:07,166 - INFO - 127.0.0.1 - - [09/Mar/2026 11:33:07] "GET /socket.io/?EIO=4&transport=polling&t=PpINqt9 HTTP/1.1" 200 -
+2026-03-09 11:33:07,209 - INFO - 127.0.0.1 - - [09/Mar/2026 11:33:07] "POST /socket.io/?EIO=4&transport=polling&t=PpINqtc&sid=6gTs1_kCZTsD43qQAAAC HTTP/1.1" 200 -
+2026-03-09 11:33:07,224 - INFO - 127.0.0.1 - - [09/Mar/2026 11:33:07] "GET /socket.io/?EIO=4&transport=polling&t=PpINqtp&sid=6gTs1_kCZTsD43qQAAAC HTTP/1.1" 200 -
+2026-03-09 11:33:07,275 - INFO - 127.0.0.1 - - [09/Mar/2026 11:33:07] "GET /socket.io/?EIO=4&transport=polling&t=PpINqul&sid=6gTs1_kCZTsD43qQAAAC HTTP/1.1" 200 -
+2026-03-09 11:33:37,355 - INFO - 127.0.0.1 - - [09/Mar/2026 11:33:37] "GET /socket.io/?EIO=4&transport=websocket&sid=6gTs1_kCZTsD43qQAAAC HTTP/1.1" 200 -
+2026-03-09 11:35:05,899 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+2026-03-09 11:35:05,902 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3000
+ * Running on http://192.168.0.2:3000
+2026-03-09 11:35:05,902 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-09 11:35:18,607 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+2026-03-09 11:36:29,235 - INFO - 127.0.0.1 - - [09/Mar/2026 11:36:29] "GET / HTTP/1.1" 200 -
+2026-03-09 11:36:29,265 - INFO - 127.0.0.1 - - [09/Mar/2026 11:36:29] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-09 11:36:29,267 - INFO - 127.0.0.1 - - [09/Mar/2026 11:36:29] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-03-09 11:36:29,430 - INFO - 127.0.0.1 - - [09/Mar/2026 11:36:29] "GET /socket.io/?EIO=4&transport=polling&t=PpIOcFi HTTP/1.1" 200 -
+2026-03-09 11:36:29,436 - INFO - 127.0.0.1 - - [09/Mar/2026 11:36:29] "GET /api/config HTTP/1.1" 200 -
+2026-03-09 11:36:29,446 - INFO - 127.0.0.1 - - [09/Mar/2026 11:36:29] "POST /socket.io/?EIO=4&transport=polling&t=PpIOcF-&sid=Nl7RtSpJoCRHXmiKAAAA HTTP/1.1" 200 -
+2026-03-09 11:36:29,448 - INFO - 127.0.0.1 - - [09/Mar/2026 11:36:29] "GET /socket.io/?EIO=4&transport=polling&t=PpIOcG1&sid=Nl7RtSpJoCRHXmiKAAAA HTTP/1.1" 200 -
+2026-03-09 11:36:29,466 - INFO - 127.0.0.1 - - [09/Mar/2026 11:36:29] "GET /socket.io/?EIO=4&transport=polling&t=PpIOcGM&sid=Nl7RtSpJoCRHXmiKAAAA HTTP/1.1" 200 -
+2026-03-09 11:36:59,529 - INFO - 127.0.0.1 - - [09/Mar/2026 11:36:59] "GET /socket.io/?EIO=4&transport=websocket&sid=Nl7RtSpJoCRHXmiKAAAA HTTP/1.1" 200 -
+2026-03-09 11:37:56,627 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+2026-03-09 11:37:56,630 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3000
+ * Running on http://192.168.0.2:3000
+2026-03-09 11:37:56,630 - INFO - [33mPress CTRL+C to quit[0m
+2026-03-09 11:38:43,418 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET / HTTP/1.1" 200 -
+2026-03-09 11:38:43,448 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-03-09 11:38:43,449 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-09 11:38:43,650 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /api/config HTTP/1.1" 200 -
+2026-03-09 11:38:43,652 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP70t HTTP/1.1" 200 -
+2026-03-09 11:38:43,662 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "POST /socket.io/?EIO=4&transport=polling&t=PpIP718&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
+2026-03-09 11:38:43,673 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP71C&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
+2026-03-09 11:38:43,685 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP71Y&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
+2026-03-09 11:38:43,696 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP71i&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
+2026-03-09 11:39:14,154 - INFO - 127.0.0.1 - - [09/Mar/2026 11:39:14] "GET /socket.io/?EIO=4&transport=websocket&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -

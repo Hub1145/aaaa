@@ -85,6 +85,11 @@ function setupEventListeners() {
             const el = document.getElementById(id);
             if (el) el.innerText = unit;
         });
+
+        // Clear stale price display immediately
+        document.getElementById('bid-price').innerText = '0.00';
+        document.getElementById('ask-price').innerText = '0.00';
+
         updateUIFromConfig();
     });
 
@@ -604,14 +609,33 @@ function setupSocketListeners() {
     socket.on('price_update', (prices) => {
         if (activeSymbol && prices[activeSymbol]) {
             const p = prices[activeSymbol];
-            // p should be {bid, ask, last}, handle fallbacks
             const bid = p.bid !== undefined ? p.bid : p.last || p;
             const ask = p.ask !== undefined ? p.ask : p.last || p;
 
             const bidEl = document.getElementById('bid-price');
             const askEl = document.getElementById('ask-price');
-            if (bidEl && typeof bid === 'number') bidEl.innerText = bid.toFixed(2);
-            if (askEl && typeof ask === 'number') askEl.innerText = ask.toFixed(2);
+
+            // Determine precision based on price magnitude
+            // For DOGE (~0.15) we need at least 4-5 decimals
+            // For BTC (~70000) 1-2 decimals is enough
+            let precision = 2;
+            if (bid < 0.1) precision = 6;
+            else if (bid < 1) precision = 5;
+            else if (bid < 10) precision = 4;
+            else if (bid < 100) precision = 3;
+
+            if (bidEl && typeof bid === 'number') bidEl.innerText = bid.toFixed(precision);
+            if (askEl && typeof ask === 'number') askEl.innerText = ask.toFixed(precision);
+
+            // Auto-populate entry price if it's 0 and we JUST received a fresh market price
+            if (currentConfig && currentConfig.symbol_strategies[activeSymbol]) {
+                const strat = currentConfig.symbol_strategies[activeSymbol];
+                if (!strat.entry_price || strat.entry_price === 0) {
+                    strat.entry_price = bid;
+                    document.getElementById('inputEntryPrice').value = bid.toFixed(precision);
+                    saveLiveConfig();
+                }
+            }
 
             updateTotalBaseUnits();
         }
