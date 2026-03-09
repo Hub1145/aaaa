@@ -323,7 +323,8 @@ class BinanceTradingBotEngine:
         client = acc['client']
         symbol_strategies = self.config.get('symbol_strategies', {})
         strategy = symbol_strategies.get(symbol, {})
-        direction = strategy.get('direction', 'LONG')
+        direction = strategy.get('direction', 'LONG').upper()
+        entry_type = strategy.get('entry_type', 'LIMIT').upper()
         
         trade_amount_val = float(strategy.get('trade_amount_usdc', 0))
         leverage = int(strategy.get('leverage', 20))
@@ -334,13 +335,31 @@ class BinanceTradingBotEngine:
         
         if current_price <= 0: return
         
+        entry_price = float(strategy.get('entry_price', 0))
+
+        # Determine calculation price for quantity
+        # For LIMIT/COND_LIMIT, use entry_price to ensure notional amount (qty*price) is exact.
+        # For MARKET/COND_MARKET, use current market price.
+        # Robust check: if entry_price is wildly different from current_price (e.g. 5x difference),
+        # it's likely a stale price from another symbol or a major config error.
+        if entry_type in ['LIMIT', 'COND_LIMIT'] and entry_price > 0:
+            if entry_price > current_price * 2 or entry_price < current_price * 0.5:
+                log_key = f"stale_price_skip_{idx}_{symbol}"
+                now = time.time()
+                if now - self.last_log_times.get(log_key, 0) > 60:
+                    self.log(f"Skipping {symbol} - Entry price {entry_price} is too far from market {current_price}. Please update configuration.", level='warning', account_name=acc['info'].get('name'))
+                    self.last_log_times[log_key] = now
+                return
+            calc_price = entry_price
+        else:
+            calc_price = current_price
+
         # Calculate quantity for new entry
         balance = self.account_balances.get(idx, 0.0)
         if is_pct:
-            quantity = (balance * (trade_amount_val / 100.0) * leverage) / current_price
+            quantity = (balance * (trade_amount_val / 100.0) * leverage) / calc_price
         else:
-            quantity = (trade_amount_val * leverage) / current_price
-        entry_price = float(strategy.get('entry_price', 0))
+            quantity = (trade_amount_val * leverage) / calc_price
 
         # "Use Existing Assets" logic
         use_existing = strategy.get('use_existing', strategy.get('use_existing_assets', True))
@@ -383,7 +402,6 @@ class BinanceTradingBotEngine:
             if orders:
                 # Synchronization: check if order price matches config price
                 # Only check for LIMIT entries
-                entry_type = strategy.get('entry_type', 'LIMIT')
                 if entry_type == 'LIMIT':
                     for o in orders:
                         if o['type'] == 'LIMIT' and o['side'] == (Client.SIDE_BUY if direction == 'LONG' else Client.SIDE_SELL):
@@ -398,8 +416,26 @@ class BinanceTradingBotEngine:
                                 return # Next loop will re-place
                 return
 
+            # Safety check: Prevent placing LIMIT orders too far from market price
+            # to avoid spamming "Limit price can't be higher/lower than X" errors
+            if entry_type == 'LIMIT':
+                # Binance usually allows up to 5% or 10% deviation for futures
+                # We'll use a conservative 5% check
+                is_invalid = False
+                if direction == 'LONG' and entry_price > current_price * 1.05:
+                    is_invalid = True
+                elif direction == 'SHORT' and entry_price < current_price * 0.95:
+                    is_invalid = True
+
+                if is_invalid:
+                    log_key = f"price_out_of_range_{idx}_{symbol}"
+                    now = time.time()
+                    if now - self.last_log_times.get(log_key, 0) > 60:
+                        self.log("limit_price_out_of_range", level='warning', account_name=acc['info'].get('name'), is_key=False, symbol=symbol, price=entry_price, market=current_price)
+                        self.last_log_times[log_key] = now
+                    return
+
             side = Client.SIDE_BUY if direction == 'LONG' else Client.SIDE_SELL
-            entry_type = strategy.get('entry_type', 'LIMIT')
             
             if entry_type == 'MARKET':
                 self.log("placing_market_initial", account_name=acc['info'].get('name'), is_key=True, direction=direction)
@@ -683,18 +719,30 @@ class BinanceTradingBotEngine:
                 'filled': False
             }
 
-    def _check_balance_for_order(self, idx, qty, price):
+    def _check_balance_for_order(self, idx, qty, price, leverage=None):
         # Specifically check USDC balance for USDC-M pairs
         balance = self.account_balances.get(idx, 0)
         notional = qty * price
-        # Buffer for margin
-        return balance > (notional / 5) # Simplified check for leverage safety
+
+        # If leverage is not provided, try to find it in config
+        if leverage is None:
+            leverage = 20 # Default fallback
+            # We don't have symbol here, so this is an approximation.
+            # In _place_limit_order we can pass it.
+
+        # Margin required = Notional / Leverage
+        # Add a 5% buffer for fees and price movements
+        margin_required = (notional / leverage) * 1.05
+        return balance >= margin_required
 
     def _place_limit_order(self, idx, symbol, side, qty, price):
         client = self.accounts[idx]['client']
 
+        strategy = self.config.get('symbol_strategies', {}).get(symbol, {})
+        leverage = int(strategy.get('leverage', 20))
+
         # Validate balance before placing re-buy/re-sell orders
-        if not self._check_balance_for_order(idx, qty, price):
+        if not self._check_balance_for_order(idx, qty, price, leverage=leverage):
             log_key = f"insufficient_balance_{idx}_{symbol}"
             now = time.time()
             if now - self.last_log_times.get(log_key, 0) > 60: # Log at most once per minute per symbol
@@ -726,8 +774,8 @@ class BinanceTradingBotEngine:
             )
             return order['orderId']
         except BinanceAPIException as e:
-            # Catch specific price out of range errors
-            if e.code == -4025 or "Price out of range" in e.message or "Price higher than" in e.message:
+            # Catch specific price out of range errors (including -4016 and -4025)
+            if e.code in [-4016, -4025] or "Price out of range" in e.message or "Price higher than" in e.message or "Price lower than" in e.message:
                 self.log("limit_order_price_error", level='warning', account_name=self.accounts[idx]['info'].get('name'), is_key=False, symbol=symbol, error=e.message)
             else:
                 self.log("limit_order_failed", level='error', account_name=self.accounts[idx]['info'].get('name'), is_key=True, error=str(e))

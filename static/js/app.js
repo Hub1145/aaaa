@@ -35,6 +35,11 @@ function setupEventListeners() {
                 // Copy current strategy or initialize a default one
                 let newStrat = JSON.parse(JSON.stringify(currentConfig.symbol_strategies[activeSymbol] || {}));
 
+                // Reset price-sensitive fields for the new symbol
+                newStrat.entry_price = 0;
+                newStrat.stop_loss_price = 0;
+                newStrat.sl_order_price = 0;
+
                 // Ensure the 8-step TP ladder and recycling are enabled by default for new symbols
                 newStrat.tp_enabled = true;
                 newStrat.consolidated_reentry = true;
@@ -417,6 +422,12 @@ function applyUiTranslations() {
 function updateUIFromConfig() {
     if (!activeSymbol || !currentConfig) return;
     const strat = currentConfig.symbol_strategies[activeSymbol] || {};
+
+    // Update active symbol picker to match
+    const picker = document.getElementById('selectActiveSymbol');
+    if (picker && picker.value !== activeSymbol) {
+        picker.value = activeSymbol;
+    }
 
     const isPct = strat.trade_amount_is_pct || false;
     document.getElementById('selectTradeAmountMode').value = isPct ? 'pct' : 'fixed';
