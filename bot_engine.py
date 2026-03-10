@@ -13,15 +13,17 @@ from binance.exceptions import BinanceAPIException
 from translations_py import TRANSLATIONS
 
 class BinanceTradingBotEngine:
-    def __init__(self, config_path, emit_callback):
+    def __init__(self, config_path, emit_callback, server_ip="Unknown"):
         self.config_path = config_path
         self.emit = emit_callback
+        self.server_ip = server_ip
         self.console_logs = deque(maxlen=500)
         self.config = self._load_config()
         self.language = self.config.get('language', 'pt-BR')
         self.bg_clients = {} # account_index -> { 'client': Client, 'name': str }
         self._initialize_bg_clients()
         self.metadata_client = self._get_metadata_client()
+        self.market_client = self._create_client("", "")
 
         self.is_running = False
         self.stop_event = threading.Event()
@@ -43,6 +45,7 @@ class BinanceTradingBotEngine:
         
         # Dashboard metrics
         self.account_balances = {} # account_index -> balance
+        self.account_errors = {} # account_index -> error message
         self.open_positions = {} # account_index -> [positions]
         # Trailing TP/SL/Buy state
         self.trailing_state = {}
@@ -267,8 +270,12 @@ class BinanceTradingBotEngine:
         # Instead, we just stop the TWMs and clear active trading accounts
         for i, acc in list(self.accounts.items()):
             try:
-                acc['twm'].stop()
-            except: pass
+                if 'twm' in acc:
+                    acc['twm'].stop()
+                    # Small sleep to allow websocket cleanup and prevent fail_connection AttributeError
+                    time.sleep(0.1)
+            except Exception:
+                pass
         self.accounts = {}
         self.log("bot_stopped", is_key=True)
 
@@ -801,6 +808,7 @@ class BinanceTradingBotEngine:
             return None
 
     def _update_account_metrics(self, idx, force=False):
+        if idx not in self.accounts: return
         acc = self.accounts[idx]
         client = acc['client']
         try:
@@ -835,6 +843,16 @@ class BinanceTradingBotEngine:
 
             self._emit_account_update()
 
+        except BinanceAPIException as e:
+            if e.code == -2015:
+                self.account_errors[idx] = "Invalid API Key/Permissions"
+                log_key = f"invalid_api_{idx}"
+                now = time.time()
+                if now - self.last_log_times.get(log_key, 0) > 300:
+                    self.log("invalid_api_keys", level='error', account_name=acc['info'].get('name'), is_key=True, ip=self.server_ip)
+                    self.last_log_times[log_key] = now
+            else:
+                logging.error(f"Error updating metrics for account {idx}: {e}")
         except Exception as e:
             logging.error(f"Error updating metrics for account {idx}: {e}")
 
@@ -852,6 +870,7 @@ class BinanceTradingBotEngine:
                     usdc_balance = float(asset['walletBalance'])
                     break
             self.account_balances[idx] = usdc_balance
+            self.account_errors[idx] = None
 
             positions = []
             for p in account_info['positions']:
@@ -864,6 +883,14 @@ class BinanceTradingBotEngine:
                         'leverage': p['leverage']
                     })
             self.open_positions[idx] = positions
+        except BinanceAPIException as e:
+            if e.code == -2015:
+                self.account_errors[idx] = "Invalid API Key/Permissions"
+                # Don't spam but keep track
+                pass
+            else:
+                # logging.debug(f"Error updating bg metrics for account {idx}: {e}")
+                pass
         except Exception as e:
             # logging.error(f"Error updating bg metrics for account {idx}: {e}")
             pass
@@ -910,7 +937,8 @@ class BinanceTradingBotEngine:
                 'name': self.config.get('api_accounts', [])[idx].get('name', f"Account {idx+1}") if idx < len(self.config.get('api_accounts', [])) else f"Account {idx+1}",
                 'balance': self.account_balances.get(idx, 0.0),
                 'active': idx in self.accounts,
-                'has_client': idx in self.bg_clients
+                'has_client': idx in self.bg_clients,
+                'error': self.account_errors.get(idx)
             } for idx in range(len(self.config.get('api_accounts', [])))
         ]
         }
@@ -955,6 +983,7 @@ class BinanceTradingBotEngine:
         # Immediate refresh of background states
         self._initialize_bg_clients()
         self.metadata_client = self._get_metadata_client()
+        self.market_client = self._create_client("", "")
 
         # Cleanup stale data for removed accounts or cleared keys
         num_accounts = len(self.config.get('api_accounts', []))
@@ -995,6 +1024,7 @@ class BinanceTradingBotEngine:
                     try:
                         if 'twm' in self.accounts[idx]:
                             self.accounts[idx]['twm'].stop()
+                            time.sleep(0.1)
                     except Exception as e:
                         logging.debug(f"Error stopping TWM for account {idx}: {e}")
                     del self.accounts[idx]
@@ -1017,6 +1047,7 @@ class BinanceTradingBotEngine:
                         try:
                             if 'twm' in self.accounts[i]:
                                 self.accounts[i]['twm'].stop()
+                                time.sleep(0.1)
                         except Exception as e:
                             logging.debug(f"Error stopping TWM for account {i}: {e}")
                         del self.accounts[i]
@@ -1116,22 +1147,22 @@ class BinanceTradingBotEngine:
                 # Ensure we use a fresh list of symbols from the live config
                 symbols = list(self.config.get('symbols', []))
                 
-                # Use metadata client if no accounts are active yet
+                # Use metadata client or first active client for non-public metadata if needed
                 active_client = None
                 for acc in list(self.accounts.values()):
                     if acc.get('client'):
                         active_client = acc['client']
                         break
-                
                 if not active_client:
                     active_client = self.metadata_client
 
-                if symbols and active_client:
+                if symbols:
                     # Optimize: Check if we need to fetch exchange info for any missing symbols
                     missing_info = [s for s in symbols if s not in self.shared_market_data or 'info' not in self.shared_market_data[s]]
                     if missing_info:
                         try:
-                            ex_info = active_client.futures_exchange_info()
+                            # exchange_info is public, but we'll use market_client
+                            ex_info = self.market_client.futures_exchange_info()
                             with self.market_data_lock:
                                 for s_data in ex_info['symbols']:
                                     s_name = s_data['symbol']
@@ -1142,9 +1173,9 @@ class BinanceTradingBotEngine:
                         except Exception as e:
                             logging.error(f"Error fetching exchange info: {e}")
 
+                    # 1a. Fetch orderbook ticker for bid/ask - Always use dedicated market client
                     try:
-                        # Fetch orderbook ticker for bid/ask
-                        tickers = active_client.futures_orderbook_ticker()
+                        tickers = self.market_client.futures_orderbook_ticker()
                         price_map = {
                             item['symbol']: {
                                 'bid': float(item['bidPrice']),
@@ -1153,6 +1184,7 @@ class BinanceTradingBotEngine:
                             } for item in tickers if item['symbol'] in symbols
                         }
                     except Exception as e:
+                        logging.debug(f"Error fetching tickers: {e}")
                         price_map = {}
                     
                     with self.market_data_lock:
@@ -1165,22 +1197,24 @@ class BinanceTradingBotEngine:
                                 self.shared_market_data[symbol]['bid'] = price_map[symbol]['bid']
                                 self.shared_market_data[symbol]['ask'] = price_map[symbol]['ask']
                                 self.shared_market_data[symbol]['last_update'] = time.time()
-                                
-                                # Fetch max leverage if not cached
-                                if symbol not in self.max_leverages:
-                                    try:
-                                        # Use active_client (metadata or account client)
-                                        brackets = active_client.futures_leverage_bracket(symbol=symbol)
-                                        if brackets and len(brackets) > 0:
-                                            # Normalize response format
-                                            bracket_info = brackets[0] if 'brackets' in brackets[0] else brackets
-                                            max_l = bracket_info['brackets'][0]['initialLeverage']
-                                            self.max_leverages[symbol] = max_l
-                                    except:
-                                        self.max_leverages[symbol] = 125 # Default fallback
                     
                     if price_map:
                         self.emit('price_update', price_map)
+
+                    # 1b. Fetch max leverage if not cached - Needs authentication
+                    for symbol in symbols:
+                        if symbol not in self.max_leverages:
+                            try:
+                                # Try active_client (first authenticated client)
+                                if active_client:
+                                    # This call needs authentication and can fail with -2015
+                                    brackets = active_client.futures_leverage_bracket(symbol=symbol)
+                                    if brackets and len(brackets) > 0:
+                                        bracket_info = brackets[0] if 'brackets' in brackets[0] else brackets
+                                        max_l = bracket_info['brackets'][0]['initialLeverage']
+                                        self.max_leverages[symbol] = max_l
+                            except Exception:
+                                pass
                     
                     # Log warnings for symbols not found (typos or unsupported)
                     for s in symbols:
@@ -1193,14 +1227,20 @@ class BinanceTradingBotEngine:
 
                     # 2. Update balances for all background accounts
                     for idx in list(self.bg_clients.keys()):
-                        self._update_bg_account_metrics(idx)
+                        try:
+                            self._update_bg_account_metrics(idx)
+                        except Exception:
+                            pass
                     
                     self._emit_account_update()
                     self.emit('max_leverages', self.max_leverages)
                 
-                # 2. Update account metrics (balance/positions)
+                # 3. Update active trading account metrics
                 for idx in list(self.accounts.keys()):
-                    self._update_account_metrics(idx)
+                    try:
+                        self._update_account_metrics(idx)
+                    except Exception:
+                        pass
                     
                 time.sleep(1) # Faster update loop (1s)
             except Exception as e:

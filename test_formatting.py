@@ -1,9 +1,11 @@
 import unittest
 from bot_engine import BinanceTradingBotEngine
 from decimal import Decimal
+from unittest.mock import MagicMock, patch
 
 class TestFormatting(unittest.TestCase):
-    def setUp(self):
+    @patch('bot_engine.Client')
+    def setUp(self, mock_client):
         # Mock engine
         self.bot = BinanceTradingBotEngine('config.json', lambda x, y: None)
         self.bot.shared_market_data['BTCUSDC'] = {

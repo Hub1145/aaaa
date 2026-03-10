@@ -1,9 +1,10 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from bot_engine import BinanceTradingBotEngine
 
 class TestLogic(unittest.TestCase):
-    def setUp(self):
+    @patch('bot_engine.Client')
+    def setUp(self, mock_client):
         self.bot = BinanceTradingBotEngine('config.json', lambda x, y: None)
         self.bot.account_balances[0] = 1000.0
         self.bot.config['symbol_strategies'] = {

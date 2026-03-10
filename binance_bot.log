@@ -93,3 +93,12 @@
 2026-03-09 11:38:43,685 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP71Y&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
 2026-03-09 11:38:43,696 - INFO - 127.0.0.1 - - [09/Mar/2026 11:38:43] "GET /socket.io/?EIO=4&transport=polling&t=PpIP71i&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
 2026-03-09 11:39:14,154 - INFO - 127.0.0.1 - - [09/Mar/2026 11:39:14] "GET /socket.io/?EIO=4&transport=websocket&sid=UC4RXmIyjp_noTWNAAAA HTTP/1.1" 200 -
+2026-03-10 01:03:29,982 - WARNING - Warning: Symbol BTCUSDC not found on Binance. Please check if it is a valid USDC pair.
+2026-03-10 01:03:29,987 - INFO - Initialized 0 background clients in LIVE (Mainnet) mode.
+2026-03-10 01:03:29,987 - WARNING - Warning: Symbol LINKUSDC not found on Binance. Please check if it is a valid USDC pair.
+2026-03-10 01:03:29,994 - WARNING - Warning: Symbol BTCUSDC not found on Binance. Please check if it is a valid USDC pair.
+2026-03-10 01:03:29,995 - WARNING - Warning: Symbol LINKUSDC not found on Binance. Please check if it is a valid USDC pair.
+2026-03-10 01:03:29,995 - WARNING - Warning: Symbol DOGEUSDC not found on Binance. Please check if it is a valid USDC pair.
+2026-03-10 01:03:29,995 - WARNING - Warning: Symbol SOLUSDC not found on Binance. Please check if it is a valid USDC pair.
+2026-03-10 01:03:30,794 - WARNING - Warning: Symbol BTCUSDC not found on Binance. Please check if it is a valid USDC pair.
+2026-03-10 01:03:31,832 - WARNING - Warning: Symbol BTCUSDC not found on Binance. Please check if it is a valid USDC pair.

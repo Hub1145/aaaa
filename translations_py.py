@@ -47,6 +47,7 @@ TRANSLATIONS = {
         'conn_success': "Conexão bem-sucedida",
         'api_credentials_required': "Chave e Segredo da API são necessários.",
         'api_keys_missing': "API Key e Secret são obrigatórios.",
+        'invalid_api_keys': "Chaves de API Inválidas ou Permissões insuficientes. Verifique se o IP {ip} está na whitelist.",
         'ui': {
             'nav_title': "Terminal SmartTrade",
             'start': "Iniciar",
@@ -126,6 +127,7 @@ TRANSLATIONS = {
             'label_consolidated_reentry': "Reciclagem de Frações",
             'desc_consolidated_reentry': "Sempre que um Take Profit for atingido, o robô recompra automaticamente no preço de entrada original, acumulando o volume.",
             'server_ip': "IP do Servidor: ",
+            'api_error': "Erro de API",
         }
     },
     'en-US': {
@@ -174,6 +176,7 @@ TRANSLATIONS = {
         'conn_success': "Connection successful",
         'api_credentials_required': "API credentials are required.",
         'api_keys_missing': "API Key and Secret are required.",
+        'invalid_api_keys': "Invalid API Keys or insufficient permissions. Check if IP {ip} is whitelisted.",
         'ui': {
             'nav_title': "SmartTrade Terminal",
             'start': "Start",
@@ -253,6 +256,7 @@ TRANSLATIONS = {
             'label_consolidated_reentry': "Consolidated Re-entry",
             'desc_consolidated_reentry': "Whenever a Take Profit is hit, the bot automatically buys back at the original entry price, accumulating the volume.",
             'server_ip': "Server IP: ",
+            'api_error': "API Error",
         }
     }
 }

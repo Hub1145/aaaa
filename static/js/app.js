@@ -648,15 +648,27 @@ function setupSocketListeners() {
 
     socket.on('account_update', (data) => {
         const container = document.getElementById('individual-accounts-container');
-        container.innerHTML = (data.accounts || []).map(acc => `
-            <div class="account-card ${acc.has_client ? '' : 'opacity-50'}" style="min-width: 150px">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small fw-bold text-secondary text-uppercase">${acc.name}</span>
-                    <div class="account-dot ${acc.active ? 'bg-success' : 'bg-secondary'}" style="width:6px; height:6px; border-radius:50%"></div>
+        container.innerHTML = (data.accounts || []).map(acc => {
+            const ui = (allTranslations[currentLang] || {}).ui || {};
+            let balanceText = 'Disconnected';
+            let balanceClass = 'text-primary';
+
+            if (acc.error) {
+                balanceText = `<span class="text-danger" title="${acc.error}"><i class="bi bi-exclamation-triangle-fill"></i> ${ui.api_error || 'API Error'}</span>`;
+            } else if (acc.has_client && acc.balance !== undefined) {
+                balanceText = '$' + acc.balance.toFixed(2);
+            }
+
+            return `
+                <div class="account-card ${acc.has_client ? '' : 'opacity-50'}" style="min-width: 150px">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="small fw-bold text-secondary text-uppercase">${acc.name}</span>
+                        <div class="account-dot ${acc.active ? 'bg-success' : 'bg-secondary'}" style="width:6px; height:6px; border-radius:50%"></div>
+                    </div>
+                    <span class="${balanceClass} fw-bold">${balanceText}</span>
                 </div>
-                <span class="text-primary fw-bold">${acc.has_client && acc.balance !== undefined ? '$' + acc.balance.toFixed(2) : 'Disconnected'}</span>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
         currentBalance = data.total_equity || 0;
         const totalEquityVal = document.getElementById('total-equity-val');

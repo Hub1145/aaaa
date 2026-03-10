@@ -1,8 +1,10 @@
 import unittest
 from bot_engine import BinanceTradingBotEngine
+from unittest.mock import MagicMock, patch
 
 class TestDogePrecision(unittest.TestCase):
-    def setUp(self):
+    @patch('bot_engine.Client')
+    def setUp(self, mock_client):
         self.bot = BinanceTradingBotEngine('config.json', lambda x, y: None)
         self.bot.shared_market_data['DOGEUSDC'] = {
             'info': {

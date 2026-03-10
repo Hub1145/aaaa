@@ -23,8 +23,9 @@ server_ip = "Unknown"
 
 try:
     server_ip = requests.get('https://api.ipify.org', timeout=5).text
-except Exception:
-    pass
+    logging.info(f"Bot starting on Server IP: {server_ip}")
+except Exception as e:
+    logging.warning(f"Could not determine Server IP: {e}")
 
 def load_config():
     with open(config_file, 'r') as f:
@@ -116,7 +117,7 @@ def test_api_key_route():
 def handle_connect():
     global bot_engine
     if not bot_engine:
-        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client)
+        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client, server_ip=server_ip)
 
     emit('bot_status', {'running': bot_engine.is_running})
     emit('clear_console', {})
@@ -129,7 +130,7 @@ def handle_connect():
 def handle_start_bot():
     global bot_engine
     if not bot_engine:
-        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client)
+        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client, server_ip=server_ip)
 
     if not bot_engine.is_running:
         bot_engine.start()
@@ -160,7 +161,7 @@ def handle_close_trade(data):
 
 if __name__ == '__main__':
     if not bot_engine:
-        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client)
+        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client, server_ip=server_ip)
 
     port = int(os.environ.get('PORT', 3000))
     socketio.run(app, host='0.0.0.0', port=port, debug=False, use_reloader=False, allow_unsafe_werkzeug=True)
