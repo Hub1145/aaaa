@@ -28,8 +28,26 @@ except Exception as e:
     logging.warning(f"Could not determine Server IP: {e}")
 
 def load_config():
-    with open(config_file, 'r') as f:
-        return json.load(f)
+    try:
+        with open(config_file, 'r') as f:
+            config = json.load(f)
+
+        # Ensure per-account symbol strategies (Migration)
+        global_strategies = config.get('symbol_strategies', {})
+        api_accounts = config.get('api_accounts', [])
+        modified = False
+        for acc in api_accounts:
+            if 'symbol_strategies' not in acc:
+                acc['symbol_strategies'] = global_strategies.copy()
+                modified = True
+
+        if modified:
+            save_config(config)
+
+        return config
+    except Exception as e:
+        logging.error(f"Error loading config in app.py: {e}")
+        return {}
 
 def save_config(config):
     with open(config_file, 'w') as f:

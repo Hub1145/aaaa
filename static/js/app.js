@@ -3,6 +3,7 @@ const socket = io();
 let currentLang = 'en-US';
 let currentConfig = null;
 let isBotRunning = false;
+let activeAccountIdx = 0;
 let activeSymbol = null;
 let maxLeverages = {};
 let currentBalance = 0; // Total equity for hero
@@ -366,7 +367,13 @@ function updateTotalBaseUnits() {
     const priceText = document.getElementById('bid-price').innerText;
     const currentPrice = parseFloat(priceText) || 1;
     const entryInput = parseFloat(document.getElementById('inputEntryPrice').value);
-    const leverage = (currentConfig.symbol_strategies[activeSymbol] || {}).leverage || 20;
+
+    const acc = currentConfig.api_accounts[activeAccountIdx];
+    const strat = (acc && acc.symbol_strategies && acc.symbol_strategies[activeSymbol])
+                  ? acc.symbol_strategies[activeSymbol]
+                  : (currentConfig.symbol_strategies[activeSymbol] || {});
+
+    const leverage = strat.leverage || 20;
     const isPct = document.getElementById('selectTradeAmountMode').value === 'pct';
 
     let totalUSDC = amountVal;
@@ -393,8 +400,18 @@ function checkMinRequirements(units) {
 
 function updateStrategyField(field, value) {
     if (currentConfig && activeSymbol) {
+        // Update per-account strategy
+        const acc = currentConfig.api_accounts[activeAccountIdx];
+        if (acc) {
+            if (!acc.symbol_strategies) acc.symbol_strategies = {};
+            if (!acc.symbol_strategies[activeSymbol]) acc.symbol_strategies[activeSymbol] = {};
+            acc.symbol_strategies[activeSymbol][field] = value;
+        }
+
+        // Also update global fallback for consistency and for newly added accounts
         if (!currentConfig.symbol_strategies[activeSymbol]) currentConfig.symbol_strategies[activeSymbol] = {};
         currentConfig.symbol_strategies[activeSymbol][field] = value;
+
         // Auto-save on discrete changes
         saveLiveConfig();
     }
@@ -426,7 +443,12 @@ function applyUiTranslations() {
 
 function updateUIFromConfig() {
     if (!activeSymbol || !currentConfig) return;
-    const strat = currentConfig.symbol_strategies[activeSymbol] || {};
+
+    // Fetch strategy from active account with global fallback
+    const acc = currentConfig.api_accounts[activeAccountIdx];
+    const strat = (acc && acc.symbol_strategies && acc.symbol_strategies[activeSymbol])
+                  ? acc.symbol_strategies[activeSymbol]
+                  : (currentConfig.symbol_strategies[activeSymbol] || {});
 
     // Update active symbol picker to match
     const picker = document.getElementById('selectActiveSymbol');
@@ -648,7 +670,12 @@ function setupSocketListeners() {
 
     socket.on('account_update', (data) => {
         const container = document.getElementById('individual-accounts-container');
-        container.innerHTML = (data.accounts || []).map(acc => {
+        if (!container) return;
+
+        // Ensure activeAccountIdx is in bounds
+        if (activeAccountIdx >= data.accounts.length) activeAccountIdx = 0;
+
+        container.innerHTML = (data.accounts || []).map((acc, idx) => {
             const ui = (allTranslations[currentLang] || {}).ui || {};
             let balanceText = 'Disconnected';
             let balanceClass = 'text-primary';
@@ -659,8 +686,12 @@ function setupSocketListeners() {
                 balanceText = '$' + acc.balance.toFixed(2);
             }
 
+            const isActive = (idx === activeAccountIdx);
+
             return `
-                <div class="account-card ${acc.has_client ? '' : 'opacity-50'}" style="min-width: 150px">
+                <div class="account-card ${acc.has_client ? '' : 'opacity-50'} ${isActive ? 'active' : ''}"
+                     style="min-width: 150px"
+                     onclick="setActiveAccount(${idx})">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <span class="small fw-bold text-secondary text-uppercase">${acc.name}</span>
                         <div class="account-dot ${acc.active ? 'bg-success' : 'bg-secondary'}" style="width:6px; height:6px; border-radius:50%"></div>
@@ -822,10 +853,25 @@ window.testApiKey = async (i) => {
 
 window.closePosition = (account_idx, symbol) => { socket.emit('close_trade', { account_idx, symbol }); };
 
+window.setActiveAccount = (idx) => {
+    activeAccountIdx = idx;
+    // We don't need to re-render all accounts immediately as account_update will handle it next poll,
+    // but for immediate feedback we can:
+    document.querySelectorAll('.account-card').forEach((card, i) => {
+        card.classList.toggle('active', i === idx);
+    });
+    updateUIFromConfig();
+};
+
 // TP Split Management
 function renderTpTargets() {
     if (!activeSymbol || !currentConfig) return;
-    const strat = currentConfig.symbol_strategies[activeSymbol] || {};
+
+    const acc = currentConfig.api_accounts[activeAccountIdx];
+    const strat = (acc && acc.symbol_strategies && acc.symbol_strategies[activeSymbol])
+                  ? acc.symbol_strategies[activeSymbol]
+                  : (currentConfig.symbol_strategies[activeSymbol] || {});
+
     const targets = strat.tp_targets || [];
     const container = document.getElementById('tp-targets-list');
     const entryPrice = parseFloat(document.getElementById('inputEntryPrice').value) || 0;
@@ -864,8 +910,12 @@ function renderTpTargets() {
 
 window.addTpTarget = () => {
     if (!activeSymbol) return;
-    if (!currentConfig.symbol_strategies[activeSymbol]) currentConfig.symbol_strategies[activeSymbol] = {};
-    const strat = currentConfig.symbol_strategies[activeSymbol];
+
+    const acc = currentConfig.api_accounts[activeAccountIdx];
+    if (!acc.symbol_strategies) acc.symbol_strategies = {};
+    if (!acc.symbol_strategies[activeSymbol]) acc.symbol_strategies[activeSymbol] = {};
+    const strat = acc.symbol_strategies[activeSymbol];
+
     if (!strat.tp_targets) strat.tp_targets = [];
 
     // Default: split volume evenly among targets if possible, or just add 25%
@@ -876,14 +926,16 @@ window.addTpTarget = () => {
 };
 
 window.removeTpTarget = (idx) => {
-    const strat = currentConfig.symbol_strategies[activeSymbol];
+    const acc = currentConfig.api_accounts[activeAccountIdx];
+    const strat = acc.symbol_strategies[activeSymbol];
     strat.tp_targets.splice(idx, 1);
     renderTpTargets();
     saveLiveConfig();
 };
 
 window.updateTpTarget = (idx, field, value) => {
-    const strat = currentConfig.symbol_strategies[activeSymbol];
+    const acc = currentConfig.api_accounts[activeAccountIdx];
+    const strat = acc.symbol_strategies[activeSymbol];
     strat.tp_targets[idx][field] = value;
     renderTpTargets();
     saveLiveConfig();

@@ -1,0 +1,19 @@
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Serving Flask app 'app_mock'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3000
+ * Running on http://192.168.0.2:3000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [11/Mar/2026 07:22:43] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:43] "GET /static/js/app.js HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:43] "GET /static/css/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:44] "GET /socket.io/?EIO=4&transport=polling&t=PpRnifl HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:44] "GET /api/config HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:44] "POST /socket.io/?EIO=4&transport=polling&t=PpRnigf&sid=F8bkrqP2ReFYYKkPAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:44] "GET /socket.io/?EIO=4&transport=polling&t=PpRnigq&sid=F8bkrqP2ReFYYKkPAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:44] "GET /socket.io/?EIO=4&transport=polling&t=PpRnii4&sid=F8bkrqP2ReFYYKkPAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:44] "GET /socket.io/?EIO=4&transport=polling&t=PpRniiL&sid=F8bkrqP2ReFYYKkPAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:48] "POST /api/config HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2026 07:22:51] "GET /socket.io/?EIO=4&transport=websocket&sid=F8bkrqP2ReFYYKkPAAAA HTTP/1.1" 200 -

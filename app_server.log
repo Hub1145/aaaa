@@ -1,0 +1,29 @@
+2026-03-11 07:20:46,805 - INFO - Bot starting on Server IP: 34.46.237.233
+2026-03-11 07:20:46,810 - INFO - Initialized 0 background clients in DEMO (Testnet) mode.
+Traceback (most recent call last):
+  File "/app/app.py", line 182, in <module>
+    bot_engine = BinanceTradingBotEngine(config_file, emit_to_client, server_ip=server_ip)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot_engine.py", line 26, in __init__
+    self.market_client = self._create_client("", "")
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot_engine.py", line 164, in _create_client
+    client = Client(api_key.strip(), api_secret.strip(), testnet=testnet, requests_params={'timeout': 10})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jules/.pyenv/versions/3.12.12/lib/python3.12/site-packages/binance/client.py", line 344, in __init__
+    self.ping()
+  File "/home/jules/.pyenv/versions/3.12.12/lib/python3.12/site-packages/binance/client.py", line 570, in ping
+    return self._get('ping', version=self.PRIVATE_API_VERSION)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jules/.pyenv/versions/3.12.12/lib/python3.12/site-packages/binance/client.py", line 415, in _get
+    return self._request_api('get', path, signed, version, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jules/.pyenv/versions/3.12.12/lib/python3.12/site-packages/binance/client.py", line 378, in _request_api
+    return self._request(method, uri, signed, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jules/.pyenv/versions/3.12.12/lib/python3.12/site-packages/binance/client.py", line 359, in _request
+    return self._handle_response(self.response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jules/.pyenv/versions/3.12.12/lib/python3.12/site-packages/binance/client.py", line 368, in _handle_response
+    raise BinanceAPIException(response, response.status_code, response.text)
+binance.exceptions.BinanceAPIException: APIError(code=0): Service unavailable from a restricted location according to 'b. Eligibility' in https://www.binance.com/en/terms. Please contact customer service if you believe you received this message in error.

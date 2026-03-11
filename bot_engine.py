@@ -24,6 +24,7 @@ class BinanceTradingBotEngine:
         self._initialize_bg_clients()
         self.metadata_client = self._get_metadata_client()
         self.market_client = self._create_client("", "")
+        self.market_twm = None
 
         self.is_running = False
         self.stop_event = threading.Event()
@@ -46,6 +47,7 @@ class BinanceTradingBotEngine:
         # Dashboard metrics
         self.account_balances = {} # account_index -> balance
         self.account_errors = {} # account_index -> error message
+        self.account_last_update = {} # account_index -> timestamp
         self.open_positions = {} # account_index -> [positions]
         # Trailing TP/SL/Buy state
         self.trailing_state = {}
@@ -57,6 +59,7 @@ class BinanceTradingBotEngine:
         
         # Start global background tasks immediately (pricing, metrics)
         self._background_tasks_started = False
+        self._initialize_market_ws()
         threading.Thread(target=self._global_background_worker, daemon=True).start()
 
     def _setup_logging(self):
@@ -75,10 +78,40 @@ class BinanceTradingBotEngine:
     def _load_config(self):
         try:
             with open(self.config_path, 'r') as f:
-                return json.load(f)
+                config = json.load(f)
+
+            # Migration: If accounts don't have symbol_strategies, but global one exists, copy it
+            global_strategies = config.get('symbol_strategies', {})
+            api_accounts = config.get('api_accounts', [])
+            modified = False
+            for acc in api_accounts:
+                if 'symbol_strategies' not in acc:
+                    # Deep copy of global strategies to ensure account isolation
+                    acc['symbol_strategies'] = {k: v.copy() for k, v in global_strategies.items()}
+                    modified = True
+
+            if modified:
+                try:
+                    with open(self.config_path, 'w') as f:
+                        json.dump(config, f, indent=2)
+                except: pass
+
+            return config
         except Exception as e:
             logging.error(f"Error loading config: {e}")
             return {}
+
+    def _get_strategy(self, idx, symbol):
+        """Helper to get strategy for a specific account and symbol."""
+        api_accounts = self.config.get('api_accounts', [])
+        if 0 <= idx < len(api_accounts):
+            acc = api_accounts[idx]
+            acc_strategies = acc.get('symbol_strategies', {})
+            if symbol in acc_strategies:
+                return acc_strategies[symbol]
+
+        # Fallback to global symbol_strategies
+        return self.config.get('symbol_strategies', {}).get(symbol, {})
 
     def _t(self, key, **kwargs):
         """Helper to get translated strings."""
@@ -154,6 +187,57 @@ class BinanceTradingBotEngine:
 
     def _get_client(self, api_key, api_secret):
         return self._create_client(api_key, api_secret)
+
+    def _initialize_market_ws(self):
+        """Initializes WebSocket for market data (prices)."""
+        try:
+            if self.market_twm:
+                try: self.market_twm.stop()
+                except: pass
+                time.sleep(0.5)
+
+            testnet = self.config.get('is_demo', True)
+            self.market_twm = ThreadedWebsocketManager(testnet=testnet)
+            self.market_twm.start()
+
+            symbols = self.config.get('symbols', [])
+            if symbols:
+                for symbol in symbols:
+                    try:
+                        self.market_twm.start_futures_ticker_socket(
+                            callback=self._handle_market_ticker,
+                            symbol=symbol
+                        )
+                    except Exception as e:
+                        logging.debug(f"Failed to start stream for {symbol}: {e}")
+                logging.info(f"Started market WebSocket for {len(symbols)} symbols")
+        except Exception as e:
+            logging.error(f"Failed to initialize market WebSocket: {e}")
+
+    def _handle_market_ticker(self, msg):
+        """Callback for market ticker WebSocket."""
+        try:
+            # Handle both single ticker and array if needed
+            data_list = msg if isinstance(msg, list) else [msg]
+
+            for item in data_list:
+                if item.get('e') == '24hrTicker':
+                    symbol = item.get('s')
+                    bid = float(item.get('b', 0))
+                    ask = float(item.get('a', 0))
+                    last = float(item.get('c', 0))
+
+                    with self.market_data_lock:
+                        if symbol not in self.shared_market_data:
+                            self.shared_market_data[symbol] = {'price': 0, 'last_update': 0}
+
+                        data = self.shared_market_data[symbol]
+                        data['price'] = last
+                        data['bid'] = bid
+                        data['ask'] = ask
+                        data['last_update'] = time.time()
+        except Exception as e:
+            pass
 
     def _initialize_bg_clients(self):
         """Initializes clients for all accounts with keys to fetch balances in background."""
@@ -284,8 +368,7 @@ class BinanceTradingBotEngine:
             return
         acc = self.accounts[idx]
         client = acc['client']
-        symbol_strategies = self.config.get('symbol_strategies', {})
-        strategy = symbol_strategies.get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         if not symbol: return
 
         try:
@@ -328,8 +411,7 @@ class BinanceTradingBotEngine:
         if idx not in self.accounts: return
         acc = self.accounts[idx]
         client = acc['client']
-        symbol_strategies = self.config.get('symbol_strategies', {})
-        strategy = symbol_strategies.get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         direction = strategy.get('direction', 'LONG').upper()
         entry_type = strategy.get('entry_type', 'LIMIT').upper()
         
@@ -575,19 +657,36 @@ class BinanceTradingBotEngine:
                 self._process_filled_order(idx, symbol, order_data)
 
         elif event_type == 'ACCOUNT_UPDATE':
-            # Update balances and positions
+            # Fast update for specific assets from WebSocket event
             update_data = msg.get('a', {})
             balances = update_data.get('B', [])
             for b in balances:
-                asset = b.get('a')
-                # Update local balance storage
-                pass
-            self._update_account_metrics(idx, force=True)
+                if b.get('a') == 'USDC':
+                    self.account_balances[idx] = float(b.get('wb', self.account_balances.get(idx, 0)))
+            self.account_last_update[idx] = time.time()
+
+            # Fast update for positions
+            positions_data = update_data.get('P', [])
+            if positions_data:
+                new_positions = []
+                for p in positions_data:
+                    if float(p.get('pa', 0)) != 0:
+                        new_positions.append({
+                            'symbol': p['s'],
+                            'amount': p['pa'],
+                            'entryPrice': p['ep'],
+                            'unrealizedProfit': p['up'],
+                            'leverage': p['l']
+                        })
+                # Only update if we actually got position data to avoid clearing accidentally
+                if new_positions:
+                    self.open_positions[idx] = new_positions
+
+            self._emit_account_update()
 
     def _process_filled_order(self, idx, symbol, order_data):
         order_id = order_data.get('i')
-        symbol_strategies = self.config.get('symbol_strategies', {})
-        strategy = symbol_strategies.get(symbol)
+        strategy = self._get_strategy(idx, symbol)
         if not strategy: return
 
         direction = strategy.get('direction', 'LONG')
@@ -670,7 +769,7 @@ class BinanceTradingBotEngine:
 
     def _handle_reentry_logic(self, idx, symbol, qty_filled):
         """Handles the logic for placing/updating re-entry orders after a TP fill."""
-        strategy = self.config.get('symbol_strategies', {}).get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         direction = strategy.get('direction', 'LONG')
         entry_price_base = float(strategy.get('entry_price', 0))
 
@@ -702,7 +801,7 @@ class BinanceTradingBotEngine:
         state = self.grid_state.get((idx, symbol))
         if not state: return
         
-        strategy = self.config.get('symbol_strategies', {}).get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         tp_market_mode = strategy.get('tp_market_mode', False)
         
         state['levels'] = {} # Reset levels for new targets
@@ -759,7 +858,7 @@ class BinanceTradingBotEngine:
     def _place_limit_order(self, idx, symbol, side, qty, price):
         client = self.accounts[idx]['client']
 
-        strategy = self.config.get('symbol_strategies', {}).get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         leverage = int(strategy.get('leverage', 20))
 
         # Validate balance before placing re-buy/re-sell orders
@@ -813,21 +912,26 @@ class BinanceTradingBotEngine:
         client = acc['client']
         try:
             # Throttle updates
-            if not force and time.time() - acc['last_update'] < 5: return
+            if not force and time.time() - acc['last_update'] < 10: return
             acc['last_update'] = time.time()
 
             account_info = client.futures_account()
             
             # Find USDC asset balance specifically
-            usdc_balance = 0.0
+            usdc_found = False
             for asset in account_info.get('assets', []):
                 if asset['asset'] == 'USDC':
-                    usdc_balance = float(asset['walletBalance'])
+                    self.account_balances[idx] = float(asset['walletBalance'])
+                    usdc_found = True
                     break
             
-            total_unrealized_pnl = float(account_info['totalUnrealizedProfit'])
+            # If not found in assets, don't zero it out, maybe it's zero or network issue
+            if not usdc_found and idx not in self.account_balances:
+                self.account_balances[idx] = 0.0
 
-            self.account_balances[idx] = usdc_balance
+            self.account_last_update[idx] = time.time()
+
+            total_unrealized_pnl = float(account_info['totalUnrealizedProfit'])
 
             positions = []
             for p in account_info['positions']:
@@ -938,7 +1042,8 @@ class BinanceTradingBotEngine:
                 'balance': self.account_balances.get(idx, 0.0),
                 'active': idx in self.accounts,
                 'has_client': idx in self.bg_clients,
-                'error': self.account_errors.get(idx)
+                'error': self.account_errors.get(idx),
+                'last_update': self.account_last_update.get(idx, 0)
             } for idx in range(len(self.config.get('api_accounts', [])))
         ]
         }
@@ -982,6 +1087,7 @@ class BinanceTradingBotEngine:
 
         # Immediate refresh of background states
         self._initialize_bg_clients()
+        self._initialize_market_ws()
         self.metadata_client = self._get_metadata_client()
         self.market_client = self._create_client("", "")
 
@@ -1014,7 +1120,6 @@ class BinanceTradingBotEngine:
                 return {"success": True}
 
             api_accounts = self.config.get('api_accounts', [])
-            symbol_strategies = self.config.get('symbol_strategies', {})
             symbols = self.config.get('symbols', [])
             
             # Handle account changes (Surgical updates)
@@ -1031,6 +1136,8 @@ class BinanceTradingBotEngine:
                     with self.data_lock:
                         for key in list(self.grid_state.keys()):
                             if key[0] == idx: del self.grid_state[key]
+                        for key in list(self.symbol_threads.keys()):
+                            if key[0] == idx: del self.symbol_threads[key]
 
             for i, acc_config in enumerate(api_accounts):
                 enabled = acc_config.get('enabled', True)
@@ -1056,6 +1163,8 @@ class BinanceTradingBotEngine:
                         with self.data_lock:
                             for key in list(self.grid_state.keys()):
                                 if key[0] == i: del self.grid_state[key]
+                            for key in list(self.symbol_threads.keys()):
+                                if key[0] == i: del self.symbol_threads[key]
                     else:
                         self.accounts[i]['info'] = acc_config
 
@@ -1069,8 +1178,9 @@ class BinanceTradingBotEngine:
                 
                 # 2. Update leverage for all active symbols
                 for symbol in symbols:
-                    if symbol in symbol_strategies:
-                        leverage = int(symbol_strategies[symbol].get('leverage', 20))
+                    strategy = self._get_strategy(idx, symbol)
+                    if strategy:
+                        leverage = int(strategy.get('leverage', 20))
                         try:
                             # Clamp to max allowed
                             max_l = self.max_leverages.get(symbol, 125)
@@ -1173,33 +1283,32 @@ class BinanceTradingBotEngine:
                         except Exception as e:
                             logging.error(f"Error fetching exchange info: {e}")
 
-                    # 1a. Fetch orderbook ticker for bid/ask - Always use dedicated market client
-                    try:
-                        tickers = self.market_client.futures_orderbook_ticker()
-                        price_map = {
-                            item['symbol']: {
-                                'bid': float(item['bidPrice']),
-                                'ask': float(item['askPrice']),
-                                'last': (float(item['bidPrice']) + float(item['askPrice'])) / 2
-                            } for item in tickers if item['symbol'] in symbols
-                        }
-                    except Exception as e:
-                        logging.debug(f"Error fetching tickers: {e}")
-                        price_map = {}
-                    
+                    # 1a. WebSocket Health Check & Fallback
+                    now = time.time()
+                    price_map_emit = {}
                     with self.market_data_lock:
                         for symbol in symbols:
-                            if symbol in price_map:
-                                if symbol not in self.shared_market_data:
-                                    self.shared_market_data[symbol] = {'price': 0, 'last_update': 0}
-                                        
-                                self.shared_market_data[symbol]['price'] = price_map[symbol]['last']
-                                self.shared_market_data[symbol]['bid'] = price_map[symbol]['bid']
-                                self.shared_market_data[symbol]['ask'] = price_map[symbol]['ask']
-                                self.shared_market_data[symbol]['last_update'] = time.time()
+                            data = self.shared_market_data.get(symbol)
+                            # If no data or stale (>10s), try polling
+                            if not data or (now - data.get('last_update', 0) > 10):
+                                try:
+                                    ticker = self.market_client.futures_symbol_ticker(symbol=symbol)
+                                    if symbol not in self.shared_market_data:
+                                        self.shared_market_data[symbol] = {'price': 0, 'last_update': 0}
+                                    data = self.shared_market_data[symbol]
+                                    data['price'] = float(ticker['price'])
+                                    data['last_update'] = now
+                                except: pass
+
+                            if data and 'price' in data:
+                                price_map_emit[symbol] = {
+                                    'bid': data.get('bid', data['price']),
+                                    'ask': data.get('ask', data['price']),
+                                    'last': data['price']
+                                }
                     
-                    if price_map:
-                        self.emit('price_update', price_map)
+                    if price_map_emit:
+                        self.emit('price_update', price_map_emit)
 
                     # 1b. Fetch max leverage if not cached - Needs authentication
                     for symbol in symbols:
@@ -1218,7 +1327,7 @@ class BinanceTradingBotEngine:
                     
                     # Log warnings for symbols not found (typos or unsupported)
                     for s in symbols:
-                        if s not in price_map:
+                        if s not in price_map_emit:
                             log_key = f"symbol_not_found_{s}"
                             now = time.time()
                             if now - self.last_log_times.get(log_key, 0) > 300: # Every 5 mins
@@ -1264,19 +1373,25 @@ class BinanceTradingBotEngine:
 
     def _start_symbol_thread(self, idx, symbol):
         key = (idx, symbol)
-        if key not in self.symbol_threads:
-            t = threading.Thread(target=self._symbol_logic_worker, args=(idx, symbol), daemon=True)
-            self.symbol_threads[key] = t
-            t.start()
-            self.log("started_thread", account_name=self.accounts[idx]['info'].get('name'), is_key=True, symbol=symbol)
+        with self.data_lock:
+            if key in self.symbol_threads and not self.symbol_threads[key].is_alive():
+                del self.symbol_threads[key]
+
+            if key not in self.symbol_threads:
+                t = threading.Thread(target=self._symbol_logic_worker, args=(idx, symbol), daemon=True)
+                self.symbol_threads[key] = t
+                t.start()
+                self.log("started_thread", account_name=self.accounts[idx]['info'].get('name'), is_key=True, symbol=symbol)
 
     def _symbol_logic_worker(self, idx, symbol):
         """Dedicated worker for each symbol's grid and trailing logic."""
         try:
+            if idx not in self.accounts: return
+            current_client = self.accounts[idx].get('client')
             self._setup_strategy_for_account(idx, symbol)
 
             while self.is_running and not self.stop_event.is_set():
-                if idx not in self.accounts:
+                if idx not in self.accounts or self.accounts[idx].get('client') != current_client:
                     break
                 try:
                     # Check if this symbol still in config (for live removal)
@@ -1312,7 +1427,7 @@ class BinanceTradingBotEngine:
             state = self.grid_state.get((idx, symbol))
             if not state or not state.get('trailing_buy_active'): return
             
-        strategy = self.config.get('symbol_strategies', {}).get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         direction = strategy.get('direction', 'LONG')
         target_price = state.get('trailing_buy_target')
         dev_pct = float(strategy.get('trailing_buy_deviation', 0.1))
@@ -1353,7 +1468,7 @@ class BinanceTradingBotEngine:
             state = self.grid_state.get((idx, symbol))
             if not state or not state.get('conditional_active'): return
             
-        strategy = self.config.get('symbol_strategies', {}).get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         direction = strategy.get('direction', 'LONG')
         trigger_price = state.get('trigger_price', 0)
         cond_type = state.get('conditional_type', 'CONDITIONAL')
@@ -1393,7 +1508,7 @@ class BinanceTradingBotEngine:
                     self.log("cond_limit_failed", level='error', account_name=self.accounts[idx]['info'].get('name'), is_key=True, error=str(e))
 
     def _execute_market_entry(self, idx, symbol):
-        strategy = self.config.get('symbol_strategies', {}).get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         trade_amount_usdc = float(strategy.get('trade_amount_usdc', 0))
         leverage = int(strategy.get('leverage', 20))
         direction = strategy.get('direction', 'LONG')
@@ -1439,7 +1554,7 @@ class BinanceTradingBotEngine:
         
         if current_price <= 0: return
 
-        strategy = self.config.get('symbol_strategies', {}).get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         direction = strategy.get('direction', 'LONG')
 
         to_execute = []
@@ -1484,8 +1599,7 @@ class BinanceTradingBotEngine:
             return False
 
     def _stop_loss_logic(self, idx, symbol):
-        symbol_strategies = self.config.get('symbol_strategies', {})
-        strategy = symbol_strategies.get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         if not strategy.get('stop_loss_enabled'): return
         
         sl_price = float(strategy.get('stop_loss_price', 0))
@@ -1567,8 +1681,7 @@ class BinanceTradingBotEngine:
                     self.log("sl_timeout_reset", account_name=self.accounts[idx]['info'].get('name'), is_key=False)
 
     def _trailing_tp_logic(self, idx, symbol):
-        symbol_strategies = self.config.get('symbol_strategies', {})
-        strategy = symbol_strategies.get(symbol, {})
+        strategy = self._get_strategy(idx, symbol)
         if not strategy.get('trailing_tp_enabled'): return
 
         with self.data_lock:
