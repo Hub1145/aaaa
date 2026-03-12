@@ -158,32 +158,42 @@ class BinanceTradingBotEngine:
         return f"{prefix}{message}"
 
     def _create_client(self, api_key, api_secret):
-        testnet = self.config.get('is_demo', True)
-        # Enable automatic time synchronization and trim keys
-        # We don't set API_URL manually to avoid breaking standard calls
-        # Use a shorter timeout for the initial connection to avoid blocking too long
-        client = Client(api_key.strip(), api_secret.strip(), testnet=testnet, requests_params={'timeout': 10})
-
-        # Explicitly set Futures URL if we are in Demo mode to avoid any confusion with python-binance defaults
-        if testnet:
-            client.FUTURES_URL = 'https://testnet.binancefuture.com/fapi'
-            client.FUTURES_DATA_URL = 'https://testnet.binancefuture.com/fapi'
-        else:
-            client.FUTURES_URL = 'https://fapi.binance.com/fapi'
-            client.FUTURES_DATA_URL = 'https://fapi.binance.com/fapi'
-
         try:
-            # Use futures_time for futures accounts to avoid 404s on restricted spot regions
-            res = client.futures_time()
-            client.timestamp_offset = res['serverTime'] - int(time.time() * 1000)
-        except Exception as e:
-            # Fallback to spot time if futures_time fails
+            testnet = self.config.get('is_demo', True)
+            # Enable automatic time synchronization and trim keys
+            # Use a shorter timeout for the initial connection to avoid blocking too long
+            client = Client(api_key.strip(), api_secret.strip(), testnet=testnet, requests_params={'timeout': 10})
+
+            # Explicitly set Futures URL if we are in Demo mode
+            if testnet:
+                client.FUTURES_URL = 'https://testnet.binancefuture.com/fapi'
+                client.FUTURES_DATA_URL = 'https://testnet.binancefuture.com/fapi'
+            else:
+                client.FUTURES_URL = 'https://fapi.binance.com/fapi'
+                client.FUTURES_DATA_URL = 'https://fapi.binance.com/fapi'
+
             try:
-                res = client.get_server_time()
+                # Use futures_time for futures accounts to avoid 404s on restricted spot regions
+                res = client.futures_time()
                 client.timestamp_offset = res['serverTime'] - int(time.time() * 1000)
-            except:
-                logging.warning(f"Failed to sync time for account: {e}")
-        return client
+            except Exception as e:
+                # Fallback to spot time if futures_time fails
+                try:
+                    res = client.get_server_time()
+                    client.timestamp_offset = res['serverTime'] - int(time.time() * 1000)
+                except:
+                    # If both fail, we might be in a restricted region
+                    if "restricted location" in str(e).lower():
+                        logging.error("CRITICAL: Restricted location detected. Binance services are unavailable from this IP.")
+                    else:
+                        logging.warning(f"Failed to sync time for account: {e}")
+            return client
+        except Exception as e:
+            if "restricted location" in str(e).lower():
+                logging.error("CRITICAL: Restricted location detected. Cannot create Binance client.")
+            else:
+                logging.error(f"Error creating Binance client: {e}")
+            return None
 
     def _get_client(self, api_key, api_secret):
         return self._create_client(api_key, api_secret)
@@ -198,7 +208,15 @@ class BinanceTradingBotEngine:
 
             testnet = self.config.get('is_demo', True)
             self.market_twm = ThreadedWebsocketManager(testnet=testnet)
-            self.market_twm.start()
+            try:
+                self.market_twm.start()
+            except Exception as e:
+                if "restricted location" in str(e).lower():
+                    logging.error("CRITICAL: Market WebSocket failed - Restricted location.")
+                else:
+                    logging.error(f"Failed to start market WebSocket thread: {e}")
+                self.market_twm = None
+                return
 
             symbols = self.config.get('symbols', [])
             if symbols:
@@ -281,11 +299,17 @@ class BinanceTradingBotEngine:
                 try:
                     # Always re-create client to ensure correct environment (Demo vs Live)
                     client = self._get_client(api_key, api_secret)
+                    if not client:
+                         continue
 
                     # Start background WebSocket for this account
                     twm = ThreadedWebsocketManager(api_key=api_key, api_secret=api_secret, testnet=testnet)
-                    twm.start()
-                    twm.start_futures_user_socket(callback=lambda msg, idx=i: self._handle_user_data(idx, msg))
+                    try:
+                        twm.start()
+                        twm.start_futures_user_socket(callback=lambda msg, idx=i: self._handle_user_data(idx, msg))
+                    except Exception as e:
+                        logging.error(f"Failed to start background WebSocket for {acc.get('name')}: {e}")
+                        twm = None
 
                     new_bg_clients[i] = {
                         'client': client,
@@ -351,9 +375,17 @@ class BinanceTradingBotEngine:
                 api_key = acc.get('api_key', '').strip()
                 api_secret = acc.get('api_secret', '').strip()
                 client = self._get_client(api_key, api_secret)
+                if not client:
+                    self.log("account_init_failed", level='error', is_key=True, name=acc.get('name', i), error="Client creation failed (Restricted location?)")
+                    return
+
                 twm = ThreadedWebsocketManager(api_key=api_key, api_secret=api_secret, testnet=self.config.get('is_demo', True))
-                twm.start()
-                twm.start_futures_user_socket(callback=lambda msg, idx=i: self._handle_user_data(idx, msg))
+                try:
+                    twm.start()
+                    twm.start_futures_user_socket(callback=lambda msg, idx=i: self._handle_user_data(idx, msg))
+                except Exception as e:
+                    logging.error(f"Failed to start WebSocket for {acc.get('name')}: {e}")
+                    twm = None
 
             self.accounts[i] = {
                 'client': client,
@@ -1323,32 +1355,36 @@ class BinanceTradingBotEngine:
                     if missing_info:
                         try:
                             # exchange_info is public, but we'll use market_client
-                            ex_info = self.market_client.futures_exchange_info()
-                            with self.market_data_lock:
-                                for s_data in ex_info['symbols']:
-                                    s_name = s_data['symbol']
-                                    if s_name in symbols:
-                                        if s_name not in self.shared_market_data:
-                                            self.shared_market_data[s_name] = {'price': 0, 'last_update': 0}
-                                        self.shared_market_data[s_name]['info'] = s_data
+                            m_client = self.market_client
+                            if m_client:
+                                ex_info = m_client.futures_exchange_info()
+                                with self.market_data_lock:
+                                    for s_data in ex_info['symbols']:
+                                        s_name = s_data['symbol']
+                                        if s_name in symbols:
+                                            if s_name not in self.shared_market_data:
+                                                self.shared_market_data[s_name] = {'price': 0, 'last_update': 0}
+                                            self.shared_market_data[s_name]['info'] = s_data
                         except Exception as e:
                             logging.error(f"Error fetching exchange info: {e}")
 
                     # 1a. WebSocket Health Check & Fallback
                     now = time.time()
                     price_map_emit = {}
+                    m_client = self.market_client
                     with self.market_data_lock:
                         for symbol in symbols:
                             data = self.shared_market_data.get(symbol)
                             # If no data or stale (>10s), try polling
                             if not data or (now - data.get('last_update', 0) > 10):
                                 try:
-                                    ticker = self.market_client.futures_symbol_ticker(symbol=symbol)
-                                    if symbol not in self.shared_market_data:
-                                        self.shared_market_data[symbol] = {'price': 0, 'last_update': 0}
-                                    data = self.shared_market_data[symbol]
-                                    data['price'] = float(ticker['price'])
-                                    data['last_update'] = now
+                                    if m_client:
+                                        ticker = m_client.futures_symbol_ticker(symbol=symbol)
+                                        if symbol not in self.shared_market_data:
+                                            self.shared_market_data[symbol] = {'price': 0, 'last_update': 0}
+                                        data = self.shared_market_data[symbol]
+                                        data['price'] = float(ticker['price'])
+                                        data['last_update'] = now
                                 except: pass
 
                             if data and 'price' in data:
@@ -1370,9 +1406,14 @@ class BinanceTradingBotEngine:
                                     # This call needs authentication and can fail with -2015
                                     brackets = active_client.futures_leverage_bracket(symbol=symbol)
                                     if brackets and len(brackets) > 0:
-                                        bracket_info = brackets[0] if 'brackets' in brackets[0] else brackets
-                                        max_l = bracket_info['brackets'][0]['initialLeverage']
-                                        self.max_leverages[symbol] = max_l
+                                        # Handle different response formats
+                                        if isinstance(brackets, list) and len(brackets) > 0:
+                                            bracket_info = brackets[0]
+                                            if 'brackets' in bracket_info:
+                                                max_l = bracket_info['brackets'][0]['initialLeverage']
+                                                self.max_leverages[symbol] = max_l
+                                            elif 'initialLeverage' in bracket_info:
+                                                self.max_leverages[symbol] = bracket_info['initialLeverage']
                             except Exception:
                                 pass
                     
