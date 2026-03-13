@@ -765,7 +765,9 @@ class BinanceTradingBotEngine:
                     self.open_positions[idx] = {}
 
                 for p in positions_data:
-                    symbol = p['s']
+                    symbol = p.get('s')
+                    if not symbol: continue
+
                     amt = float(p.get('pa') or 0)
                     if amt == 0:
                         # Position closed
@@ -773,12 +775,13 @@ class BinanceTradingBotEngine:
                             del self.open_positions[idx][symbol]
                     else:
                         # Update or add position
+                        existing_pos = self.open_positions[idx].get(symbol, {})
                         self.open_positions[idx][symbol] = {
                             'symbol': symbol,
-                            'amount': p['pa'],
-                            'entryPrice': p['ep'],
-                            'unrealizedProfit': p['up'],
-                            'leverage': p['l']
+                            'amount': p.get('pa', existing_pos.get('amount', '0')),
+                            'entryPrice': p.get('ep', existing_pos.get('entryPrice', '0')),
+                            'unrealizedProfit': p.get('up', existing_pos.get('unrealizedProfit', '0')),
+                            'leverage': p.get('l', existing_pos.get('leverage', '20'))
                         }
 
             self.account_last_update[idx] = time.time()
@@ -1083,14 +1086,17 @@ class BinanceTradingBotEngine:
                 acc['last_pos_update'] = time.time()
                 account_info = client.futures_account()
                 new_positions = {}
-                for p in account_info['positions']:
-                    if float(p.get('positionAmt') or 0) != 0:
-                        new_positions[p['symbol']] = {
-                            'symbol': p['symbol'],
-                            'amount': p['positionAmt'],
-                            'entryPrice': p['entryPrice'],
-                            'unrealizedProfit': p['unrealizedProfit'],
-                            'leverage': p['leverage']
+                for p in account_info.get('positions', []):
+                    sym = p.get('symbol')
+                    if not sym: continue
+                    amt = float(p.get('positionAmt') or 0)
+                    if amt != 0:
+                        new_positions[sym] = {
+                            'symbol': sym,
+                            'amount': p.get('positionAmt', '0'),
+                            'entryPrice': p.get('entryPrice', '0'),
+                            'unrealizedProfit': p.get('unrealizedProfit', '0'),
+                            'leverage': p.get('leverage', '20')
                         }
                 with self.data_lock:
                     self.open_positions[idx] = new_positions
@@ -1135,13 +1141,16 @@ class BinanceTradingBotEngine:
                 pos_info = client.futures_position_information()
                 new_positions = {}
                 for p in pos_info:
-                    if float(p.get('positionAmt') or 0) != 0:
-                        new_positions[p['symbol']] = {
-                            'symbol': p['symbol'],
-                            'amount': p['positionAmt'],
-                            'entryPrice': p['entryPrice'],
-                            'unrealizedProfit': p['unRealizedProfit'],
-                            'leverage': p['leverage']
+                    sym = p.get('symbol')
+                    if not sym: continue
+                    amt = float(p.get('positionAmt') or 0)
+                    if amt != 0:
+                        new_positions[sym] = {
+                            'symbol': sym,
+                            'amount': p.get('positionAmt', '0'),
+                            'entryPrice': p.get('entryPrice', '0'),
+                            'unrealizedProfit': p.get('unRealizedProfit', p.get('unrealizedProfit', '0')),
+                            'leverage': p.get('leverage', '20')
                         }
                 with self.data_lock:
                     self.open_positions[idx] = new_positions
@@ -1395,7 +1404,7 @@ class BinanceTradingBotEngine:
                 # Close position by market order
                 pos = target_client.futures_position_information(symbol=symbol)
                 for p in pos:
-                    if p['symbol'] == symbol:
+                    if p.get('symbol') == symbol:
                         amt = float(p.get('positionAmt') or 0)
                         if amt != 0:
                             side = Client.SIDE_SELL if amt > 0 else Client.SIDE_BUY
