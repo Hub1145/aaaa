@@ -1,55 +1,10 @@
-2026-03-12 12:38:34,490 - INFO - Started market WebSocket for 4 symbols
-2026-03-13 10:06:41,120 - INFO - Started market WebSocket for 1 symbols
-2026-03-13 10:06:41,123 - INFO - Iniciando Binance Bot Engine...
-2026-03-13 10:06:41,236 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:06:41,237 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:06:41,239 - ERROR - Falha ao inicializar conta Test Acc: Client creation failed (Restricted location?)
-2026-03-13 10:06:41,239 - INFO - Binance Bot Engine parado.
-2026-03-13 10:54:21,766 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:21,871 - INFO - Started market WebSocket for 1 symbols
-2026-03-13 10:54:21,873 - INFO - Iniciando Binance Bot Engine...
-2026-03-13 10:54:21,983 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:21,984 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:21,986 - ERROR - Falha ao inicializar conta Test Acc: Client creation failed (Restricted location?)
-2026-03-13 10:54:22,103 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:22,106 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:22,109 - ERROR - Falha ao inicializar conta Test Acc: Client creation failed (Restricted location?)
-2026-03-13 10:54:22,217 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:22,218 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:22,222 - ERROR - Falha ao inicializar conta Test Acc: Client creation failed (Restricted location?)
-2026-03-13 10:54:22,332 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:22,333 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:22,335 - WARNING - Warning: Symbol BTCUSDC not found on Binance. Please check if it is a valid USDC pair.
-2026-03-13 10:54:22,337 - ERROR - Falha ao inicializar conta Test Acc: Client creation failed (Restricted location?)
-2026-03-13 10:54:22,416 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:22,418 - ERROR - Falha ao inicializar conta Test Acc: Client creation failed (Restricted location?)
-2026-03-13 10:54:22,495 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 10:54:22,497 - ERROR - Falha ao inicializar conta Test Acc: Client creation failed (Restricted location?)
-2026-03-13 10:54:22,497 - INFO - Binance Bot Engine parado.
-2026-03-13 11:06:05,263 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:06:05,265 - ERROR - CRITICAL: Market client is unavailable. Skipping market WebSocket initialization.
-2026-03-13 11:06:05,266 - INFO - Iniciando Binance Bot Engine...
-2026-03-13 11:06:05,369 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:06:05,371 - ERROR - Falha ao inicializar conta Test Acc 1: Client creation failed (Restricted location?)
-2026-03-13 11:06:05,373 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:06:05,479 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:06:05,483 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:06:05,485 - ERROR - Falha ao inicializar conta Test Acc 1: Client creation failed (Restricted location?)
-2026-03-13 11:06:05,577 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:06:05,659 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:06:05,661 - WARNING - Warning: Symbol BTCUSDC not found on Binance. Please check if it is a valid USDC pair.
-2026-03-13 11:06:05,662 - WARNING - Warning: Symbol ETHUSDC not found on Binance. Please check if it is a valid USDC pair.
-2026-03-13 11:06:06,064 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:06:06,066 - ERROR - Falha ao inicializar conta Test Acc 1: Client creation failed (Restricted location?)
-2026-03-13 11:06:06,643 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:06:06,645 - ERROR - Falha ao inicializar conta Test Acc 1: Client creation failed (Restricted location?)
-2026-03-13 11:06:07,145 - INFO - Binance Bot Engine parado.
-2026-03-13 11:10:50,229 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
-2026-03-13 11:10:50,231 - ERROR - CRITICAL: Market client is unavailable. Skipping market WebSocket initialization.
-2026-03-13 11:10:50,233 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+2026-03-13 11:12:14,732 - INFO - Bot starting on Server IP: 34.46.237.233
+2026-03-13 11:12:14,736 - INFO - Initialized 0 background clients in DEMO (Testnet) mode.
 2026-03-13 11:12:14,834 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
 2026-03-13 11:12:14,835 - ERROR - CRITICAL: Market client is unavailable. Skipping market WebSocket initialization.
 2026-03-13 11:12:14,838 - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Serving Flask app 'app'
+ * Debug mode: off
 2026-03-13 11:12:14,843 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:3000
