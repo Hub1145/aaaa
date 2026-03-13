@@ -1,1 +1,7 @@
 2026-03-12 12:38:34,490 - INFO - Started market WebSocket for 4 symbols
+2026-03-13 10:06:41,120 - INFO - Started market WebSocket for 1 symbols
+2026-03-13 10:06:41,123 - INFO - Iniciando Binance Bot Engine...
+2026-03-13 10:06:41,236 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
+2026-03-13 10:06:41,237 - ERROR - CRITICAL: Restricted location detected. Cannot create Binance client.
+2026-03-13 10:06:41,239 - ERROR - Falha ao inicializar conta Test Acc: Client creation failed (Restricted location?)
+2026-03-13 10:06:41,239 - INFO - Binance Bot Engine parado.
