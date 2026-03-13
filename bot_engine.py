@@ -889,7 +889,7 @@ class BinanceTradingBotEngine:
                 for level, lvl_data in list(state['levels'].items()):
                     if lvl_data.get('tp_order_id') and order_id == lvl_data.get('tp_order_id'):
                         qty_filled_lvl = lvl_data.get('qty', fraction_qty)
-                        self.log("tp_filled_manual", account_name=self.accounts[idx]['info'].get('name'), is_key=True, level=level, qty=qty_filled_lvl)
+                        self.log("tp_filled_reentry", account_name=self.accounts[idx]['info'].get('name'), is_key=True, target_level=level, qty=qty_filled_lvl)
                         lvl_data['filled'] = True
                         lvl_data['tp_order_id'] = None # Clear filled ID
                         reentry_needed_qty = qty_filled_lvl
@@ -907,6 +907,7 @@ class BinanceTradingBotEngine:
             self._handle_reentry_logic(idx, symbol, reentry_needed_qty)
 
         if reentry_fill_detected:
+            # Note: reentry_filled_tp_all in translations doesn't take target_level
             self.log("reentry_filled_tp_all", account_name=self.accounts[idx]['info'].get('name'), is_key=True)
             with self.data_lock:
                 state['consolidated_reentry_id'] = None
@@ -1022,6 +1023,12 @@ class BinanceTradingBotEngine:
                 with self.data_lock:
                     if (idx, symbol) in self.grid_state and o['level'] in self.grid_state[(idx, symbol)]['levels']:
                         self.grid_state[(idx, symbol)]['levels'][o['level']]['tp_order_id'] = order_id
+            else:
+                # If limit order placement failed (possibly due to dust),
+                # mark it as filled to prevent _tp_market_logic from spinning on it if strategy level matches.
+                with self.data_lock:
+                    if (idx, symbol) in self.grid_state and o['level'] in self.grid_state[(idx, symbol)]['levels']:
+                        self.grid_state[(idx, symbol)]['levels'][o['level']]['filled'] = True
 
     def _check_balance_for_order(self, idx, qty, price, leverage=None):
         # Specifically check USDC balance for USDC-M pairs
@@ -1058,18 +1065,40 @@ class BinanceTradingBotEngine:
             return None
 
         try:
-            formatted_qty = self._format_quantity(symbol, qty)
-            formatted_price = self._format_price(symbol, price)
+            formatted_qty_str = self._format_quantity(symbol, qty)
+            formatted_price_str = self._format_price(symbol, price)
 
-            logging.debug(f"[{acc_name}] Placing {side} LIMIT order for {symbol}: Qty {formatted_qty} @ Price {formatted_price}")
+            f_qty = float(formatted_qty_str)
+            f_price = float(formatted_price_str)
+
+            if f_qty <= 0:
+                self.log(f"Limit order skipped for {symbol}: Calculated quantity {f_qty} <= 0.", level='warning', account_name=acc_name)
+                return None
+
+            # Min Notional Check
+            notional = f_qty * f_price
+            min_notional = 5.0
+            with self.market_data_lock:
+                info = self.shared_market_data.get(symbol, {}).get('info')
+                if info:
+                    for f in info.get('filters', []):
+                        if f.get('filterType') == 'MIN_NOTIONAL':
+                            min_notional = float(f.get('notional') or f.get('minNotional') or 5.0)
+                            break
+
+            if notional < min_notional:
+                self.log(f"Limit order skipped for {symbol}: Notional {notional:.2f} < Min {min_notional}.", level='warning', account_name=acc_name)
+                return None
+
+            logging.debug(f"[{acc_name}] Placing {side} LIMIT order for {symbol}: Qty {formatted_qty_str} @ Price {formatted_price_str}")
 
             order = client.futures_create_order(
                 symbol=symbol,
                 side=side,
                 type=Client.FUTURE_ORDER_TYPE_LIMIT,
                 timeInForce=Client.TIME_IN_FORCE_GTC,
-                quantity=formatted_qty,
-                price=formatted_price
+                quantity=formatted_qty_str,
+                price=formatted_price_str
             )
             return order['orderId']
         except BinanceAPIException as e:
@@ -1820,7 +1849,7 @@ class BinanceTradingBotEngine:
                         to_execute.append((lvl_idx, lvl['qty'], lvl['side']))
 
         for lvl_idx, qty, side in to_execute:
-            self.log("tp_market_triggered", account_name=acc_name, is_key=True, symbol=symbol, level=lvl_idx, price=current_price)
+            self.log("tp_market_triggered", account_name=acc_name, is_key=True, symbol=symbol, target_level=lvl_idx, price=current_price)
             # Execute Market Order outside lock
             success = self._execute_market_close_partial(idx, symbol, qty, side)
             if success:
@@ -1828,7 +1857,7 @@ class BinanceTradingBotEngine:
                     state = self.grid_state.get((idx, symbol))
                     if state and lvl_idx in state['levels']:
                         state['levels'][lvl_idx]['filled'] = True
-                    self.log("tp_filled_market", account_name=acc_name, is_key=True, symbol=symbol, level=lvl_idx)
+                    self.log("tp_filled_market", account_name=acc_name, is_key=True, symbol=symbol, target_level=lvl_idx)
 
                 self._handle_reentry_logic(idx, symbol, qty)
 
@@ -1837,11 +1866,35 @@ class BinanceTradingBotEngine:
         acc = self.accounts[idx]
         client = acc['client']
         try:
+            qty_str = self._format_quantity(symbol, qty)
+            f_qty = float(qty_str)
+            if f_qty <= 0:
+                self.log(f"Market TP skipped for {symbol}: Quantity {f_qty} <= 0.", level='warning', account_name=acc['info'].get('name'))
+                return True # Mark as "handled" to stop the loop
+
+            # Notional check
+            with self.market_data_lock:
+                current_price = float(self.shared_market_data.get(symbol, {}).get('price') or 0)
+
+            if current_price > 0:
+                notional = f_qty * current_price
+                min_notional = 5.0
+                with self.market_data_lock:
+                    info = self.shared_market_data.get(symbol, {}).get('info')
+                    if info:
+                        for f in info.get('filters', []):
+                            if f.get('filterType') == 'MIN_NOTIONAL':
+                                min_notional = float(f.get('notional') or f.get('minNotional') or 5.0)
+                                break
+                if notional < min_notional:
+                    self.log(f"Market TP skipped for {symbol}: Notional {notional:.2f} < Min {min_notional}.", level='warning', account_name=acc['info'].get('name'))
+                    return True # Mark as "handled" to stop the loop
+
             client.futures_create_order(
                 symbol=symbol,
                 side=side,
                 type=Client.ORDER_TYPE_MARKET,
-                quantity=self._format_quantity(symbol, qty)
+                quantity=qty_str
             )
             return True
         except Exception as e:
