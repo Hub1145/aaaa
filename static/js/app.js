@@ -3,6 +3,7 @@ const socket = io();
 let currentLang = 'en-US';
 let currentConfig = null;
 let isBotRunning = false;
+let activeAccountIdx = 0;
 let activeSymbol = null;
 let maxLeverages = {};
 let currentBalance = 0; // Total equity for hero
@@ -26,7 +27,7 @@ function setupEventListeners() {
         applyUiTranslations();
     });
 
-    document.getElementById('addNewSymbolBtn').addEventListener('click', () => {
+    document.getElementById('addNewSymbolBtn').addEventListener('click', async () => {
         const inputStr = document.getElementById('newSymbolInput').value;
         const symbol = inputStr ? inputStr.trim().toUpperCase() : '';
         if (symbol && symbol.length > 3) {
@@ -34,6 +35,11 @@ function setupEventListeners() {
                 currentConfig.symbols.push(symbol);
                 // Copy current strategy or initialize a default one
                 let newStrat = JSON.parse(JSON.stringify(currentConfig.symbol_strategies[activeSymbol] || {}));
+
+                // Reset price-sensitive fields for the new symbol
+                newStrat.entry_price = 0;
+                newStrat.stop_loss_price = 0;
+                newStrat.sl_order_price = 0;
 
                 // Ensure the 8-step TP ladder and recycling are enabled by default for new symbols
                 newStrat.tp_enabled = true;
@@ -48,9 +54,9 @@ function setupEventListeners() {
                 }
 
                 currentConfig.symbol_strategies[symbol] = newStrat;
-                saveLiveConfig();
+                await saveLiveConfig();
                 initSymbolPicker();
-                renderSymbolsList(); // Update the settings modal list
+                renderSymbolsInModal();
                 document.getElementById('newSymbolInput').value = '';
                 document.getElementById('selectActiveSymbol').value = symbol;
                 activeSymbol = symbol;
@@ -74,11 +80,17 @@ function setupEventListeners() {
     // Asset Switcher
     document.getElementById('selectActiveSymbol').addEventListener('change', (e) => {
         activeSymbol = e.target.value;
+        const unit = 'USDC';
         const labels = ['asset-symbol-label', 'base-asset-label', 'entry-price-asset-label', 'tp-price-asset-label', 'sl-price-asset-label', 'sl-order-price-asset-label'];
         labels.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.innerText = unit;
         });
+
+        // Clear stale price display immediately
+        document.getElementById('bid-price').innerText = '0.00';
+        document.getElementById('ask-price').innerText = '0.00';
+
         updateUIFromConfig();
     });
 
@@ -327,18 +339,6 @@ function setupEventListeners() {
         loadConfig(); // Refresh after save
     });
 
-    document.getElementById('addNewSymbolBtn').addEventListener('click', () => {
-        const input = document.getElementById('newSymbolInput');
-        const sym = input.value.trim().toUpperCase();
-        if (sym && !currentConfig.symbols.includes(sym)) {
-            currentConfig.symbols.push(sym);
-            if (!currentConfig.symbol_strategies[sym]) {
-                currentConfig.symbol_strategies[sym] = JSON.parse(JSON.stringify(currentConfig.symbol_strategies[activeSymbol] || {}));
-            }
-            input.value = '';
-            renderSymbolsInModal();
-        }
-    });
 
     // Custom Bottom Tabs
     document.querySelectorAll('[data-tab-target]').forEach(tab => {
@@ -367,7 +367,11 @@ function updateTotalBaseUnits() {
     const priceText = document.getElementById('bid-price').innerText;
     const currentPrice = parseFloat(priceText) || 1;
     const entryInput = parseFloat(document.getElementById('inputEntryPrice').value);
-    const leverage = (currentConfig.symbol_strategies[activeSymbol] || {}).leverage || 20;
+
+    // All accounts use the same settings (global symbol_strategies)
+    const strat = currentConfig.symbol_strategies[activeSymbol] || {};
+
+    const leverage = strat.leverage || 20;
     const isPct = document.getElementById('selectTradeAmountMode').value === 'pct';
 
     let totalUSDC = amountVal;
@@ -394,8 +398,10 @@ function checkMinRequirements(units) {
 
 function updateStrategyField(field, value) {
     if (currentConfig && activeSymbol) {
+        // All accounts use the same settings (global symbol_strategies)
         if (!currentConfig.symbol_strategies[activeSymbol]) currentConfig.symbol_strategies[activeSymbol] = {};
         currentConfig.symbol_strategies[activeSymbol][field] = value;
+
         // Auto-save on discrete changes
         saveLiveConfig();
     }
@@ -427,7 +433,15 @@ function applyUiTranslations() {
 
 function updateUIFromConfig() {
     if (!activeSymbol || !currentConfig) return;
+
+    // All accounts use the same settings (global symbol_strategies)
     const strat = currentConfig.symbol_strategies[activeSymbol] || {};
+
+    // Update active symbol picker to match
+    const picker = document.getElementById('selectActiveSymbol');
+    if (picker && picker.value !== activeSymbol) {
+        picker.value = activeSymbol;
+    }
 
     const isPct = strat.trade_amount_is_pct || false;
     document.getElementById('selectTradeAmountMode').value = isPct ? 'pct' : 'fixed';
@@ -604,30 +618,75 @@ function setupSocketListeners() {
     socket.on('price_update', (prices) => {
         if (activeSymbol && prices[activeSymbol]) {
             const p = prices[activeSymbol];
-            // p should be {bid, ask, last}, handle fallbacks
             const bid = p.bid !== undefined ? p.bid : p.last || p;
             const ask = p.ask !== undefined ? p.ask : p.last || p;
 
             const bidEl = document.getElementById('bid-price');
             const askEl = document.getElementById('ask-price');
-            if (bidEl && typeof bid === 'number') bidEl.innerText = bid.toFixed(2);
-            if (askEl && typeof ask === 'number') askEl.innerText = ask.toFixed(2);
+
+            // Determine precision based on price magnitude
+            // For DOGE (~0.15) we need at least 4-5 decimals
+            // For BTC (~70000) 1-2 decimals is enough
+            let precision = 2;
+            if (bid < 0.1) precision = 6;
+            else if (bid < 1) precision = 5;
+            else if (bid < 10) precision = 4;
+            else if (bid < 100) precision = 3;
+
+            if (bidEl && typeof bid === 'number') bidEl.innerText = bid.toFixed(precision);
+            if (askEl && typeof ask === 'number') askEl.innerText = ask.toFixed(precision);
+
+            // Auto-populate entry price if it's 0 and we JUST received a fresh market price
+            if (currentConfig && currentConfig.symbol_strategies[activeSymbol]) {
+                const strat = currentConfig.symbol_strategies[activeSymbol];
+                if (!strat.entry_price || strat.entry_price === 0) {
+                    strat.entry_price = bid;
+                    document.getElementById('inputEntryPrice').value = bid.toFixed(precision);
+                    saveLiveConfig();
+                }
+            }
 
             updateTotalBaseUnits();
         }
     });
 
+    socket.on('clear_console', () => {
+        const out = document.getElementById('consoleOutput');
+        if (out) out.innerHTML = '';
+    });
+
     socket.on('account_update', (data) => {
         const container = document.getElementById('individual-accounts-container');
-        container.innerHTML = (data.accounts || []).map(acc => `
-            <div class="account-card ${acc.has_client ? '' : 'opacity-50'}" style="min-width: 150px">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="small fw-bold text-secondary text-uppercase">${acc.name}</span>
-                    <div class="account-dot ${acc.active ? 'bg-success' : 'bg-secondary'}" style="width:6px; height:6px; border-radius:50%"></div>
+        if (!container) return;
+
+        // Ensure activeAccountIdx is in bounds
+        if (activeAccountIdx >= data.accounts.length) activeAccountIdx = 0;
+
+        container.innerHTML = (data.accounts || []).map((acc, idx) => {
+            const ui = (allTranslations[currentLang] || {}).ui || {};
+            let balanceText = 'Disconnected';
+            let balanceClass = 'text-primary';
+
+            if (acc.error) {
+                balanceText = `<span class="text-danger" title="${acc.error}"><i class="bi bi-exclamation-triangle-fill"></i> ${ui.api_error || 'API Error'}</span>`;
+            } else if (acc.has_client && acc.balance !== undefined) {
+                balanceText = '$' + acc.balance.toFixed(2);
+            }
+
+            const isActive = (idx === activeAccountIdx);
+
+            return `
+                <div class="account-card ${acc.has_client ? '' : 'opacity-50'} ${isActive ? 'active' : ''}"
+                     style="min-width: 150px"
+                     onclick="setActiveAccount(${idx})">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="small fw-bold text-secondary text-uppercase">${acc.name}</span>
+                        <div class="account-dot ${acc.active ? 'bg-success' : 'bg-secondary'}" style="width:6px; height:6px; border-radius:50%"></div>
+                    </div>
+                    <span class="${balanceClass} fw-bold">${balanceText}</span>
                 </div>
-                <span class="text-primary fw-bold">${acc.has_client && acc.balance !== undefined ? '$' + acc.balance.toFixed(2) : 'Disconnected'}</span>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
         currentBalance = data.total_equity || 0;
         const totalEquityVal = document.getElementById('total-equity-val');
@@ -641,7 +700,7 @@ function setupSocketListeners() {
                 <td class="${p.amount > 0 ? 'text-success' : 'text-danger'}">${p.amount}</td>
                 <td>${(parseFloat(p.entryPrice) || 0).toFixed(2)}</td>
                 <td class="${p.unrealizedProfit >= 0 ? 'text-success' : 'text-danger'}">${(parseFloat(p.unrealizedProfit) || 0).toFixed(2)}</td>
-                <td><button class="btn btn-xs btn-outline-danger py-0" onclick="closePosition('${p.account}', '${p.symbol}')">Kill</button></td>
+                <td><button class="btn btn-xs btn-outline-danger py-0" onclick="closePosition(${p.account_idx}, '${p.symbol}')">Kill</button></td>
             </tr>
         `).join('');
     });
@@ -649,8 +708,10 @@ function setupSocketListeners() {
     socket.on('console_log', (data) => {
         const out = document.getElementById('consoleOutput');
         const div = document.createElement('div');
-        div.className = `small mb-1 ${data.level === 'error' ? 'text-danger' : 'text-success'}`;
-        div.innerText = `[${data.timestamp}] ${data.message}`;
+        div.className = `small mb-1 console-entry ${data.level === 'error' ? 'text-danger' : 'text-success'}`;
+        // data.rendered is pre-rendered on backend but if we changed language
+        // we might get the whole history or just updates.
+        div.innerText = `[${data.timestamp}] ${data.rendered || data.message}`;
         out.appendChild(div);
         out.scrollTop = out.scrollHeight;
     });
@@ -677,8 +738,11 @@ function populateSettingsModal() {
     accContainer.innerHTML = (currentConfig.api_accounts || []).map((acc, i) => `
         <div class="row g-2 mb-2 align-items-center account-setting-row" data-idx="${i}">
             <div class="col-2"><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_name_placeholder || 'Name'}" value="${acc.name || ''}" id="acc-name-${i}"></div>
-            <div class="col-4"><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_key_placeholder || 'Key'}" value="${acc.api_key || ''}" id="acc-key-${i}"></div>
-            <div class="col-4"><input type="password" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_secret_placeholder || 'Secret'}" value="${acc.api_secret || ''}" id="acc-secret-${i}"></div>
+            <div class="col-3"><input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_key_placeholder || 'Key'}" value="${acc.api_key || ''}" id="acc-key-${i}"></div>
+            <div class="col-3"><input type="password" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="${ui.acc_secret_placeholder || 'Secret'}" value="${acc.api_secret || ''}" id="acc-secret-${i}"></div>
+            <div class="col-2 text-center">
+                <button class="btn btn-xs btn-outline-info" onclick="testApiKey(${i})" id="test-btn-${i}">${ui.settings_test_btn || 'Test'}</button>
+            </div>
             <div class="col-2 text-end">
                 <div class="form-check form-switch d-inline-block">
                     <input class="form-check-input" type="checkbox" id="acc-enabled-${i}" ${acc.enabled !== false ? 'checked' : ''}>
@@ -743,12 +807,56 @@ async function saveLiveConfig(extra = {}) {
     await fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 }
 
-window.closePosition = (account, symbol) => { socket.emit('close_trade', { account, symbol }); };
+window.testApiKey = async (i) => {
+    const key = document.getElementById(`acc-key-${i}`).value;
+    const secret = document.getElementById(`acc-secret-${i}`).value;
+    const isDemo = document.getElementById('demoModeToggle').checked;
+    const btn = document.getElementById(`test-btn-${i}`);
+
+    if (!key || !secret) {
+        alert("Please enter API key and secret");
+        return;
+    }
+
+    btn.disabled = true;
+    const oldText = btn.innerText;
+    btn.innerText = "...";
+
+    try {
+        const res = await fetch('/api/test_api_key', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ api_key: key, api_secret: secret, is_demo: isDemo })
+        });
+        const data = await res.json();
+        alert(data.message);
+    } catch (e) {
+        alert("Error testing API key: " + e);
+    } finally {
+        btn.disabled = false;
+        btn.innerText = oldText;
+    }
+};
+
+window.closePosition = (account_idx, symbol) => { socket.emit('close_trade', { account_idx, symbol }); };
+
+window.setActiveAccount = (idx) => {
+    activeAccountIdx = idx;
+    // We don't need to re-render all accounts immediately as account_update will handle it next poll,
+    // but for immediate feedback we can:
+    document.querySelectorAll('.account-card').forEach((card, i) => {
+        card.classList.toggle('active', i === idx);
+    });
+    updateUIFromConfig();
+};
 
 // TP Split Management
 function renderTpTargets() {
     if (!activeSymbol || !currentConfig) return;
+
+    // All accounts use the same settings (global symbol_strategies)
     const strat = currentConfig.symbol_strategies[activeSymbol] || {};
+
     const targets = strat.tp_targets || [];
     const container = document.getElementById('tp-targets-list');
     const entryPrice = parseFloat(document.getElementById('inputEntryPrice').value) || 0;
@@ -787,8 +895,11 @@ function renderTpTargets() {
 
 window.addTpTarget = () => {
     if (!activeSymbol) return;
+
+    // All accounts use the same settings (global symbol_strategies)
     if (!currentConfig.symbol_strategies[activeSymbol]) currentConfig.symbol_strategies[activeSymbol] = {};
     const strat = currentConfig.symbol_strategies[activeSymbol];
+
     if (!strat.tp_targets) strat.tp_targets = [];
 
     // Default: split volume evenly among targets if possible, or just add 25%
@@ -799,6 +910,7 @@ window.addTpTarget = () => {
 };
 
 window.removeTpTarget = (idx) => {
+    // All accounts use the same settings (global symbol_strategies)
     const strat = currentConfig.symbol_strategies[activeSymbol];
     strat.tp_targets.splice(idx, 1);
     renderTpTargets();
@@ -806,6 +918,7 @@ window.removeTpTarget = (idx) => {
 };
 
 window.updateTpTarget = (idx, field, value) => {
+    // All accounts use the same settings (global symbol_strategies)
     const strat = currentConfig.symbol_strategies[activeSymbol];
     strat.tp_targets[idx][field] = value;
     renderTpTargets();

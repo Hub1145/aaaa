@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import threading
+import requests
 from bot_engine import BinanceTradingBotEngine
 from translations_py import TRANSLATIONS
 
@@ -18,10 +19,26 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 config_file = 'config.json'
 bot_engine = None
+server_ip = "Unknown"
+
+def _fetch_server_ip():
+    global server_ip
+    try:
+        server_ip = requests.get('https://api.ipify.org', timeout=10).text
+        logging.info(f"Detected Server IP: {server_ip}")
+    except Exception as e:
+        logging.warning(f"Could not determine Server IP: {e}")
+
+threading.Thread(target=_fetch_server_ip, daemon=True).start()
 
 def load_config():
-    with open(config_file, 'r') as f:
-        return json.load(f)
+    try:
+        with open(config_file, 'r') as f:
+            config = json.load(f)
+        return config
+    except Exception as e:
+        logging.error(f"Error loading config in app.py: {e}")
+        return {}
 
 def save_config(config):
     with open(config_file, 'w') as f:
@@ -32,7 +49,7 @@ def emit_to_client(event, data):
 
 @app.route('/')
 def index():
-    return render_template('dashboard.html', translations=TRANSLATIONS)
+    return render_template('dashboard.html', translations=TRANSLATIONS, server_ip=server_ip)
 
 @app.route('/api/config', methods=['GET'])
 def get_config():
@@ -87,12 +104,12 @@ def test_api_key_route():
         data = request.json
         api_key = data.get('api_key')
         api_secret = data.get('api_secret')
+        is_demo = data.get('is_demo', True)
         
         if not api_key or not api_secret:
             return jsonify({'success': False, 'message': 'API Key and Secret are required.'}), 400
 
-        temp_engine = BinanceTradingBotEngine(config_file, emit_to_client)
-        success, msg = temp_engine.test_account(api_key, api_secret)
+        success, msg = BinanceTradingBotEngine.test_account(api_key, api_secret, is_demo=is_demo)
         
         # Translate test result message if possible
         lang = load_config().get('language', 'pt-BR')
@@ -109,9 +126,10 @@ def test_api_key_route():
 def handle_connect():
     global bot_engine
     if not bot_engine:
-        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client)
+        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client, server_ip=server_ip)
 
     emit('bot_status', {'running': bot_engine.is_running})
+    emit('clear_console', {})
     for log in list(bot_engine.console_logs):
         emit('console_log', log)
     bot_engine._emit_account_update()
@@ -121,7 +139,7 @@ def handle_connect():
 def handle_start_bot():
     global bot_engine
     if not bot_engine:
-        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client)
+        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client, server_ip=server_ip)
 
     if not bot_engine.is_running:
         bot_engine.start()
@@ -145,14 +163,14 @@ def handle_clear_console():
 @socketio.on('close_trade')
 def handle_close_trade(data):
     if bot_engine:
-        account_name = data.get('account')
+        account_idx = data.get('account_idx')
         symbol = data.get('symbol')
-        if account_name and symbol:
-            bot_engine.close_position(account_name, symbol)
+        if account_idx is not None and symbol:
+            bot_engine.close_position(account_idx, symbol)
 
 if __name__ == '__main__':
     if not bot_engine:
-        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client)
+        bot_engine = BinanceTradingBotEngine(config_file, emit_to_client, server_ip=server_ip)
 
-    port = int(os.environ.get('PORT', 3000))
+    port = 3000
     socketio.run(app, host='0.0.0.0', port=port, debug=False, use_reloader=False, allow_unsafe_werkzeug=True)
