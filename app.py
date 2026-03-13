@@ -21,29 +21,20 @@ config_file = 'config.json'
 bot_engine = None
 server_ip = "Unknown"
 
-try:
-    server_ip = requests.get('https://api.ipify.org', timeout=5).text
-    logging.info(f"Bot starting on Server IP: {server_ip}")
-except Exception as e:
-    logging.warning(f"Could not determine Server IP: {e}")
+def _fetch_server_ip():
+    global server_ip
+    try:
+        server_ip = requests.get('https://api.ipify.org', timeout=10).text
+        logging.info(f"Detected Server IP: {server_ip}")
+    except Exception as e:
+        logging.warning(f"Could not determine Server IP: {e}")
+
+threading.Thread(target=_fetch_server_ip, daemon=True).start()
 
 def load_config():
     try:
         with open(config_file, 'r') as f:
             config = json.load(f)
-
-        # Ensure per-account symbol strategies (Migration)
-        global_strategies = config.get('symbol_strategies', {})
-        api_accounts = config.get('api_accounts', [])
-        modified = False
-        for acc in api_accounts:
-            if 'symbol_strategies' not in acc:
-                acc['symbol_strategies'] = global_strategies.copy()
-                modified = True
-
-        if modified:
-            save_config(config)
-
         return config
     except Exception as e:
         logging.error(f"Error loading config in app.py: {e}")

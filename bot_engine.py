@@ -82,38 +82,13 @@ class BinanceTradingBotEngine:
         try:
             with open(self.config_path, 'r') as f:
                 config = json.load(f)
-
-            # Migration: If accounts don't have symbol_strategies, but global one exists, copy it
-            global_strategies = config.get('symbol_strategies', {})
-            api_accounts = config.get('api_accounts', [])
-            modified = False
-            for acc in api_accounts:
-                if 'symbol_strategies' not in acc:
-                    # Deep copy of global strategies to ensure account isolation
-                    acc['symbol_strategies'] = {k: v.copy() for k, v in global_strategies.items()}
-                    modified = True
-
-            if modified:
-                try:
-                    with open(self.config_path, 'w') as f:
-                        json.dump(config, f, indent=2)
-                except: pass
-
             return config
         except Exception as e:
             logging.error(f"Error loading config: {e}")
             return {}
 
     def _get_strategy(self, idx, symbol):
-        """Helper to get strategy for a specific account and symbol."""
-        api_accounts = self.config.get('api_accounts', [])
-        if 0 <= idx < len(api_accounts):
-            acc = api_accounts[idx]
-            acc_strategies = acc.get('symbol_strategies', {})
-            if symbol in acc_strategies:
-                return acc_strategies[symbol]
-
-        # Fallback to global symbol_strategies
+        """Helper to get global strategy for a symbol. All accounts use the same settings."""
         return self.config.get('symbol_strategies', {}).get(symbol, {})
 
     def _t(self, key, **kwargs):
@@ -564,19 +539,8 @@ class BinanceTradingBotEngine:
         # For LIMIT/COND_LIMIT, use entry_price to ensure notional amount (qty*price) is exact.
         # For MARKET/COND_MARKET, use current market price.
 
-        # VERY IMPORTANT: Price Mismatch Protection
-        # If entry_price is wildly different from current_price (e.g. 5x difference),
-        # it's likely a stale price inherited from a previous symbol in the UI (e.g. DOGE inheriting BTC price).
-        # We MUST block this to avoid massive quantity errors.
+        # Strictly use set price for LIMIT and COND_LIMIT calculation
         if entry_type in ['LIMIT', 'COND_LIMIT'] and entry_price > 0:
-            # Increase tolerance to 5x for volatile assets, but keep protection
-            if entry_price > current_price * 5 or entry_price < current_price * 0.2:
-                log_key = f"stale_price_skip_{idx}_{symbol}"
-                now = time.time()
-                if now - self.last_log_times.get(log_key, 0) > 60:
-                    self.log(f"Skipping {symbol} - Entry price {entry_price} is too far from market {current_price}. This is likely inherited from another symbol. Please re-select the symbol in the UI to refresh.", level='warning', account_name=acc['info'].get('name'))
-                    self.last_log_times[log_key] = now
-                return
             calc_price = entry_price
         else:
             calc_price = current_price
@@ -633,7 +597,9 @@ class BinanceTradingBotEngine:
                 self._setup_tp_targets_logic(*setup_tp_args)
             return
 
-        if quantity <= 0 or entry_price <= 0: return
+        if quantity <= 0: return
+        # Price required for LIMIT and Conditional orders
+        if entry_type != 'MARKET' and entry_price <= 0: return
 
         # Check if we have open orders
         orders = client.futures_get_open_orders(symbol=symbol)
@@ -656,24 +622,6 @@ class BinanceTradingBotEngine:
                                 return # Next loop will re-place
                 return
 
-            # Safety check: Prevent placing LIMIT orders too far from market price
-            # to avoid spamming "Limit price can't be higher/lower than X" errors
-            if entry_type == 'LIMIT':
-                # Binance usually allows up to 5% or 10% deviation for futures
-                # We'll use a conservative 5% check
-                is_invalid = False
-                if direction == 'LONG' and entry_price > current_price * 1.05:
-                    is_invalid = True
-                elif direction == 'SHORT' and entry_price < current_price * 0.95:
-                    is_invalid = True
-
-                if is_invalid:
-                    log_key = f"price_out_of_range_{idx}_{symbol}"
-                    now = time.time()
-                    if now - self.last_log_times.get(log_key, 0) > 60:
-                        self.log(f"Limit order price {entry_price} for {symbol} is likely invalid (Market: {current_price}). Skipping to avoid API error.", level='warning', account_name=acc['info'].get('name'))
-                        self.last_log_times[log_key] = now
-                    return
 
             side = Client.SIDE_BUY if direction == 'LONG' else Client.SIDE_SELL
             

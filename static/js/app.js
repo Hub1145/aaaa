@@ -368,10 +368,8 @@ function updateTotalBaseUnits() {
     const currentPrice = parseFloat(priceText) || 1;
     const entryInput = parseFloat(document.getElementById('inputEntryPrice').value);
 
-    const acc = currentConfig.api_accounts[activeAccountIdx];
-    const strat = (acc && acc.symbol_strategies && acc.symbol_strategies[activeSymbol])
-                  ? acc.symbol_strategies[activeSymbol]
-                  : (currentConfig.symbol_strategies[activeSymbol] || {});
+    // All accounts use the same settings (global symbol_strategies)
+    const strat = currentConfig.symbol_strategies[activeSymbol] || {};
 
     const leverage = strat.leverage || 20;
     const isPct = document.getElementById('selectTradeAmountMode').value === 'pct';
@@ -400,15 +398,7 @@ function checkMinRequirements(units) {
 
 function updateStrategyField(field, value) {
     if (currentConfig && activeSymbol) {
-        // Update per-account strategy
-        const acc = currentConfig.api_accounts[activeAccountIdx];
-        if (acc) {
-            if (!acc.symbol_strategies) acc.symbol_strategies = {};
-            if (!acc.symbol_strategies[activeSymbol]) acc.symbol_strategies[activeSymbol] = {};
-            acc.symbol_strategies[activeSymbol][field] = value;
-        }
-
-        // Also update global fallback for consistency and for newly added accounts
+        // All accounts use the same settings (global symbol_strategies)
         if (!currentConfig.symbol_strategies[activeSymbol]) currentConfig.symbol_strategies[activeSymbol] = {};
         currentConfig.symbol_strategies[activeSymbol][field] = value;
 
@@ -444,11 +434,8 @@ function applyUiTranslations() {
 function updateUIFromConfig() {
     if (!activeSymbol || !currentConfig) return;
 
-    // Fetch strategy from active account with global fallback
-    const acc = currentConfig.api_accounts[activeAccountIdx];
-    const strat = (acc && acc.symbol_strategies && acc.symbol_strategies[activeSymbol])
-                  ? acc.symbol_strategies[activeSymbol]
-                  : (currentConfig.symbol_strategies[activeSymbol] || {});
+    // All accounts use the same settings (global symbol_strategies)
+    const strat = currentConfig.symbol_strategies[activeSymbol] || {};
 
     // Update active symbol picker to match
     const picker = document.getElementById('selectActiveSymbol');
@@ -867,10 +854,8 @@ window.setActiveAccount = (idx) => {
 function renderTpTargets() {
     if (!activeSymbol || !currentConfig) return;
 
-    const acc = currentConfig.api_accounts[activeAccountIdx];
-    const strat = (acc && acc.symbol_strategies && acc.symbol_strategies[activeSymbol])
-                  ? acc.symbol_strategies[activeSymbol]
-                  : (currentConfig.symbol_strategies[activeSymbol] || {});
+    // All accounts use the same settings (global symbol_strategies)
+    const strat = currentConfig.symbol_strategies[activeSymbol] || {};
 
     const targets = strat.tp_targets || [];
     const container = document.getElementById('tp-targets-list');
@@ -911,10 +896,9 @@ function renderTpTargets() {
 window.addTpTarget = () => {
     if (!activeSymbol) return;
 
-    const acc = currentConfig.api_accounts[activeAccountIdx];
-    if (!acc.symbol_strategies) acc.symbol_strategies = {};
-    if (!acc.symbol_strategies[activeSymbol]) acc.symbol_strategies[activeSymbol] = {};
-    const strat = acc.symbol_strategies[activeSymbol];
+    // All accounts use the same settings (global symbol_strategies)
+    if (!currentConfig.symbol_strategies[activeSymbol]) currentConfig.symbol_strategies[activeSymbol] = {};
+    const strat = currentConfig.symbol_strategies[activeSymbol];
 
     if (!strat.tp_targets) strat.tp_targets = [];
 
@@ -926,16 +910,16 @@ window.addTpTarget = () => {
 };
 
 window.removeTpTarget = (idx) => {
-    const acc = currentConfig.api_accounts[activeAccountIdx];
-    const strat = acc.symbol_strategies[activeSymbol];
+    // All accounts use the same settings (global symbol_strategies)
+    const strat = currentConfig.symbol_strategies[activeSymbol];
     strat.tp_targets.splice(idx, 1);
     renderTpTargets();
     saveLiveConfig();
 };
 
 window.updateTpTarget = (idx, field, value) => {
-    const acc = currentConfig.api_accounts[activeAccountIdx];
-    const strat = acc.symbol_strategies[activeSymbol];
+    // All accounts use the same settings (global symbol_strategies)
+    const strat = currentConfig.symbol_strategies[activeSymbol];
     strat.tp_targets[idx][field] = value;
     renderTpTargets();
     saveLiveConfig();
